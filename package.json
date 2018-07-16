@@ -1,0 +1,15 @@
+{
+  "name": "elm-generate",
+  "version": "1.0.0",
+  "description": "This project is bootstrapped with [Create Elm App](https://github.com/halfzebra/create-elm-app).",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1", 
+    "build": "node --experimental-modules generate.mjs"
+  },
+  "author": "",
+  "license": "ISC"
+}
