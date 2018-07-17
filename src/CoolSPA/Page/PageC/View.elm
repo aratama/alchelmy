@@ -9,7 +9,7 @@ import CoolSPA.Page.PageC.Type exposing (Model, Msg)
 view : Model -> Html Msg
 view model =
     div []
-        [ h1 [] [ text "PageC" ]
+        [ h1 [] [ text ("Page C (id = " ++ toString model.id ++ ")") ]
         , p [] [a [href "/#/page-a"] [text "Go to PageA"]]
         , p [] [a [href "/#/page-b"] [text "Go to PageB"]]
         ]

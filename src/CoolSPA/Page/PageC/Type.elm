@@ -1,7 +1,5 @@
 module CoolSPA.Page.PageC.Type exposing (..)
 
-type Msg = Initialize | NoOp
+type Msg = NoOp
 
-type alias Model = {
-    id : Int
-}
+type alias Model = { id : Int }

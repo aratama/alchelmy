@@ -1,7 +1,5 @@
 module CoolSPA.Page.PageA.Type exposing (..)
 
-type Msg = Initialize | NoOp
+type Msg = Increment | Decrement
 
-type alias Model = {}
-
-type alias Route = {}
+type alias Model = Int

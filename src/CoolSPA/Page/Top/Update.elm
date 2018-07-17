@@ -8,9 +8,6 @@ import CoolSPA.Page.Top.Type exposing (Model, Msg, Route)
 import UrlParser as UrlParser exposing (s, Parser, (</>), map, top)
 import Navigation exposing (modifyUrl)
 
-initial : Model  
-initial = {}
-
 initialize : Cmd msg
 initialize = modifyUrl "/#/"
 
