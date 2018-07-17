@@ -4,7 +4,22 @@ import path from "path"
 
 async function main(){
 
-  const files = await util.promisify(fs.readdir)("./src/CoolSPA/Page")
+  const filesInRoot = await util.promisify(fs.readdir)(`./src`)
+
+  const dirsWithNull = await Promise.all(filesInRoot.map(async file => {
+    const stat = await util.promisify(fs.stat)(path.resolve('./src/', file))
+    return stat.isDirectory() ? file : null
+  }))
+
+  const dirs = dirsWithNull.filter(dir => dir !== null)
+
+  if(dirs.length !== 1){
+    throw new Error("Too many folders in src directory. Cannot decide application name.")
+  }
+
+  const application = dirs[0]
+
+  const files = await util.promisify(fs.readdir)(`./src/${application}/Page`)
 
   const pages = files.map(file => path.parse(file).name)
 
@@ -15,16 +30,17 @@ async function main(){
 -- Auto-generated codes --
 -- Do not edit this     -- 
 --------------------------
-module CoolSPA.Routing exposing (..)
+
+module ${application}.Routing exposing (..)
 
 import Navigation exposing (Location)
 import UrlParser as UrlParser exposing (s, oneOf, top, Parser, parseHash)
 import Html as Html exposing (Html, text)
 ${
   pages.map(page => `
-import CoolSPA.Page.${page}.View as ${page}
-import CoolSPA.Page.${page}.Type as ${page}
-import CoolSPA.Page.${page}.Update as ${page}
+import ${application}.Page.${page}.View as ${page}
+import ${application}.Page.${page}.Type as ${page}
+import ${application}.Page.${page}.Update as ${page}
 `).join("\n")
 }
 
@@ -103,7 +119,7 @@ navigate location = Navigate (parseLocation location)
 
   `
 
-  await util.promisify(fs.writeFile)("./src/CoolSPA/Routing.elm", source)
+  await util.promisify(fs.writeFile)(`./src/${application}/Routing.elm`, source)
 
 
 
@@ -114,7 +130,7 @@ import { Main } from './Main.elm';
 import registerServiceWorker from './registerServiceWorker';
 ${
   pages.map(page => {
-    return `import './CoolSPA/Page/${page}/style.css'`
+    return `import './${application}/Page/${page}/style.css'`
   }).join("\n")
 }
 
