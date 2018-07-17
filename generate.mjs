@@ -1,10 +1,15 @@
 import fs from "fs"
 import util from "util"
 import path from "path"
+import glob from "glob"
 
 function toPagePath(page){
-  const words = page.split(/([A-Z][a-z]*)/).filter(s => s != "").map(s => s.toLowerCase())
-  return words.join("-")
+  return page.map(toPagePathSegment).join("/")
+}
+
+function toPagePathSegment(token){ 
+  const words = token.split(/([A-Z][a-z]*)/).filter(s => s != "").map(s => s.toLowerCase())
+  return words.join("-")    
 }
 
 async function main(){
@@ -24,11 +29,22 @@ async function main(){
 
   const application = dirs[0]
 
-  const files = await util.promisify(fs.readdir)(`./src/${application}/Page`)
+  const ds = await util.promisify(glob)(`./src/${application}/Page/**/`)  
+  
+  const pages = ds.map(dir => {
+    if(
+      fs.existsSync(path.resolve(dir, "style.css")) && 
+      fs.existsSync(path.resolve(dir, "Type.elm")) && 
+      fs.existsSync(path.resolve(dir, "Update.elm")) && 
+      fs.existsSync(path.resolve(dir, "View.elm")) 
+    ){
+      return path.relative(`./src/${application}/Page/`, dir).split(path.sep)
+    }else{
+      return null
+    }
+  }).filter(dir => dir !== null)
 
-  const pages = files.map(file => path.parse(file).name)
-
-  pages.forEach(page => console.log(`Generate '${page}' as /${toPagePath(page)}`))
+  pages.forEach(page => console.log(`Generate '${page.join(".")}' as /${toPagePath(page)}`))
 
   const source = `
 --------------------------
@@ -39,13 +55,13 @@ async function main(){
 module ${application}.Routing exposing (..)
 
 import Navigation exposing (Location)
-import UrlParser as UrlParser exposing (s, oneOf, top, Parser, parseHash)
+import UrlParser as UrlParser exposing (s, oneOf, top, Parser, parseHash, (</>))
 import Html as Html exposing (Html, text)
 ${
   pages.map(page => `
-import ${application}.Page.${page}.View as ${page}
-import ${application}.Page.${page}.Type as ${page}
-import ${application}.Page.${page}.Update as ${page}
+import ${application}.Page.${page.join(".")}.View as ${page.join("_")}
+import ${application}.Page.${page.join(".")}.Type as ${page.join("_")}
+import ${application}.Page.${page.join(".")}.Update as ${page.join("_")}
 `).join("\n")
 }
 
@@ -55,7 +71,7 @@ type alias Model =
 type Msg
     = Navigate Route
 ${
-  pages.map(page => `    | ${page}Msg ${page}.Msg`).join("\n")
+  pages.map(page => `    | ${page.join("_")}Msg ${page.join("_")}.Msg`).join("\n")
 }
 
 
@@ -67,15 +83,15 @@ update msg model = case (Debug.log "" msg) of
     , case route of 
       NotFoundRoute -> Cmd.none
 ${
-  pages.map(page => `      ${page} _ -> Cmd.map ${page}Msg ${page}.initialize`).join("\n")
+  pages.map(page => `      ${page.join("_")} _ -> Cmd.map ${page.join("_")}Msg ${page.join("_")}.initialize`).join("\n")
 }
   )
 
 ${
   pages.map(page => `
-  ${page}Msg pageMsg -> case model.route of 
-      ${page} pageModel -> case ${page}.update pageMsg pageModel of 
-        (pageModel_, pageCmd) -> ( { model | route = ${page} pageModel_ }, Cmd.map ${page}Msg pageCmd)      
+  ${page.join("_")}Msg pageMsg -> case model.route of 
+      ${page.join("_")} pageModel -> case ${page.join("_")}.update pageMsg pageModel of 
+        (pageModel_, pageCmd) -> ( { model | route = ${page.join("_")} pageModel_ }, Cmd.map ${page.join("_")}Msg pageCmd)      
       _ -> (model, Cmd.none)
   `).join("\n")
 }
@@ -84,7 +100,7 @@ view : Model -> Html Msg
 view model = case model.route of 
   NotFoundRoute -> text "404 Not Found"
 ${
-  pages.map(page => `  ${page} m -> Html.map ${page}Msg (${page}.view m)`).join("\n")
+  pages.map(page => `  ${page.join("_")} m -> Html.map ${page.join("_")}Msg (${page.join("_")}.view m)`).join("\n")
 }
 
     
@@ -92,7 +108,7 @@ ${
 type Route
   = NotFoundRoute
 ${
-  pages.map(page => `  | ${page} ${page}.Model`).join("\n")
+  pages.map(page => `  | ${page.join("_")} ${page.join("_")}.Model`).join("\n")
 }
 
 
@@ -101,7 +117,7 @@ matchers =
     oneOf
         [ UrlParser.map (PageA PageA.initial) top
 ${
-  pages.map(page => `        , UrlParser.map (${page} ${page}.initial) (s "${toPagePath(page)}")`).join("\n")
+  pages.map(page => `        , UrlParser.map (${page.join("_")} ${page.join("_")}.initial) (${ page.map(s => `s "${toPagePathSegment(s)}"`).join(" </> ") })`).join("\n")
 }
         ]   
 
@@ -131,7 +147,7 @@ import { Main } from './Main.elm';
 import registerServiceWorker from './registerServiceWorker';
 ${
   pages.map(page => {
-    return `import './${application}/Page/${page}/style.css'`
+    return `import './${application}/Page/${page.join("/")}/style.css'`
   }).join("\n")
 }
 
