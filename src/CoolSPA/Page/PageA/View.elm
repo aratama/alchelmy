@@ -14,5 +14,5 @@ view model =
     div []
         [ h1 [] [ text "PageA" ]
         , p [] [a [href "/#/page-b"] [text "Go to PageB"]]
-        , p [] [a [href "/#/page-c"] [text "Go to PageC"]]
+        , p [] [a [href "/#/page-c/42"] [text "Go to PageC"]]
         ]

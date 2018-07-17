@@ -117,7 +117,7 @@ matchers =
     oneOf
         [ UrlParser.map (PageA PageA.initial) top
 ${
-  pages.map(page => `        , UrlParser.map (${page.join("_")} ${page.join("_")}.initial) (${ page.map(s => `s "${toPagePathSegment(s)}"`).join(" </> ") })`).join("\n")
+  pages.map(page => `        , UrlParser.map ${page.join("_")} ${page.join("_")}.route`).join("\n")
 }
         ]   
 
