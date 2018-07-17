@@ -3,15 +3,6 @@ import util from "util"
 import path from "path"
 import glob from "glob"
 
-function toPagePath(page){
-  return page.map(toPagePathSegment).join("/")
-}
-
-function toPagePathSegment(token){ 
-  const words = token.split(/([A-Z][a-z]*)/).filter(s => s != "").map(s => s.toLowerCase())
-  return words.join("-")    
-}
-
 async function main(){
 
   const filesInRoot = await util.promisify(fs.readdir)(`./src`)
@@ -44,7 +35,7 @@ async function main(){
     }
   }).filter(dir => dir !== null)
 
-  pages.forEach(page => console.log(`Generate '${page.join(".")}' as /${toPagePath(page)}`))
+  pages.forEach(page => console.log(`Generate '${page.join(".")}'`))
 
   const source = `
 --------------------------
