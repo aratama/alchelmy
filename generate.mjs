@@ -13,6 +13,7 @@ async function main(){
   const source = `
 --------------------------
 -- Auto-generated codes --
+-- Do not edit this     -- 
 --------------------------
 module CoolSPA.Routing exposing (..)
 
@@ -20,7 +21,11 @@ import Navigation exposing (Location)
 import UrlParser as UrlParser exposing (s, oneOf, top, Parser, parseHash)
 import Html as Html exposing (Html, text)
 ${
-  pages.map(page => `import CoolSPA.Page.${page} as ${page}`).join("\n")
+  pages.map(page => `
+import CoolSPA.Page.${page}.View as ${page}
+import CoolSPA.Page.${page}.Type as ${page}
+import CoolSPA.Page.${page}.Update as ${page}
+`).join("\n")
 }
 
 type alias Model =
@@ -75,7 +80,12 @@ matchers =
     oneOf
         [ UrlParser.map (PageA PageA.initial) top
 ${
-  pages.map(page => `        , UrlParser.map (${page} ${page}.initial) (s "${page}")`).join("\n")
+  pages.map(page => {
+    const words = page.split(/([A-Z][a-z]*)/).filter(s => s != "").map(s => s.toLowerCase())
+    const name = words.join("-")
+    console.log(name)
+    return `        , UrlParser.map (${page} ${page}.initial) (s "${name}")`
+  }).join("\n")
 }
         ]   
 
@@ -94,6 +104,27 @@ navigate location = Navigate (parseLocation location)
   `
 
   await util.promisify(fs.writeFile)("./src/CoolSPA/Routing.elm", source)
+
+
+
+
+  const css = `
+import './main.css';
+import { Main } from './Main.elm';
+import registerServiceWorker from './registerServiceWorker';
+${
+  pages.map(page => {
+    return `import './CoolSPA/Page/${page}/style.css'`
+  }).join("\n")
+}
+
+Main.embed(document.getElementById('root'));
+
+registerServiceWorker();
+`
+
+  await util.promisify(fs.writeFile)("./src/index.js", css)
+
 }
 
 main()
