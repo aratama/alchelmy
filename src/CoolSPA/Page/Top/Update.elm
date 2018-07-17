@@ -1,4 +1,3 @@
-
 module CoolSPA.Page.Top.Update exposing (..)
 
 import UrlParser exposing (..)
@@ -8,12 +7,17 @@ import CoolSPA.Page.Top.Type exposing (Model, Msg, Route)
 import UrlParser as UrlParser exposing (s, Parser, (</>), map, top)
 import Navigation exposing (modifyUrl)
 
+
 initialize : Cmd msg
-initialize = modifyUrl "/#/"
+initialize =
+    modifyUrl "/#/"
+
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     ( model, Cmd.none )
 
+
 route : Parser (Model -> a) a
-route = map Model top
+route =
+    map Model top
