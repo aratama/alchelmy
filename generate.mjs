@@ -2,6 +2,11 @@ import fs from "fs"
 import util from "util"
 import path from "path"
 
+function toPagePath(page){
+  const words = page.split(/([A-Z][a-z]*)/).filter(s => s != "").map(s => s.toLowerCase())
+  return words.join("-")
+}
+
 async function main(){
 
   const filesInRoot = await util.promisify(fs.readdir)(`./src`)
@@ -23,7 +28,7 @@ async function main(){
 
   const pages = files.map(file => path.parse(file).name)
 
-  console.log(pages)
+  pages.forEach(page => console.log(`Generate '${page}' as /${toPagePath(page)}`))
 
   const source = `
 --------------------------
@@ -96,12 +101,7 @@ matchers =
     oneOf
         [ UrlParser.map (PageA PageA.initial) top
 ${
-  pages.map(page => {
-    const words = page.split(/([A-Z][a-z]*)/).filter(s => s != "").map(s => s.toLowerCase())
-    const name = words.join("-")
-    console.log(name)
-    return `        , UrlParser.map (${page} ${page}.initial) (s "${name}")`
-  }).join("\n")
+  pages.map(page => `        , UrlParser.map (${page} ${page}.initial) (s "${toPagePath(page)}")`).join("\n")
 }
         ]   
 
@@ -123,6 +123,7 @@ navigate location = Navigate (parseLocation location)
 
 
 
+  // generate index.js
 
   const css = `
 import './main.css';
