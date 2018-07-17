@@ -7,9 +7,6 @@ import Html.Attributes exposing (src, href)
 import CoolSPA.Page.PageB.PageBA.Type exposing (Model, Msg)
 import UrlParser as UrlParser exposing (s, Parser, (</>), map)
 
-initial : Model  
-initial = {}
-
 initialize : Cmd Msg 
 initialize = Cmd.none
 

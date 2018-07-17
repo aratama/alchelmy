@@ -55,7 +55,7 @@ async function main(){
 module ${application}.Routing exposing (..)
 
 import Navigation exposing (Location)
-import UrlParser as UrlParser exposing (s, oneOf, top, Parser, parseHash, (</>))
+import UrlParser as UrlParser exposing (s, oneOf, Parser, parseHash, (</>))
 import Html as Html exposing (Html, text)
 ${
   pages.map(page => `
@@ -81,7 +81,6 @@ update msg model = case (Debug.log "" msg) of
   Navigate route -> (
     { model | route = route }
     , case route of 
-      NotFoundRoute -> Cmd.none
 ${
   pages.map(page => `      ${page.join("_")} _ -> Cmd.map ${page.join("_")}Msg ${page.join("_")}.initialize`).join("\n")
 }
@@ -98,7 +97,6 @@ ${
 
 view : Model -> Html Msg
 view model = case model.route of 
-  NotFoundRoute -> text "404 Not Found"
 ${
   pages.map(page => `  ${page.join("_")} m -> Html.map ${page.join("_")}Msg (${page.join("_")}.view m)`).join("\n")
 }
@@ -106,18 +104,18 @@ ${
     
 
 type Route
-  = NotFoundRoute
+  = 
 ${
-  pages.map(page => `  | ${page.join("_")} ${page.join("_")}.Model`).join("\n")
+  pages.map(page => `    ${page.join("_")} ${page.join("_")}.Model`).join(" | \n")
 }
 
 
 matchers : Parser (Route -> a) a
 matchers =
     oneOf
-        [ UrlParser.map (PageA PageA.initial) top
+        [
 ${
-  pages.map(page => `        , UrlParser.map ${page.join("_")} ${page.join("_")}.route`).join("\n")
+  pages.map(page => `        UrlParser.map ${page.join("_")} ${page.join("_")}.route`).join(",\n")
 }
         ]   
 
@@ -128,7 +126,7 @@ parseLocation location =
             route
 
         Nothing ->
-            NotFoundRoute
+            NotFound NotFound.initial
 
 navigate : Location -> Msg 
 navigate location = Navigate (parseLocation location)
