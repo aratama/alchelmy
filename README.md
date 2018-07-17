@@ -2,20 +2,20 @@
 
 Single page application experimental project with auto-generated routing file for Elm.
 
-# Motivation
+## Motivation
 
 [The Elm Architecture](https://guide.elm-lang.org/architecture/) is simple and readable architecture that suitable for use with simgle page application.
 However, you need write a lot of boiler plates when you want to add a new page in your application. 
 For example, in your Main module, You need to add import declarations, add data constructor to hold Msg from child in parent Msg, add routes in routing and so on. 
-elm-generate try to auto-generate those boiler plates.
+elm-generate try to auto-generate those boiler plates. This project is highly experimental, so your comments or suggestions are welcome.
 
-# Usage 
+## Usage 
 
-Do `npm run build` and `src/<Application>/Routing.elm` and `src/index.js` will be generated.
+Do `npm run build` and `src/<Application>/Routing.elm` and `src/index.js` will be generated. Then, execute `elm-app start`.
 
-# Project Conventions 
+## Project Conventions 
 
-## Typicial Directory Structure
+### Typicial Directory Structure
 
 In elm-generate, you must conform to the following structure:
 
