@@ -1,4 +1,6 @@
-# elm-generate
+# elm-generate 
+
+[日本語ReadMe](readme-ja.md)
 
 Single page application experimental project with auto-generated routing file for Elm.
 
