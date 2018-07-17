@@ -73,7 +73,7 @@ update msg model = case (Debug.log "" msg) of
     { model | route = route }
     , case route of 
 ${
-  pages.map(page => `      ${page.join("_")} _ -> Cmd.map ${page.join("_")}Msg ${page.join("_")}.initialize`).join("\n")
+  pages.map(page => `          ${page.join("_")} _ -> Cmd.map ${page.join("_")}Msg ${page.join("_")}.initialize`).join("\n")
 }
   )
 
@@ -122,6 +122,15 @@ parseLocation location =
 navigate : Location -> Msg 
 navigate location = Navigate (parseLocation location)
 
+init : Location -> ( Model, Cmd Msg )
+init location = 
+  let route = parseLocation location in 
+        ( { route = route }
+        , case route of
+${
+  pages.map(page => `               ${page.join("_")} _ -> Cmd.map ${page.join("_")}Msg ${page.join("_")}.initialize`).join("\n")
+}   
+        )
   `
 
   await util.promisify(fs.writeFile)(`./src/${application}/Routing.elm`, source)

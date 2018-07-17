@@ -6,7 +6,7 @@ import Navigation exposing (Location)
 import CoolSPA.Routing as Routing exposing (Model, Msg, Route(..), parseLocation, navigate)
 
 init : Location -> ( Model, Cmd Msg )
-init location = ( { route = parseLocation location }, Cmd.none )
+init location = Routing.init location
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model = Routing.update msg model
