@@ -33,6 +33,11 @@ src
                 Type.elm
                 Update.elm
                 View.elm
+                <Page2-1>
+                    style.css
+                    Type.elm
+                    Update.elm
+                    View.elm
             <Page3>
                 style.css
                 Type.elm
