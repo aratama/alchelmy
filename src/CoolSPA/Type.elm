@@ -1,10 +1,10 @@
 module CoolSPA.Type exposing (..)
 
 
-type alias State =
+type alias Model =
     { user : String }
 
 
-initial : State
+initial : Model
 initial =
     { user = "Alice" }

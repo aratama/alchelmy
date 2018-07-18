@@ -52,7 +52,7 @@ module ${application}.Routing exposing (..)
 import Navigation exposing (Location)
 import UrlParser as UrlParser exposing (s, oneOf, Parser, parseHash, (</>))
 import Html as Html exposing (Html, text)
-import ${application}.Type as State
+import ${application}.Type as Root
 ${
   pages.map(page => `
 import ${application}.Page.${page.join(".")}.View as ${page.join("_")}
@@ -64,7 +64,7 @@ import ${application}.Page.${page.join(".")}.Update as ${page.join("_")}
 
 type alias Model = {
   route : Route,
-  state : State.State
+  state : Root.Model
 }
 
 type Route
@@ -135,7 +135,7 @@ navigate location = Navigate (parseLocation location)
 init : Location -> ( Model, Cmd Msg )
 init location = 
   let route = parseLocation location in 
-        ( { route = route, state = State.initial }
+        ( { route = route, state = Root.initial }
         , case route of
 ${
   pages.map(page => `               ${page.join("_")} _ -> Cmd.map ${page.join("_")}Msg ${page.join("_")}.initialize`).join("\n")

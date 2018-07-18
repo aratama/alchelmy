@@ -4,10 +4,10 @@ import UrlParser exposing (..)
 import Html exposing (Html, text, div, h1, img, a, p)
 import Html.Attributes exposing (src, href)
 import CoolSPA.Page.PageB.Type exposing (Model, Msg)
-import CoolSPA.Type exposing (State)
+import CoolSPA.Type as Root
 
 
-view : State -> Model -> Html Msg
+view : Root.Model -> Model -> Html Msg
 view state model =
     div []
         [ h1 [] [ text "PageB" ]
