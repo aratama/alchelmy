@@ -37,6 +37,10 @@ async function main(){
 
   pages.forEach(page => console.log(`Generate '${page.join(".")}'`))
 
+
+
+  // generate Routing.elm
+
   const source = `
 --------------------------
 -- Auto-generated codes --
@@ -48,6 +52,7 @@ module ${application}.Routing exposing (..)
 import Navigation exposing (Location)
 import UrlParser as UrlParser exposing (s, oneOf, Parser, parseHash, (</>))
 import Html as Html exposing (Html, text)
+import ${application}.Type as State
 ${
   pages.map(page => `
 import ${application}.Page.${page.join(".")}.View as ${page.join("_")}
@@ -56,9 +61,18 @@ import ${application}.Page.${page.join(".")}.Update as ${page.join("_")}
 `).join("\n")
 }
 
-type alias Model =
-    { route : Route }
 
+type alias Model = {
+  route : Route,
+  state : State.State
+}
+
+type Route
+  = 
+${
+  pages.map(page => `    ${page.join("_")} ${page.join("_")}.Model`).join(" | \n")
+}
+ 
 type Msg
     = Navigate Route
 ${
@@ -67,7 +81,7 @@ ${
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model = case (Debug.log "" msg) of 
+update msg model = case msg of 
 
   Navigate route -> (
     { model | route = route }
@@ -89,16 +103,12 @@ ${
 view : Model -> Html Msg
 view model = case model.route of 
 ${
-  pages.map(page => `  ${page.join("_")} m -> Html.map ${page.join("_")}Msg (${page.join("_")}.view m)`).join("\n")
+  pages.map(page => `  ${page.join("_")} m -> Html.map ${page.join("_")}Msg (${page.join("_")}.view model.state m)`).join("\n")
 }
 
     
 
-type Route
-  = 
-${
-  pages.map(page => `    ${page.join("_")} ${page.join("_")}.Model`).join(" | \n")
-}
+
 
 
 matchers : Parser (Route -> a) a
@@ -125,7 +135,7 @@ navigate location = Navigate (parseLocation location)
 init : Location -> ( Model, Cmd Msg )
 init location = 
   let route = parseLocation location in 
-        ( { route = route }
+        ( { route = route, state = State.initial }
         , case route of
 ${
   pages.map(page => `               ${page.join("_")} _ -> Cmd.map ${page.join("_")}Msg ${page.join("_")}.initialize`).join("\n")

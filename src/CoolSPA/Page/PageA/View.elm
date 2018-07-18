@@ -5,10 +5,11 @@ import Html exposing (Html, text, div, h1, img, a, p, button)
 import Html.Attributes exposing (src, href, class)
 import Html.Events exposing (onClick)
 import CoolSPA.Page.PageA.Type exposing (Model, Msg(..))
+import CoolSPA.Type exposing (State)
 
 
-view : Model -> Html Msg
-view model =
+view : State -> Model -> Html Msg
+view state model =
     div [ class "page-a" ]
         [ h1 [] [ text "PageA" ]
         , p [] [ a [ href "/#/page-b" ] [ text "Go to PageB" ] ]
