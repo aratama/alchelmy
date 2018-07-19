@@ -1,10 +1,10 @@
-module CoolSPA.Page.PageA.View exposing (..)
+module CoolSPA.Page.Preferences.View exposing (..)
 
 import UrlParser exposing (..)
-import Html exposing (Html, text, div, h1, img, a, p, button)
-import Html.Attributes exposing (src, href, class)
-import Html.Events exposing (onClick)
-import CoolSPA.Page.PageA.Type exposing (Model, Msg(..))
+import Html exposing (Html, text, div, h1, img, a, p, button, input)
+import Html.Attributes exposing (src, href, class, type_)
+import Html.Events exposing (onClick, onInput)
+import CoolSPA.Page.Preferences.Type exposing (Model, Msg(..))
 import CoolSPA.Type as Root
 import CoolSPA.View as Root
 
@@ -18,12 +18,10 @@ view state model =
                 , p [] [ a [ href "/#/page-b" ] [ text "Go to Page B" ] ]
                 , p [] [ a [ href "/#/page-b/page-b-a" ] [ text "Go to Page B/A" ] ]
                 , p [] [ a [ href "/#/page-c/42" ] [ text "Go to Page C" ] ]
-                , p [] [ a [ href "/#/preferences" ] [ text "Preferences" ] ]
                 ]
             , div []
-                [ h1 [] [ text "PageA" ]
-                , button [ onClick Decrement ] [ text "-" ]
-                , div [] [ text (toString model) ]
-                , button [ onClick Increment ] [ text "+" ]
+                [ h1 [] [ text "Preferences" ]
+                , p [] [ input [ type_ "text", onInput InputUserName ] [ text "" ] ]
+                , p [] [ button [ onClick SaveUserName ] [ text "Save" ] ]
                 ]
             ]
