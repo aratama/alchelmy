@@ -8,3 +8,7 @@ type Msg
 
 type alias Model =
     Int
+
+
+type alias Route =
+    {}

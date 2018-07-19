@@ -8,3 +8,7 @@ type Msg
 
 type alias Model =
     { value : String }
+
+
+type alias Route =
+    {}

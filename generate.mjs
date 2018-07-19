@@ -62,15 +62,17 @@ import ${application}.Page.${page.join(".")}.Update as ${page.join("_")}
 }
 
 
-type alias Model = {
-  route : Route,
-  state : Root.Model
-}
+type alias Model 
+  = { route : Route
+    , routeState : RouteState
+    , state : Root.Model
+    }
 
 type Route
-  = ${
-  pages.map(page => `${page.join("_")} ${page.join("_")}.Model`).join("\n  | ")
-}
+  = ${ pages.map(page => `${page.join("_")} ${page.join("_")}.Model`).join("\n  | ") }
+
+type RouteState
+  = ${ pages.map(page => `${page.join("_")}__State ${page.join("_")}.Model`).join("\n  | ") }
  
 type Msg
   = Navigate Route
@@ -85,7 +87,12 @@ update msg model = case msg of
     { model | route = route }
     , case route of 
 ${
-  pages.map(page => `          ${page.join("_")} _ -> Cmd.map ${page.join("_")}Msg ${page.join("_")}.initialize`).join("\n")
+  pages.map(page => `
+          ${page.join("_")} _ -> case ${page.join("_")}.initialize model.state of
+              (initialModel, initialCmd) -> Cmd.map ${page.join("_")}Msg initialCmd
+  
+  
+  `).join("\n")
 }
   )
 
@@ -133,12 +140,19 @@ navigate location = Navigate (parseLocation location)
 init : Location -> ( Model, Cmd Msg )
 init location = 
   let route = parseLocation location in 
-        ( { route = route, state = Root.initial }
-        , case route of
+        case route of
 ${
-  pages.map(page => `               ${page.join("_")} _ -> Cmd.map ${page.join("_")}Msg ${page.join("_")}.initialize`).join("\n")
+  pages.map(page => `
+            ${page.join("_")} _ -> case ${page.join("_")}.initialize Root.initial of
+                (initialModel, initialCmd) -> 
+                    ( { route = route
+                      , routeState = ${page.join("_")}__State initialModel
+                      , state = Root.initial 
+                      }
+                    , Cmd.map ${page.join("_")}Msg initialCmd
+                    )
+  `).join("\n")
 }   
-        )
   `
 
   await util.promisify(fs.writeFile)(`./src/${application}/Routing.elm`, source)

@@ -7,3 +7,7 @@ type Msg
 
 type alias Model =
     {}
+
+
+type alias Route =
+    {}

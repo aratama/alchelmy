@@ -8,9 +8,9 @@ import CoolSPA.Type as Root
 import UrlParser as UrlParser exposing (s, Parser, (</>), map)
 
 
-initialize : Cmd Msg
-initialize =
-    Cmd.none
+initialize : Root.Model -> ( Model, Cmd Msg )
+initialize rootModel =
+    ( { value = "" }, Cmd.none )
 
 
 update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg )

@@ -7,3 +7,7 @@ type Msg
 
 type alias Model =
     { id : Int }
+
+
+type alias Route =
+    { id : Int }

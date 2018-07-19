@@ -9,9 +9,9 @@ import UrlParser as UrlParser exposing (s, Parser, (</>), map, top)
 import Navigation exposing (modifyUrl)
 
 
-initialize : Cmd msg
-initialize =
-    modifyUrl "/#/"
+initialize : Root.Model -> ( Model, Cmd msg )
+initialize rootModel =
+    ( {}, modifyUrl "/#/" )
 
 
 update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg )

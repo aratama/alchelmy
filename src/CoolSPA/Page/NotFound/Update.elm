@@ -13,9 +13,9 @@ initial =
     {}
 
 
-initialize : Cmd Msg
-initialize =
-    Cmd.none
+initialize : Root.Model -> ( Model, Cmd Msg )
+initialize rootModel =
+    ( initial, Cmd.none )
 
 
 update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg )
