@@ -1,5 +1,5 @@
 .page-not-found {
     background-color: black;
     color: white;
-    height: 100%;
+    min-height: 100%;
 }

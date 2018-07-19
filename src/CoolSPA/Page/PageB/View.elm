@@ -14,9 +14,10 @@ view state model =
     Root.view state <|
         div [ class "page-b container" ]
             [ div []
-                [ p [] [ a [ href "/#/page-a" ] [ text "Go to PageA" ] ]
-                , p [] [ a [ href "/#/page-c/42" ] [ text "Go to PageC" ] ]
+                [ p [] [ a [ href "/#/page-a" ] [ text "Go to Page A" ] ]
+                , p [] [ a [ href "/#/page-b" ] [ text "Go to Page B" ] ]
                 , p [] [ a [ href "/#/page-b/page-b-a" ] [ text "Go to Page B/A" ] ]
+                , p [] [ a [ href "/#/page-c/42" ] [ text "Go to Page C" ] ]
                 ]
             , div []
                 [ h1 [] [ text "PageB" ]

@@ -13,14 +13,14 @@ initialize =
     Cmd.none
 
 
-update : Msg -> Root.Model -> Model -> ( Model, Cmd Msg )
+update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg )
 update msg rootModel model =
     case msg of
         Increment ->
-            ( model + 1, Cmd.none )
+            ( rootModel, model + 1, Cmd.none )
 
         Decrement ->
-            ( model - 1, Cmd.none )
+            ( rootModel, model - 1, Cmd.none )
 
 
 route : Parser (Model -> a) a

@@ -18,9 +18,9 @@ initialize =
     Cmd.none
 
 
-update : Msg -> Root.Model -> Model -> ( Model, Cmd Msg )
+update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg )
 update msg rootModel model =
-    ( model, Cmd.none )
+    ( rootModel, model, Cmd.none )
 
 
 route : Parser (Model -> a) a

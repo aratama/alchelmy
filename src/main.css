@@ -1,8 +1,11 @@
 * {
+  transition-property: background-color;
+  transition-duration: 0.3s;
+}
+
+html, body {
   margin: 0;
   padding: 0;
-  transition-property: all;
-  transition-duration: 0.3s;
 }
 
 
@@ -22,9 +25,17 @@ img {
   max-width: 200px;
 }
 
+.root {
+  height: 100vh;
+}
+
 header {
-  min-height: 100px;
+  height: 100px;
   background-color: white;
+}
+
+.page {
+  height: calc(100vh - 100px);
 }
 
 .container {
@@ -34,7 +45,8 @@ header {
 
 .container > *:nth-child(1) {
   flex-grow: 0;
-  background-color: rgba(0, 0, 0, 0.2)
+  background-color: rgba(0, 0, 0, 0.2);
+  width: 200px;
 }
 
 .container > *:nth-child(2) {

@@ -74,11 +74,9 @@ type Route
  
 type Msg
   = Navigate Route
-  | SetState Root.Model
 ${
   pages.map(page => `  | ${page.join("_")}Msg ${page.join("_")}.Msg`).join("\n")
 }
-
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model = case msg of 
@@ -91,13 +89,11 @@ ${
 }
   )
 
-  SetState model_ -> (model, Cmd.none)
-
 ${
   pages.map(page => `
   ${page.join("_")}Msg pageMsg -> case model.route of 
       ${page.join("_")} pageModel -> case ${page.join("_")}.update pageMsg model.state pageModel of 
-        (pageModel_, pageCmd) -> ( { model | route = ${page.join("_")} pageModel_ }, Cmd.map ${page.join("_")}Msg pageCmd)      
+        (model_, pageModel_, pageCmd) -> ( { model | route = ${page.join("_")} pageModel_, state = model_ }, Cmd.map ${page.join("_")}Msg pageCmd)      
       _ -> (model, Cmd.none)
   `).join("\n")
 }

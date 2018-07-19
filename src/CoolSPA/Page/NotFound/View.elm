@@ -10,8 +10,7 @@ import CoolSPA.View as Root
 
 view : Root.Model -> Model -> Html Msg
 view state model =
-    Root.view state <|
-        div [ class "page-not-found" ]
-            [ h1 [] [ text "404 Not Found" ]
-            , p [] [ a [ href "/#/" ] [ text "Go to Top" ] ]
-            ]
+    div [ class "page-not-found" ]
+        [ h1 [] [ text "404 Not Found" ]
+        , p [] [ a [ href "/#/" ] [ text "Go to Top" ] ]
+        ]
