@@ -13,6 +13,11 @@ initial =
     {}
 
 
+route : Parser (Model -> a) a
+route =
+    map Model (s "not-found")
+
+
 initialize : Root.Model -> ( Model, Cmd Msg )
 initialize rootModel =
     ( initial, Cmd.none )
@@ -21,8 +26,3 @@ initialize rootModel =
 update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg )
 update msg rootModel model =
     ( rootModel, model, Cmd.none )
-
-
-route : Parser (Model -> a) a
-route =
-    map Model (s "not-found")

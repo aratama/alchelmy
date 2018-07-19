@@ -8,6 +8,11 @@ import CoolSPA.Type as Root
 import UrlParser as UrlParser exposing (s, Parser, (</>), map)
 
 
+route : Parser (Model -> a) a
+route =
+    map { value = "" } (s "preferences")
+
+
 initialize : Root.Model -> ( Model, Cmd Msg )
 initialize rootModel =
     ( { value = "" }, Cmd.none )
@@ -21,8 +26,3 @@ update msg rootModel model =
 
         SaveUserName ->
             ( { rootModel | user = model.value }, model, Cmd.none )
-
-
-route : Parser (Model -> a) a
-route =
-    map { value = "" } (s "preferences")

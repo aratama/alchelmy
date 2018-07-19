@@ -8,6 +8,11 @@ import CoolSPA.Type as Root
 import UrlParser as UrlParser exposing (s, Parser, (</>), map)
 
 
+route : Parser (Model -> a) a
+route =
+    map Model (s "page-b" </> s "page-b-a")
+
+
 initialize : Root.Model -> ( Model, Cmd Msg )
 initialize rootModel =
     ( {}, Cmd.none )
@@ -16,8 +21,3 @@ initialize rootModel =
 update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg )
 update msg rootModel model =
     ( rootModel, model, Cmd.none )
-
-
-route : Parser (Model -> a) a
-route =
-    map Model (s "page-b" </> s "page-b-a")

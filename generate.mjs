@@ -53,12 +53,14 @@ import Navigation exposing (Location)
 import UrlParser as UrlParser exposing (s, oneOf, Parser, parseHash, (</>))
 import Html as Html exposing (Html, text)
 import ${application}.Type as Root
-${
+${ 
   pages.map(page => `
+
 import ${application}.Page.${page.join(".")}.View as ${page.join("_")}
 import ${application}.Page.${page.join(".")}.Type as ${page.join("_")}
 import ${application}.Page.${page.join(".")}.Update as ${page.join("_")}
-`).join("\n")
+
+`.trim()).join("\n") 
 }
 
 
@@ -83,18 +85,18 @@ ${
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model = case msg of 
 
-  Navigate route -> (
-    { model | route = route }
-    , case route of 
+  Navigate route -> case route of 
 ${
   pages.map(page => `
           ${page.join("_")} _ -> case ${page.join("_")}.initialize model.state of
-              (initialModel, initialCmd) -> Cmd.map ${page.join("_")}Msg initialCmd
-  
+              (initialModel, initialCmd) -> 
+                ( { model | route = route, routeState = ${page.join("_")}__State initialModel }
+                , Cmd.map ${page.join("_")}Msg initialCmd
+                )  
   
   `).join("\n")
 }
-  )
+
 
 ${
   pages.map(page => `

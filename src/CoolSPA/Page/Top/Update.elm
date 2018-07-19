@@ -9,6 +9,11 @@ import UrlParser as UrlParser exposing (s, Parser, (</>), map, top)
 import Navigation exposing (modifyUrl)
 
 
+route : Parser (Model -> a) a
+route =
+    map Model top
+
+
 initialize : Root.Model -> ( Model, Cmd msg )
 initialize rootModel =
     ( {}, modifyUrl "/#/" )
@@ -17,8 +22,3 @@ initialize rootModel =
 update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg )
 update msg rootModel model =
     ( rootModel, model, Cmd.none )
-
-
-route : Parser (Model -> a) a
-route =
-    map Model top
