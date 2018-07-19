@@ -8,7 +8,7 @@ import CoolSPA.Type as Root
 import UrlParser as UrlParser exposing (s, Parser, (</>), map)
 
 
-route : Parser (Model -> a) a
+route : Parser (Route -> a) a
 route =
     map 0 (s "counter")
 

@@ -15,6 +15,7 @@ view model content =
         , div [ class "page" ]
             [ div [ class "index" ]
                 [ p [] [ a [ href "/#/counter" ] [ text "Counter" ] ]
+                , p [] [ a [ href "/#/http" ] [ text "Http" ] ]
                 , p [] [ a [ href "/#/page-b" ] [ text "Go to Page B" ] ]
                 , p [] [ a [ href "/#/page-b/page-b-a" ] [ text "Go to Page B/A" ] ]
                 , p [] [ a [ href "/#/page-c/42" ] [ text "Go to Page C" ] ]
