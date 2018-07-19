@@ -112,10 +112,6 @@ ${
   pages.map(page => `  ${page.join("_")}__State m -> Html.map ${page.join("_")}Msg (${page.join("_")}.view model.state m)`).join("\n")
 }
 
-    
-
-
-
 
 matchers : Parser (Route -> a) a
 matchers =

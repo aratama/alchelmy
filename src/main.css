@@ -1,6 +1,7 @@
 * {
   transition-property: background-color;
   transition-duration: 0.3s;
+  box-sizing:border-box;
 }
 
 html, body {
@@ -12,7 +13,6 @@ html, body {
 body {
   font-family: 'Source Sans Pro', 'Trebuchet MS', 'Lucida Grande', 'Bitstream Vera Sans', 'Helvetica Neue', sans-serif;
   margin: 0;
-  text-align: center;
   color: #293c4b;
 }
 
@@ -30,27 +30,32 @@ img {
 }
 
 header {
-  height: 100px;
-  background-color: white;
+  height: 150px;
+  background-color: #333;
+  color: white;
+  padding: 8px;
 }
 
 .page {
-  height: calc(100vh - 100px);
-}
-
-.container {
+  height: calc(100vh - 150px);
   display: flex;
   flex-direction: row;
+  align-items: stretch;
 }
 
-.container > *:nth-child(1) {
+.page > *:nth-child(1) {
   flex-grow: 0;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: #444;
   width: 200px;
+  text-align: center;
 }
 
-.container > *:nth-child(2) {
+.page > *:nth-child(2) {
   flex-grow: 1;
+}
+
+.page > *:nth-child(2) > * {
+  padding: 20px;
 }
 
 button {

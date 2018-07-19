@@ -1,4 +1,4 @@
-module CoolSPA.Page.PageA.Type exposing (..)
+module CoolSPA.Page.Counter.Type exposing (..)
 
 
 type Msg

@@ -12,13 +12,6 @@ view : Root.Model -> Model -> Html Msg
 view state model =
     Root.view state <|
         div [ class "page-c container" ]
-            [ div []
-                [ p [] [ a [ href "/#/page-a" ] [ text "Go to Page A" ] ]
-                , p [] [ a [ href "/#/page-b" ] [ text "Go to Page B" ] ]
-                , p [] [ a [ href "/#/page-b/page-b-a" ] [ text "Go to Page B/A" ] ]
-                , p [] [ a [ href "/#/page-c/42" ] [ text "Go to Page C" ] ]
-                ]
-            , div []
-                [ h1 [] [ text "Page C" ]
-                ]
+            [ h1 [] [ text "Page C" ]
+            , p [] [ text <| "Parameter: " ++ toString model.id ]
             ]

@@ -13,15 +13,7 @@ view : Root.Model -> Model -> Html Msg
 view state model =
     Root.view state <|
         div [ class "page-a container" ]
-            [ div [ class "" ]
-                [ p [] [ a [ href "/#/page-a" ] [ text "Go to Page A" ] ]
-                , p [] [ a [ href "/#/page-b" ] [ text "Go to Page B" ] ]
-                , p [] [ a [ href "/#/page-b/page-b-a" ] [ text "Go to Page B/A" ] ]
-                , p [] [ a [ href "/#/page-c/42" ] [ text "Go to Page C" ] ]
-                ]
-            , div []
-                [ h1 [] [ text "Preferences" ]
-                , p [] [ input [ type_ "text", onInput InputUserName, value model.value ] [] ]
-                , p [] [ button [ onClick SaveUserName ] [ text "Save" ] ]
-                ]
+            [ h1 [] [ text "Preferences" ]
+            , p [] [ text "User Name:", input [ type_ "text", onInput InputUserName, value model.value ] [] ]
+            , p [] [ button [ onClick SaveUserName ] [ text "Save" ] ]
             ]
