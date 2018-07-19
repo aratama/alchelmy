@@ -26,3 +26,8 @@ update msg rootModel model =
 
         SaveUserName ->
             ( { rootModel | user = model.value }, model, Cmd.none )
+
+
+subscriptions : Root.Model -> Sub Msg
+subscriptions model =
+    Sub.none

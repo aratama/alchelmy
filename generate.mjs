@@ -149,6 +149,18 @@ ${
                     )
   `).join("\n")
 }   
+
+subscriptions : Model -> Sub Msg
+subscriptions model = 
+    Sub.batch
+        [  ${
+            pages.map(page => `Sub.map ${page.join("_")}Msg (${page.join("_")}.subscriptions model.state)`).join("\n        , ") 
+}
+        ]
+
+
+
+
   `
 
   await util.promisify(fs.writeFile)(`./src/${application}/Routing.elm`, source)

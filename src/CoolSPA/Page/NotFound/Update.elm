@@ -26,3 +26,8 @@ init _ rootModel =
 update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg )
 update msg rootModel model =
     ( rootModel, model, Cmd.none )
+
+
+subscriptions : Root.Model -> Sub Msg
+subscriptions model =
+    Sub.none

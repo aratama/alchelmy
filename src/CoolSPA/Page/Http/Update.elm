@@ -49,3 +49,8 @@ getRandomGif topic =
 decodeGifUrl : Decode.Decoder String
 decodeGifUrl =
     Decode.at [ "data", "image_url" ] Decode.string
+
+
+subscriptions : Root.Model -> Sub Msg
+subscriptions model =
+    Sub.none

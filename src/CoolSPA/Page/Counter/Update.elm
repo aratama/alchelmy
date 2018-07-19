@@ -26,3 +26,8 @@ update msg rootModel model =
 
         Decrement ->
             ( rootModel, model - 1, Cmd.none )
+
+
+subscriptions : Root.Model -> Sub Msg
+subscriptions model =
+    Sub.none
