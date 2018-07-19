@@ -1,5 +1,7 @@
 module CoolSPA.Type exposing (..)
 
+-- global application state
+
 
 type alias Model =
     { user : String }

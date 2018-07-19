@@ -6,17 +6,22 @@ import Html.Attributes exposing (src, href, class)
 import Html.Events exposing (onClick)
 import CoolSPA.Page.PageA.Type exposing (Model, Msg(..))
 import CoolSPA.Type as Root
+import CoolSPA.View as Root
 
 
 view : Root.Model -> Model -> Html Msg
 view state model =
-    div [ class "page-a" ]
-        [ h1 [] [ text "PageA" ]
-        , p [] [ a [ href "/#/page-b" ] [ text "Go to PageB" ] ]
-        , p [] [ a [ href "/#/page-c/42" ] [ text "Go to PageC" ] ]
-        , div []
-            [ button [ onClick Decrement ] [ text "-" ]
-            , div [] [ text (toString model) ]
-            , button [ onClick Increment ] [ text "+" ]
+    Root.view state <|
+        div [ class "page-a container" ]
+            [ div [ class "" ]
+                [ p [] [ a [ href "/#/page-a" ] [ text "Go to Page A" ] ]
+                , p [] [ a [ href "/#/page-b" ] [ text "Go to Page B" ] ]
+                , p [] [ a [ href "/#/page-c/42" ] [ text "Go to Page C" ] ]
+                ]
+            , div []
+                [ h1 [] [ text "PageA" ]
+                , button [ onClick Decrement ] [ text "-" ]
+                , div [] [ text (toString model) ]
+                , button [ onClick Increment ] [ text "+" ]
+                ]
             ]
-        ]

@@ -21,3 +21,35 @@ img {
   margin: 20px 0;
   max-width: 200px;
 }
+
+header {
+  min-height: 100px;
+  background-color: white;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+}
+
+.container > *:nth-child(1) {
+  flex-grow: 0;
+  background-color: rgba(0, 0, 0, 0.2)
+}
+
+.container > *:nth-child(2) {
+  flex-grow: 1;
+}
+
+button {
+  width: 200px;
+  height: 2em;
+}
+
+a {
+  color :white;
+}
+
+p {
+  padding: 10px;
+}

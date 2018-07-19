@@ -1,12 +1,13 @@
 module CoolSPA.View exposing (..)
 
-import Html exposing (Html, text, div, h1, img, a, p)
-import Html.Attributes exposing (src, href)
+import Html exposing (Html, text, div, header)
+import Html.Attributes exposing (class)
+import CoolSPA.Type as Root
 
 
-view : Html msg -> Html msg
-view content =
-    div []
-        [ div [] []
-        , div [] [ content ]
+view : Root.Model -> Html msg -> Html msg
+view model content =
+    div [ class "root" ]
+        [ header [] [ text <| "User Name: " ++ model.user ]
+        , div [ class "page" ] [ content ]
         ]
