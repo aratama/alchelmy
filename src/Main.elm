@@ -7,23 +7,23 @@ import CoolSPA.Routing as Routing exposing (Model, Msg, Route(..), parseLocation
 
 
 init : Location -> ( Model, Cmd Msg )
-init location =
-    Routing.init location
+init =
+    Routing.init
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
-    Routing.update msg model
+update =
+    Routing.update
 
 
 view : Model -> Html Msg
-view model =
-    Routing.view model
+view =
+    Routing.view
 
 
 subscriptions : Model -> Sub Msg
-subscriptions model =
-    Sub.none
+subscriptions =
+    Routing.subscriptions
 
 
 main : Program Never Model Msg
