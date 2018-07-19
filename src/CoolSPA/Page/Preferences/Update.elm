@@ -15,7 +15,7 @@ route =
 
 initialize : Route -> Root.Model -> ( Model, Cmd Msg )
 initialize route rootModel =
-    ( { value = "" }, Cmd.none )
+    ( { value = rootModel.user }, Cmd.none )
 
 
 update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg )

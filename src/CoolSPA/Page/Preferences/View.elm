@@ -2,7 +2,7 @@ module CoolSPA.Page.Preferences.View exposing (..)
 
 import UrlParser exposing (..)
 import Html exposing (Html, text, div, h1, img, a, p, button, input)
-import Html.Attributes exposing (src, href, class, type_)
+import Html.Attributes exposing (src, href, class, type_, value)
 import Html.Events exposing (onClick, onInput)
 import CoolSPA.Page.Preferences.Type exposing (Model, Msg(..))
 import CoolSPA.Type as Root
@@ -21,7 +21,7 @@ view state model =
                 ]
             , div []
                 [ h1 [] [ text "Preferences" ]
-                , p [] [ input [ type_ "text", onInput InputUserName ] [ text "" ] ]
+                , p [] [ input [ type_ "text", onInput InputUserName, value model.value ] [] ]
                 , p [] [ button [ onClick SaveUserName ] [ text "Save" ] ]
                 ]
             ]

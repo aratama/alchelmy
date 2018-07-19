@@ -10,12 +10,12 @@ import UrlParser as UrlParser exposing (s, Parser, (</>), int, map)
 
 route : Parser (Route -> c) c
 route =
-    map Model (s "page-c" </> int)
+    s "page-c" </> int
 
 
 initialize : Route -> Root.Model -> ( Model, Cmd Msg )
-initialize route rootModel =
-    ( { id = 0 }, Cmd.none )
+initialize id rootModel =
+    ( { id = id }, Cmd.none )
 
 
 update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg )
