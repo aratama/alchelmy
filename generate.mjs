@@ -87,7 +87,7 @@ update msg model = case msg of
   Navigate route -> case route of 
 ${
   pages.map(page => `
-          ${page.join("_")} routeValue -> case ${page.join("_")}.initialize routeValue model.state of
+          ${page.join("_")} routeValue -> case ${page.join("_")}.init routeValue model.state of
               (initialModel, initialCmd) -> 
                 ( { model | route = ${page.join("_")}__State initialModel }
                 , Cmd.map ${page.join("_")}Msg initialCmd
@@ -144,7 +144,7 @@ init location =
         case route of
 ${
   pages.map(page => `
-            ${page.join("_")} routeValue -> case ${page.join("_")}.initialize routeValue Root.initial of
+            ${page.join("_")} routeValue -> case ${page.join("_")}.init routeValue Root.initial of
                 (initialModel, initialCmd) -> 
                     ( { route = ${page.join("_")}__State initialModel
                       , state = Root.initial 

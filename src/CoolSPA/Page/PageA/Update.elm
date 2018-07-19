@@ -13,8 +13,8 @@ route =
     map 0 (s "page-a")
 
 
-initialize : Route -> Root.Model -> ( Model, Cmd Msg )
-initialize route rootModel =
+init : Route -> Root.Model -> ( Model, Cmd Msg )
+init route rootModel =
     ( route, Cmd.none )
 
 

@@ -13,8 +13,8 @@ route =
     s "page-c" </> int
 
 
-initialize : Route -> Root.Model -> ( Model, Cmd Msg )
-initialize id rootModel =
+init : Route -> Root.Model -> ( Model, Cmd Msg )
+init id rootModel =
     ( { id = id }, Cmd.none )
 
 

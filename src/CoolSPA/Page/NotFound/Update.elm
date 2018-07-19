@@ -18,8 +18,8 @@ route =
     map {} (s "not-found")
 
 
-initialize : Route -> Root.Model -> ( Model, Cmd Msg )
-initialize _ rootModel =
+init : Route -> Root.Model -> ( Model, Cmd Msg )
+init _ rootModel =
     ( initial, Cmd.none )
 
 

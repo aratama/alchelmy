@@ -14,8 +14,8 @@ route =
     map Model top
 
 
-initialize : Route -> Root.Model -> ( Model, Cmd msg )
-initialize route rootModel =
+init : Route -> Root.Model -> ( Model, Cmd msg )
+init route rootModel =
     ( {}, modifyUrl "/#/" )
 
 

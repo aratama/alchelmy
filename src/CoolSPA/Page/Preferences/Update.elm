@@ -13,8 +13,8 @@ route =
     map {} (s "preferences")
 
 
-initialize : Route -> Root.Model -> ( Model, Cmd Msg )
-initialize route rootModel =
+init : Route -> Root.Model -> ( Model, Cmd Msg )
+init route rootModel =
     ( { value = rootModel.user }, Cmd.none )
 
 
