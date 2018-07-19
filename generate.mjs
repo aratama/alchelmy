@@ -65,13 +65,12 @@ import ${application}.Page.${page.join(".")}.Update as ${page.join("_")}
 
 
 type alias Model 
-  = { route : Route
-    , routeState : RouteState
+  = { route : RouteState
     , state : Root.Model
     }
 
 type Route
-  = ${ pages.map(page => `${page.join("_")} ${page.join("_")}.Model`).join("\n  | ") }
+  = ${ pages.map(page => `${page.join("_")} ${page.join("_")}.Route`).join("\n  | ") }
 
 type RouteState
   = ${ pages.map(page => `${page.join("_")}__State ${page.join("_")}.Model`).join("\n  | ") }
@@ -88,9 +87,9 @@ update msg model = case msg of
   Navigate route -> case route of 
 ${
   pages.map(page => `
-          ${page.join("_")} _ -> case ${page.join("_")}.initialize model.state of
+          ${page.join("_")} routeValue -> case ${page.join("_")}.initialize routeValue model.state of
               (initialModel, initialCmd) -> 
-                ( { model | route = route, routeState = ${page.join("_")}__State initialModel }
+                ( { model | route = ${page.join("_")}__State initialModel }
                 , Cmd.map ${page.join("_")}Msg initialCmd
                 )  
   
@@ -101,8 +100,8 @@ ${
 ${
   pages.map(page => `
   ${page.join("_")}Msg pageMsg -> case model.route of 
-      ${page.join("_")} pageModel -> case ${page.join("_")}.update pageMsg model.state pageModel of 
-        (model_, pageModel_, pageCmd) -> ( { model | route = ${page.join("_")} pageModel_, state = model_ }, Cmd.map ${page.join("_")}Msg pageCmd)      
+      ${page.join("_")}__State pageModel -> case ${page.join("_")}.update pageMsg model.state pageModel of 
+        (model_, pageModel_, pageCmd) -> ( { model | route = ${page.join("_")}__State pageModel_, state = model_ }, Cmd.map ${page.join("_")}Msg pageCmd)      
       _ -> (model, Cmd.none)
   `).join("\n")
 }
@@ -110,7 +109,7 @@ ${
 view : Model -> Html Msg
 view model = case model.route of 
 ${
-  pages.map(page => `  ${page.join("_")} m -> Html.map ${page.join("_")}Msg (${page.join("_")}.view model.state m)`).join("\n")
+  pages.map(page => `  ${page.join("_")}__State m -> Html.map ${page.join("_")}Msg (${page.join("_")}.view model.state m)`).join("\n")
 }
 
     
@@ -145,10 +144,9 @@ init location =
         case route of
 ${
   pages.map(page => `
-            ${page.join("_")} _ -> case ${page.join("_")}.initialize Root.initial of
+            ${page.join("_")} routeValue -> case ${page.join("_")}.initialize routeValue Root.initial of
                 (initialModel, initialCmd) -> 
-                    ( { route = route
-                      , routeState = ${page.join("_")}__State initialModel
+                    ( { route = ${page.join("_")}__State initialModel
                       , state = Root.initial 
                       }
                     , Cmd.map ${page.join("_")}Msg initialCmd
@@ -163,7 +161,7 @@ ${
 
   // generate index.js
 
-  const css = `
+  const indexSource = `
 import './main.css';
 import { Main } from './Main.elm';
 import registerServiceWorker from './registerServiceWorker';
@@ -178,7 +176,7 @@ Main.embed(document.getElementById('root'));
 registerServiceWorker();
 `
 
-  await util.promisify(fs.writeFile)("./src/index.js", css)
+  await util.promisify(fs.writeFile)("./src/index.js", indexSource)
 
 }
 
