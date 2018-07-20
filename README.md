@@ -2,9 +2,9 @@
 
 [日本語ReadMe](readme-ja.md)
 
-Single page application experimental project with auto-generated routing file for Elm.
+An experimental project for multipage single page application with auto-generated routing file for Elm.
 
-## Motivation
+## Motivation: Go away, boilerplate!
 
 [The Elm Architecture](https://guide.elm-lang.org/architecture/) is simple and readable architecture that suitable for use with simgle page application.
 However, you need write a lot of boiler plates when you want to add a new page in your application. 
