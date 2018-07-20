@@ -1,4 +1,4 @@
-# elm-generate
+# elm-automata
 
 邪悪なシングルページアプリケーション実験
 
