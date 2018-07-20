@@ -1,9 +1,9 @@
-module CoolSPA.Page.PageC.Update exposing (..)
+module CoolSPA.Page.URLParsing.Update exposing (..)
 
 import UrlParser exposing (..)
 import Html exposing (Html, text, div, h1, img, a, p)
 import Html.Attributes exposing (src, href)
-import CoolSPA.Page.PageC.Type exposing (Model, Msg, Route)
+import CoolSPA.Page.URLParsing.Type exposing (Model, Msg, Route)
 import CoolSPA.Type as Root
 import UrlParser as UrlParser exposing (s, Parser, (</>), int, map)
 import Navigation exposing (Location)
@@ -11,12 +11,12 @@ import Navigation exposing (Location)
 
 route : Parser (Route -> c) c
 route =
-    s "page-c" </> int
+    s "url-parsing" </> int
 
 
 init : Location -> Route -> Root.Model -> ( Model, Cmd Msg )
 init location id rootModel =
-    ( { id = id }, Cmd.none )
+    ( { id = id, location = location }, Cmd.none )
 
 
 update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg )
