@@ -3,7 +3,7 @@ import util from "util"
 import path from "path"
 import glob from "glob"
 
-async function main(){
+async function generateRouter(){
 
   const filesInRoot = await util.promisify(fs.readdir)(`./src`)
 
@@ -184,4 +184,26 @@ registerServiceWorker();
 
 }
 
-main()
+function generateNewPage(page){
+
+}
+
+const command = process.argv[2]
+if(process.argv.length === 2){
+  generateRouter()
+
+}else if (process.argv.length === 4 && command === "new"){
+
+  console.log(`Generating new page: ${page}`)
+
+  const page = process.argv[3]
+  if(fs.existsSync(path.resolve(`./src/${application}/Page/${foo}`))){
+    console.err(`[Error] Page '${page}' already exists.`)
+  }else{
+
+  }
+
+  generateRouter()
+}else{
+  console.err(`Unknown command: ${process.argv.slice(2).join(" ")}`)
+}

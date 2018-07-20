@@ -1,4 +1,4 @@
-module CoolSPA.Page.PageB.Type exposing (..)
+module CoolSPA.Page.Parent.Child.Type exposing (..)
 
 
 type Msg

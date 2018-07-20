@@ -11,12 +11,12 @@ import Navigation exposing (Location)
 
 route : Parser (Route -> a) a
 route =
-    map 0 (s "counter")
+    map () (s "counter")
 
 
 init : Location -> Route -> Root.Model -> ( Model, Cmd Msg )
-init location route rootModel =
-    ( route, Cmd.none )
+init _ _ rootModel =
+    ( 0, Cmd.none )
 
 
 update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg )

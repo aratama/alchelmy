@@ -1,9 +1,9 @@
-module CoolSPA.Page.PageB.PageBA.Update exposing (..)
+module CoolSPA.Page.Parent.Child.Update exposing (..)
 
 import UrlParser exposing (..)
 import Html exposing (Html, text, div, h1, img, a, p)
 import Html.Attributes exposing (src, href)
-import CoolSPA.Page.PageB.PageBA.Type exposing (Model, Msg, Route)
+import CoolSPA.Page.Parent.Child.Type exposing (Model, Msg, Route)
 import CoolSPA.Type as Root
 import UrlParser as UrlParser exposing (s, Parser, (</>), map)
 import Navigation exposing (Location)
@@ -11,7 +11,7 @@ import Navigation exposing (Location)
 
 route : Parser (Route -> a) a
 route =
-    map Model (s "page-b" </> s "page-b-a")
+    map Model (s "parent" </> s "child")
 
 
 init : Location -> Route -> Root.Model -> ( Model, Cmd Msg )
