@@ -76,7 +76,7 @@ type RouteState
   = ${ pages.map(page => `${page.join("_")}__State ${page.join("_")}.Model`).join("\n  | ") }
  
 type Msg
-  = Navigate Route
+  = Navigate Location
 ${
   pages.map(page => `  | ${page.join("_")}Msg ${page.join("_")}.Msg`).join("\n")
 }
@@ -84,22 +84,18 @@ ${
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model = case msg of 
 
-  Navigate route -> case route of 
-${
+  Navigate location -> let route = parseLocation location in case route of ${
   pages.map(page => `
-          ${page.join("_")} routeValue -> case ${page.join("_")}.init routeValue model.state of
+          ${page.join("_")} routeValue -> case ${page.join("_")}.init location routeValue model.state of
               (initialModel, initialCmd) -> 
                 ( { model | route = ${page.join("_")}__State initialModel }
                 , Cmd.map ${page.join("_")}Msg initialCmd
-                )  
-  
-  `).join("\n")
-}
-
+                )
+  `).join("\n") }
 
 ${
   pages.map(page => `
-  ${page.join("_")}Msg pageMsg -> case model.route of 
+  ${ page.join("_")}Msg pageMsg -> case model.route of 
       ${page.join("_")}__State pageModel -> case ${page.join("_")}.update pageMsg model.state pageModel of 
         (model_, pageModel_, pageCmd) -> ( { model | route = ${page.join("_")}__State pageModel_, state = model_ }, Cmd.map ${page.join("_")}Msg pageCmd)      
       _ -> (model, Cmd.none)
@@ -132,7 +128,7 @@ parseLocation location =
             NotFound NotFound.initial
 
 navigate : Location -> Msg 
-navigate location = Navigate (parseLocation location)
+navigate = Navigate
 
 init : Location -> ( Model, Cmd Msg )
 init location = 
@@ -140,7 +136,7 @@ init location =
         case route of
 ${
   pages.map(page => `
-            ${page.join("_")} routeValue -> case ${page.join("_")}.init routeValue Root.initial of
+            ${page.join("_")} routeValue -> case ${page.join("_")}.init location routeValue Root.initial of
                 (initialModel, initialCmd) -> 
                     ( { route = ${page.join("_")}__State initialModel
                       , state = Root.initial 

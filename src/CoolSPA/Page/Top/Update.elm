@@ -7,6 +7,7 @@ import CoolSPA.Page.Top.Type exposing (Model, Msg, Route)
 import CoolSPA.Type as Root
 import UrlParser as UrlParser exposing (s, Parser, (</>), map, top)
 import Navigation exposing (modifyUrl)
+import Navigation exposing (Location)
 
 
 route : Parser (Route -> a) a
@@ -14,8 +15,8 @@ route =
     map Model top
 
 
-init : Route -> Root.Model -> ( Model, Cmd msg )
-init route rootModel =
+init : Location -> Route -> Root.Model -> ( Model, Cmd msg )
+init location route rootModel =
     ( {}, modifyUrl "/#/" )
 
 

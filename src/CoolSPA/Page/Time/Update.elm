@@ -8,6 +8,7 @@ import CoolSPA.Type as Root
 import UrlParser as UrlParser exposing (s, Parser, (</>), map)
 import Json.Decode as Decode
 import Time as Time exposing (second)
+import Navigation exposing (Location)
 
 
 route : Parser (Route -> a) a
@@ -15,8 +16,8 @@ route =
     map {} (s "time")
 
 
-init : Route -> Root.Model -> ( Model, Cmd Msg )
-init route rootModel =
+init : Location -> Route -> Root.Model -> ( Model, Cmd Msg )
+init location route rootModel =
     ( 0, Cmd.none )
 
 

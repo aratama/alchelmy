@@ -6,6 +6,7 @@ import Html.Attributes exposing (src, href)
 import CoolSPA.Page.Counter.Type exposing (Model, Msg(..), Route)
 import CoolSPA.Type as Root
 import UrlParser as UrlParser exposing (s, Parser, (</>), map)
+import Navigation exposing (Location)
 
 
 route : Parser (Route -> a) a
@@ -13,8 +14,8 @@ route =
     map 0 (s "counter")
 
 
-init : Route -> Root.Model -> ( Model, Cmd Msg )
-init route rootModel =
+init : Location -> Route -> Root.Model -> ( Model, Cmd Msg )
+init location route rootModel =
     ( route, Cmd.none )
 
 

@@ -6,6 +6,7 @@ import Html.Attributes exposing (src, href)
 import CoolSPA.Page.PageC.Type exposing (Model, Msg, Route)
 import CoolSPA.Type as Root
 import UrlParser as UrlParser exposing (s, Parser, (</>), int, map)
+import Navigation exposing (Location)
 
 
 route : Parser (Route -> c) c
@@ -13,8 +14,8 @@ route =
     s "page-c" </> int
 
 
-init : Route -> Root.Model -> ( Model, Cmd Msg )
-init id rootModel =
+init : Location -> Route -> Root.Model -> ( Model, Cmd Msg )
+init location id rootModel =
     ( { id = id }, Cmd.none )
 
 

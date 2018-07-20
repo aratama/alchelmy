@@ -6,6 +6,7 @@ import Html.Attributes exposing (src, href)
 import CoolSPA.Page.NotFound.Type exposing (Model, Msg, Route)
 import CoolSPA.Type as Root
 import UrlParser as UrlParser exposing (s, Parser, (</>), map, top)
+import Navigation exposing (Location)
 
 
 initial : Model
@@ -18,8 +19,8 @@ route =
     map {} (s "not-found")
 
 
-init : Route -> Root.Model -> ( Model, Cmd Msg )
-init _ rootModel =
+init : Location -> Route -> Root.Model -> ( Model, Cmd Msg )
+init location _ rootModel =
     ( initial, Cmd.none )
 
 
