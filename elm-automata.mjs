@@ -268,10 +268,10 @@ type alias Route =
 `
     const dir = path.resolve("./src/", application, "Page", pageName)
     await fs.ensureDir(dir)
-    await writeFile(path.resolve(dir, "style.css"), "", { flag: 'wx' })
-    await writeFile(path.resolve(dir, "Type.elm"), type, { flag: 'wx' })
-    await writeFile(path.resolve(dir, "Update.elm"), update, { flag: 'wx' })
-    await writeFile(path.resolve(dir, "View.elm"), view, { flag: 'wx' })
+    await writeFile(path.resolve(dir, "style.css"), "")
+    await writeFile(path.resolve(dir, "Type.elm"), type)
+    await writeFile(path.resolve(dir, "Update.elm"), update)
+    await writeFile(path.resolve(dir, "View.elm"), view)
 
     await generateRouter()
   }
