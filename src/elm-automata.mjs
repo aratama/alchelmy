@@ -32,6 +32,7 @@ async function getApplicationName(){
 async function generateRouter(){
 
   const application = await getApplicationName()
+  console.log(`Found application: ${application}`)
 
   const ds = await util.promisify(glob)(`./src/${application}/Page/**/`)  
   
@@ -48,15 +49,17 @@ async function generateRouter(){
     }
   }).filter(dir => dir !== null)
 
-  pages.forEach(page => console.log(`Generate '${page.join(".")}'`))
-
   // generate Routing.elm
+  console.log(`Generating ./src/${application}/Routing.elm for ${ pages.map(p => p.join(".") ).join(", ") }...`)
   const source = renderRouter(application, pages)
   await util.promisify(fs.writeFile)(`./src/${application}/Routing.elm`, source)
 
   // generate index.js
+  console.log(`Generating ./src/index.js...`)
   const indexSource = renderIndex(application, pages)
   await writeFile("./src/index.js", indexSource)
+
+  console.log("Done.")
 }
 
 async function generateNewPage(pageName){
