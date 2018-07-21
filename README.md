@@ -9,6 +9,20 @@ However, you need write a lot of boring boilerplates when you want to add a new 
 For example, in your Main module, You need to add import declarations, add data constructor to hold Msg from child in parent Msg, add routes in routing and so on. 
 elm-automata try to auto-generate those boilerplates. This project is highly experimental, so your comments or suggestions are welcome.
 
+## Install
+
+Not in npm yet. Install from GitHub directly.
+
+```
+$ npm i aratama/elm-automata
+```
+
+And use `elm-automata` command with `npx`.
+
+```
+$ npx elm-automata
+```
+
 ## Usage 
 
 * `elm-automata` command will generate `src/<Application>/Routing.elm`.
