@@ -24,6 +24,8 @@ view model content =
                     ]
                 , p [] [ a [ href "/#/url-parsing/42" ] [ text "URL Parsing" ] ]
                 , p [] [ a [ href "/#/preferences" ] [ text "Preferences" ] ]
+                , p [] [ a [ href "/#/broken-url" ] [ text "404" ] ]
+                , p [] [ a [ href "/#/" ] [ text "Top" ] ]
                 ]
             , div []
                 [ content
