@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "",
   "bin": {
-    "elm-automata": "dist/elm-automata.js"
+    "elm-automata": "dist/src/elm-automata.js"
   },
   "directories": {
     "test": "tests"
@@ -11,7 +11,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint --fix src/**/*.mjs",
-    "build": "webpack"
+    "build": "webpack",
+    "babel": "babel ./src/**/*.mjs -d dist"
   },
   "author": "cubbit2@twitter/aratama@github",
   "license": "ISC",
