@@ -3,14 +3,15 @@
   "version": "0.1.0",
   "description": "",
   "bin": {
-    "elm-automata": "index.js"
+    "elm-automata": "dist/elm-automata.js"
   },
   "directories": {
     "test": "tests"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint --fix src/**/*.mjs"
+    "lint": "eslint --fix src/**/*.mjs",
+    "build": "webpack"
   },
   "author": "cubbit2@twitter/aratama@github",
   "license": "ISC",
@@ -18,5 +19,12 @@
     "eslint": "^5.2.0",
     "fs-extra": "^7.0.0",
     "glob": "^7.1.2"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-loader": "^7.1.5",
+    "babel-preset-env": "^1.7.0",
+    "webpack": "^4.16.1",
+    "webpack-cli": "^3.1.0"
   }
 }
