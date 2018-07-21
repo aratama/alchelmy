@@ -4,7 +4,7 @@
 
 An experimental project for multipage single page application with auto-generated routing file for Elm.
 
-## Motivation: Go away boilerplates!
+## Motivation: Go away, boilerplates!
 
 [The Elm Architecture](https://guide.elm-lang.org/architecture/) is simple and readable architecture that suitable for use with simgle page application.
 However, you need write a lot of boilerplates when you want to add a new page in your application. 
@@ -13,43 +13,6 @@ elm-automata try to auto-generate those boiler plates. This project is highly ex
 
 ## Usage 
 
-Do `npm run build` and `src/<Application>/Routing.elm` and `src/index.js` will be generated. Then, execute `elm-app start`.
+Do `npm run build` and `src/<Application>/Routing.elm` will be generated. Then, execute `elm-app start`.
 
-## Project Conventions 
 
-### Typicial Directory Structure
-
-In elm-automata, you must conform to the following structure:
-
-```
-src 
-    <Application>
-        Page
-            <Page1>
-                style.css
-                Type.elm
-                Update.elm
-                View.elm
-            <Page2>
-                style.css
-                Type.elm
-                Update.elm
-                View.elm
-                <Page2-1>
-                    style.css
-                    Type.elm
-                    Update.elm
-                    View.elm
-            <Page3>
-                style.css
-                Type.elm
-                Update.elm
-                View.elm
-        [Routing.elm]
-    Main.elm
-    [index.js]
-```
-
-* `<Application>` is your application name.
-* `<Page1>`, `<Page2>` and so on contains each view or update modules.
-* `[index.js]` and `[Routing.elm]` is auto-generated file. 
