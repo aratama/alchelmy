@@ -1,9 +1,9 @@
 {
   "name": "elm-automata",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "",
   "bin": {
-    "elm-automata": "src/elm-automata.mjs"
+    "elm-automata": "index.js"
   },
   "directories": {
     "test": "tests"
@@ -12,7 +12,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint --fix src/**/*.mjs"
   },
-  "author": "",
+  "author": "cubbit2@twitter/aratama@github",
   "license": "ISC",
   "dependencies": {
     "eslint": "^5.2.0",

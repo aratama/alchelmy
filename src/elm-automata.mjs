@@ -80,7 +80,7 @@ async function generateNewPage(pageName) {
   }
 }
 
-async function main() {
+export async function main() {
   const command = process.argv[2]
   if (process.argv.length === 2) {
     await generateRouter()

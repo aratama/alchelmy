@@ -1,7 +1,5 @@
 # elm-automata 
 
-[日本語ReadMe](readme-ja.md)
-
 An experimental project for multipage single page application with auto-generated routing file for Elm.
 
 ## Motivation: Say good-bye to boilerplates!
