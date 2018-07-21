@@ -74,3 +74,21 @@ button {
 p {
   padding: 10px;
 }
+
+input[type=text] {
+  background-color: transparent;
+  color: white;
+  padding: 4px;
+  border: solid 1px white;
+}
+
+button {
+  background-color: transparent;
+  border: solid 1px white;
+  border-radius: 4px;
+  color: white
+}
+
+button:hover {
+  background-color: rgba(255, 255, 255, 0.2)
+}
