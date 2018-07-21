@@ -1,9 +1,7 @@
 module CoolSPA.Page.Time.View exposing (..)
 
-import UrlParser exposing (..)
 import Html exposing (Html, text, div, h1, img, a, p, button, h2, img, br)
 import Html.Attributes exposing (src, href, class, src)
-import Html.Events exposing (onClick)
 import CoolSPA.Page.Time.Type exposing (Model, Msg(..))
 import CoolSPA.Type as Root
 import CoolSPA.View as Root

@@ -1,6 +1,5 @@
 module CoolSPA.Page.URLParsing.View exposing (..)
 
-import UrlParser exposing (..)
 import Html exposing (Html, text, div, h1, img, a, p)
 import Html.Attributes exposing (src, href, class)
 import CoolSPA.Page.URLParsing.Type exposing (Model, Msg)

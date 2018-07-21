@@ -1,9 +1,7 @@
 module CoolSPA.Page.Parent.View exposing (..)
 
-import UrlParser exposing (..)
 import Html exposing (Html, text, div, h1, img, a, p)
 import Html.Attributes exposing (src, href, class)
-import Html.Events exposing (onClick)
 import CoolSPA.Page.Parent.Type exposing (Model, Msg)
 import CoolSPA.Type as Root
 import CoolSPA.View as Root

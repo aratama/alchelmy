@@ -13,7 +13,7 @@ route =
 
 
 init : Location -> Route -> Root.Model -> ( Model, Cmd Msg )
-init _ _ rootModel =
+init _ _ _ =
     ( 0, Cmd.none )
 
 

@@ -1,6 +1,5 @@
 module CoolSPA.Page.Counter.View exposing (..)
 
-import UrlParser exposing (..)
 import Html exposing (Html, text, div, h1, img, a, p, button)
 import Html.Attributes exposing (src, href, class)
 import Html.Events exposing (onClick)
@@ -10,8 +9,8 @@ import CoolSPA.View as Root
 
 
 view : Root.Model -> Model -> Html Msg
-view state model =
-    Root.view state <|
+view rootModel model =
+    Root.view rootModel <|
         div [ class "page-counter container" ]
             [ h1 [] [ text "Counter" ]
             , p [] [ button [ onClick Decrement ] [ text "-" ] ]

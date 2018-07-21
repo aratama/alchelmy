@@ -4,7 +4,6 @@ import UrlParser exposing (..)
 import CoolSPA.Page.Time.Type exposing (Model, Msg(..), Route)
 import CoolSPA.Type as Root
 import UrlParser as UrlParser exposing (s, Parser, (</>), map)
-import Json.Decode as Decode
 import Time as Time exposing (second)
 import Navigation exposing (Location)
 
