@@ -96,13 +96,13 @@ parseLocation location =
 navigate : Location -> Msg 
 navigate = Navigate
 
-init : Location -> ( Model, Cmd Msg )
-init location = 
+init : Model -> Location -> ( Model, Cmd Msg )
+init initial location = 
   let route = parseLocation location in 
         case route of
 ${
   pages.map(page => `
-            ${bars(page)} routeValue -> case ${bars(page)}.init location routeValue Root.initial of
+            ${bars(page)} routeValue -> case ${bars(page)}.init location routeValue initial of
                 (initialModel, initialCmd) -> 
                     ( { route = ${bars(page)}__State initialModel
                       , state = Root.initial 

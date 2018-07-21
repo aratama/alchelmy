@@ -5,8 +5,3 @@ module CoolSPA.Type exposing (..)
 
 type alias Model =
     { theme : String }
-
-
-initial : Model
-initial =
-    { theme = "goat" }

@@ -7,7 +7,7 @@ import CoolSPA.Routing as Routing exposing (Model, Msg, Route(..), parseLocation
 
 init : Location -> ( Model, Cmd Msg )
 init =
-    Routing.init
+    Routing.init { theme = "goat" }
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )

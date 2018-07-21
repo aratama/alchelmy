@@ -2,11 +2,11 @@ import fs from "fs-extra"
 import util from "util"
 import path from "path"
 import glob from "glob"
-import { renderView } from "./view"
-import { renderUpdate } from "./update"
-import { renderType } from "./type"
-import { renderRouter } from "./router.mjs";
-import { renderIndex } from "./index.mjs";
+import { renderView } from "./template/view"
+import { renderUpdate } from "./template/update"
+import { renderType } from "./template/type"
+import { renderRouter } from "./template/router";
+import { renderIndex } from "./template/index";
 
 const writeFile = util.promisify(fs.writeFile)
 
