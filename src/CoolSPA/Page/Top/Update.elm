@@ -15,7 +15,12 @@ route =
 
 init : Location -> Route -> Root.Model -> ( Model, Cmd msg )
 init location route rootModel =
-    ( {}, modifyUrl "/#/" )
+    ( {}
+    , if Debug.log "" (location.pathname ++ location.hash) == "/#/" then
+        Cmd.none
+      else
+        modifyUrl "/#/"
+    )
 
 
 update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg )
