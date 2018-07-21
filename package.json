@@ -17,11 +17,12 @@
   "author": "cubbit2@twitter/aratama@github",
   "license": "ISC",
   "dependencies": {
-    "eslint": "^5.2.0",
     "fs-extra": "^7.0.0",
     "glob": "^7.1.2"
   },
+
   "devDependencies": {
+    "eslint": "^5.2.0",
     "babel-cli": "^6.26.0",
     "babel-loader": "^7.1.5",
     "babel-preset-env": "^1.7.0",
