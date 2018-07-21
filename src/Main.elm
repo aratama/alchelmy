@@ -1,7 +1,6 @@
 module Main exposing (..)
 
-import Html exposing (Html, text, div, h1, img)
-import Html.Attributes exposing (src)
+import Html exposing (Html)
 import Navigation exposing (Location)
 import CoolSPA.Routing as Routing exposing (Model, Msg, Route(..), parseLocation, navigate)
 

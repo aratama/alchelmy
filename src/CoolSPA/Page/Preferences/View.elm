@@ -14,6 +14,6 @@ view state model =
     Root.view state <|
         div [ class "page-a container" ]
             [ h1 [] [ text "Preferences" ]
-            , p [] [ text "User Name:", input [ type_ "text", onInput InputUserName, value model.value ] [] ]
+            , p [] [ text "Theme:", input [ type_ "text", onInput InputUserName, value model.value ] [] ]
             , p [] [ button [ onClick SaveUserName ] [ text "Save" ] ]
             ]

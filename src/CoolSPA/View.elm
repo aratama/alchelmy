@@ -10,7 +10,7 @@ view model content =
     div [ class "root" ]
         [ header []
             [ h1 [] [ text "Elm Examples" ]
-            , text <| "User Name: " ++ model.user
+            , text <| "Theme: " ++ model.theme
             ]
         , div [ class "page" ]
             [ div [ class "index" ]
