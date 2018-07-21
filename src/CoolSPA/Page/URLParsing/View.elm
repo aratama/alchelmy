@@ -11,7 +11,7 @@ import CoolSPA.View as Root
 view : Root.Model -> Model -> Html Msg
 view state model =
     Root.view state <|
-        div [ class "page-c container" ]
+        div [ class "page-url-parser container" ]
             [ h1 [] [ text "URL Parsing" ]
             , p []
                 [ text <|
