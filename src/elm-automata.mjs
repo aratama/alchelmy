@@ -6,7 +6,7 @@ import { renderView } from "./template/view"
 import { renderUpdate } from "./template/update"
 import { renderType } from "./template/type"
 import { renderRouter } from "./template/router";
-import { renderIndex } from "./template/index";
+import { renderStyle } from "./template/style";
 
 const writeFile = util.promisify(fs.writeFile)
 
@@ -54,10 +54,10 @@ async function generateRouter(){
   const source = renderRouter(application, pages)
   await util.promisify(fs.writeFile)(`./src/${application}/Routing.elm`, source)
 
-  // generate index.js
-  console.log(`Generating ./src/index.js...`)
-  const indexSource = renderIndex(application, pages)
-  await writeFile("./src/index.js", indexSource)
+  // generate routing.js
+  console.log(`Generating ./src/${application}/routing.js...`)
+  const indexSource = renderStyle(application, pages)
+  await writeFile(path.resolve("./src/", application, "routing.js"), indexSource)
 
   console.log("Done.")
 }

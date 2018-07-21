@@ -14,4 +14,4 @@ node_modules
 .DS_Store
 
 src/CoolSPA/Routing.elm
-src/index.js
+src/CoolSPA/routing.js
