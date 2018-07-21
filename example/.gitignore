@@ -13,5 +13,5 @@ node_modules
 # Desktop Services Store on macOS
 .DS_Store
 
-src/CoolSPA/Routing.elm
-src/CoolSPA/routing.js
+src/ElmPortfolio/Routing.elm
+src/ElmPortfolio/routing.js
