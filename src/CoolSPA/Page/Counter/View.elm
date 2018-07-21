@@ -12,7 +12,7 @@ import CoolSPA.View as Root
 view : Root.Model -> Model -> Html Msg
 view state model =
     Root.view state <|
-        div [ class "page-a container" ]
+        div [ class "page-counter container" ]
             [ h1 [] [ text "Counter" ]
             , p [] [ button [ onClick Decrement ] [ text "-" ] ]
             , p [] [ div [] [ text (toString model) ] ]

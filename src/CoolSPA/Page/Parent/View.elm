@@ -14,4 +14,5 @@ view state model =
     Root.view state <|
         div [ class "page-b container" ]
             [ h1 [] [ text "Parent" ]
+            , p [] [ a [ href "/#/parent/child" ] [ text "Go to the child page" ] ]
             ]

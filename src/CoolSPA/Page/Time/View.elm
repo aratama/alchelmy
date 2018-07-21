@@ -28,7 +28,7 @@ view state model =
                     toString (50 + 40 * sin angle)
               in
                 svg [ viewBox "0 0 100 100", width "300px" ]
-                    [ circle [ cx "50", cy "50", r "45", fill "#0B79CE" ] []
+                    [ circle [ cx "50", cy "50", r "45", fill "#5b91ba" ] []
                     , line [ x1 "50", y1 "50", x2 handX, y2 handY, stroke "#023963" ] []
                     ]
             ]

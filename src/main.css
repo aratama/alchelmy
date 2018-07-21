@@ -29,6 +29,10 @@ img {
   height: 100vh;
 }
 
+.index {
+  color: white;
+}
+
 header {
   height: 150px;
   background-color: #333;

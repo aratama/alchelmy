@@ -12,7 +12,7 @@ import CoolSPA.View as Root
 view : Root.Model -> Model -> Html Msg
 view state model =
     Root.view state <|
-        div [ class "page-a container" ]
+        div [ class "page-http container" ]
             [ h1 [] [ text "Http" ]
             , h2 [] [ text <| "Theme: " ++ model.topic ]
             , button [ onClick MorePlease ] [ text "More Please!" ]

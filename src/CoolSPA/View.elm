@@ -17,8 +17,11 @@ view model content =
                 [ p [] [ a [ href "/#/counter" ] [ text "Counter" ] ]
                 , p [] [ a [ href "/#/http" ] [ text "Http" ] ]
                 , p [] [ a [ href "/#/time" ] [ text "Time" ] ]
-                , p [] [ a [ href "/#/parent" ] [ text "Parent" ] ]
-                , p [] [ a [ href "/#/parent/child" ] [ text "Child" ] ]
+                , p []
+                    [ a [ href "/#/parent" ] [ text "Parent" ]
+                    , text " / "
+                    , a [ href "/#/parent/child" ] [ text "Child" ]
+                    ]
                 , p [] [ a [ href "/#/url-parsing/42" ] [ text "URL Parsing" ] ]
                 , p [] [ a [ href "/#/preferences" ] [ text "Preferences" ] ]
                 ]
