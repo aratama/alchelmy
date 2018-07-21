@@ -11,5 +11,6 @@
     "build": "node --experimental-modules ../src/elm-automata.mjs"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {}
 }
