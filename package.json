@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "This project is bootstrapped with [Create Elm App](https://github.com/halfzebra/create-elm-app).",
   "bin": {
-    "elm-automata": "elm-automata.mjs"
+    "elm-automata": "src/elm-automata.mjs"
   },
   "directories": {
     "test": "tests"
