@@ -37,7 +37,7 @@ async function getApplicationName() {
   const filesInRoot = await _fsExtra2.default.readdir(`./src`);
 
   const dirsWithNull = await Promise.all(filesInRoot.map(async file => {
-    const stat = await _fsExtra2.default.stat(_path2.default.resolve('./src/', file));
+    const stat = await _fsExtra2.default.stat(_path2.default.resolve("./src/", file));
     return stat.isDirectory() ? file : null;
   }));
 
@@ -53,7 +53,6 @@ async function getApplicationName() {
 }
 
 async function generateRouter() {
-
   const application = await getApplicationName();
   console.log(`Found application: ${application}`);
 
@@ -81,7 +80,6 @@ async function generateRouter() {
 }
 
 async function generateNewPage(pageName) {
-
   console.log(`Generating new page: ${pageName}`);
 
   const application = await getApplicationName();
@@ -103,6 +101,8 @@ async function generateNewPage(pageName) {
 async function main() {
   const command = process.argv[2];
   if (process.argv.length === 2) {
+    console.log("usage: elm-automata update");
+  } else if (command === "update") {
     await generateRouter();
   } else if (process.argv.length === 4 && command === "new") {
     await generateNewPage(process.argv[3]);
