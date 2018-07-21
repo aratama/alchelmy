@@ -1,5 +1,9 @@
 export function renderIndex(application, pages){
   return `
+/////////////////////////
+// AUTO GENERATED FILE //
+// DO NOT EDIT IT      //
+/////////////////////////
 import './main.css';
 import { Main } from './Main.elm';
 import registerServiceWorker from './registerServiceWorker';

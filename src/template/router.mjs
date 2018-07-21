@@ -96,7 +96,7 @@ parseLocation location =
 navigate : Location -> Msg 
 navigate = Navigate
 
-init : Model -> Location -> ( Model, Cmd Msg )
+init : Root.Model -> Location -> ( Model, Cmd Msg )
 init initial location = 
   let route = parseLocation location in 
         case route of
@@ -105,7 +105,7 @@ ${
             ${bars(page)} routeValue -> case ${bars(page)}.init location routeValue initial of
                 (initialModel, initialCmd) -> 
                     ( { route = ${bars(page)}__State initialModel
-                      , state = Root.initial 
+                      , state = initial
                       }
                     , Cmd.map ${bars(page)}Msg initialCmd
                     )
@@ -121,7 +121,15 @@ subscriptions model =
         ]
 
 
-
+program : Root.Model -> Program Never Model Msg
+program initial =
+    Navigation.program navigate
+        { init = init initial
+        , view = view
+        , update = update
+        , subscriptions = subscriptions
+        }
+        
 
   `
 }

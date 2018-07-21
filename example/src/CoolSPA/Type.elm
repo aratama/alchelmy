@@ -1,6 +1,6 @@
 module CoolSPA.Type exposing (..)
 
--- global application state
+-- Application global state type.
 
 
 type alias Model =
