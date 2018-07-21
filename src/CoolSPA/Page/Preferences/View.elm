@@ -12,8 +12,8 @@ import CoolSPA.View as Root
 view : Root.Model -> Model -> Html Msg
 view state model =
     Root.view state <|
-        div [ class "page-a container" ]
+        div [ class "page-preferences container" ]
             [ h1 [] [ text "Preferences" ]
-            , p [] [ text "Theme:", input [ type_ "text", onInput InputUserName, value model.value ] [] ]
+            , p [] [ text "Theme: ", input [ type_ "text", onInput InputUserName, value model.value ] [] ]
             , p [] [ button [ onClick SaveUserName ] [ text "Save" ] ]
             ]

@@ -27,7 +27,7 @@ update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg )
 update msg rootModel model =
     case msg of
         MorePlease ->
-            ( rootModel, model, getRandomGif model.topic )
+            ( rootModel, { model | gifUrl = "waiting.gif" }, getRandomGif model.topic )
 
         NewGif (Ok newUrl) ->
             ( rootModel, Model model.topic newUrl, Cmd.none )

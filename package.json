@@ -2,17 +2,20 @@
   "name": "elm-automata",
   "version": "1.0.0",
   "description": "This project is bootstrapped with [Create Elm App](https://github.com/halfzebra/create-elm-app).",
-  "main": "index.js",
+  "bin": {
+    "elm-automata": "elm-automata.mjs"
+  },
   "directories": {
     "test": "tests"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "node --experimental-modules generate.mjs"
+    "build": "node --experimental-modules elm-automata.mjs"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "fs-extra": "^7.0.0",
     "glob": "^7.1.2"
   }
 }
