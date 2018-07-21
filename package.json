@@ -2,9 +2,7 @@
   "name": "elm-automata",
   "version": "0.1.0",
   "description": "",
-  "bin": {
-    "elm-automata": "dist/src/elm-automata.js"
-  },
+  "bin": "dist/src/elm-automata.js",
   "directories": {
     "test": "tests"
   },
