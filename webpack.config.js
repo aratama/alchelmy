@@ -17,6 +17,6 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: [".mjs"]
+    extensions: [".js", ".mjs"]
   }
 };
