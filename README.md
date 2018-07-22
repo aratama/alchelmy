@@ -9,8 +9,12 @@ However, you need write a lot of boring boilerplates when you want to add a new 
 For example, in your Main module, You need to add import declarations, add data constructor to hold Msg from child in parent Msg, add routes in routing and so on. 
 elm-automata try to auto-generate those boilerplates. This project is highly experimental, so your comments or suggestions are welcome.
 
+## Commands
 
-## Usage 
+* `elm-automata` command will generate `src/<Application>/Routing.elm`.
+* `elm-automata new <name>` command will generate a new page named `<name>`.
+
+## Tutorial 
 
 * First, `create-elm-app <application> && cd <application>` to make empty project.
 * Install `elm-lang/navigation`, `evancz/url-parser`.
@@ -30,10 +34,10 @@ main =
 ```
 
 * Launch the app with `elm-app start`
+* `npx elm-automata new Cat` will generate a page "Cat".
+* Go to [http://localhost:3000/#/cat](http://localhost:3000/#/cat) and check the page.
 
-* Please see [example](example) for more information.
 
-## Commands
+Please see [example](example) for more information.
 
-* `elm-automata` command will generate `src/<Application>/Routing.elm`.
-* `elm-automata new <name>` command will generate a new page named `<name>`.
+

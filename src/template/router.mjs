@@ -6,7 +6,7 @@ function bars(page) {
   return page.join("_");
 }
 
-export function renderRouter(application, pages) {
+export function renderRouter(application, pages, argv) {
   return `
 --------------------------
 -- Auto-generated codes --
@@ -16,7 +16,7 @@ export function renderRouter(application, pages) {
 module ${application}.Routing exposing (..)
 
 import Navigation exposing (Location)
-import UrlParser as UrlParser exposing (s, oneOf, Parser, parseHash, (</>))
+import UrlParser as UrlParser exposing (s, oneOf, Parser, parseHash, parsePath, (</>))
 import Html as Html exposing (Html, text)
 import ${application}.Type as Root
 ${pages
@@ -108,7 +108,9 @@ ${pages
 
 parseLocation : Location -> Route
 parseLocation location =
-    case (parseHash matchers location) of
+    case (${
+      argv.parse === "path" ? "parsePath" : "parseHash"
+    } matchers location) of
         Just route ->
             route
 
