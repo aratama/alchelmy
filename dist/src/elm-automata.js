@@ -92,7 +92,7 @@ async function generateRouter() {
 
   if (!_fsExtra2.default.existsSync(_path2.default.resolve("src", application, "Type.elm"))) {
     console.log(`Generating ${application}/Type.elm`);
-    await (0, _root.renderRootType)(application);
+    await _fsExtra2.default.writeFile(`./src/${application}/Type.elm`, (0, _root.renderRootType)(application));
   }
 
   // generate NoutFound
