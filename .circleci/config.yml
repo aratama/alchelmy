@@ -27,7 +27,7 @@ jobs:
           - v1-dependencies-
 
       - run: npm install
-      - run: npm -g install create-elm-app
+      - run: sudo npm -g install create-elm-app
 
       - save_cache:
           paths:
