@@ -11,6 +11,7 @@ before_install:
   - npm -g install create-elm-app
 
 install:
+  - npm install
   - cd example
   - npm install
   - npm run build
