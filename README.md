@@ -18,8 +18,8 @@ elm-automata try to auto-generate those boilerplates. This project is highly exp
 
 * First, `create-elm-app <application> && cd <application>` to make empty project.
 * Install `elm-lang/navigation`, `evancz/url-parser`.
-* Install `elm-automata` with `npm i aratama/elm-automata` command.
-* `npx elm-automata update` to empty application pages.
+* Install `elm-automata` with `npm i aratama/elm-automata` command. elm-automata is not in npm yet.
+* `npx elm-automata update` to generate empty application pages. It will ask about the application name.
 * Edit `src/Main.elm` as folowing: 
 
 ```elm
@@ -33,11 +33,9 @@ main =
     Routing.program {}
 ```
 
-* Launch the app with `elm-app start`
+* Launch the app with `elm-app start`. You should see the `NotFound` page.
 * `npx elm-automata new Cat` will generate a page "Cat".
 * Go to [http://localhost:3000/#/cat](http://localhost:3000/#/cat) and check the page.
 
-
 Please see [example](example) for more information.
-
 
