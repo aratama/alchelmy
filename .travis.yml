@@ -12,5 +12,6 @@ before_install:
 
 install:
   - cd example
+  - npm install
   - npm run build
   - elm-app build
