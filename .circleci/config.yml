@@ -26,8 +26,8 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
-      - run: yarn install
-      - run: yarn -g install create-elm-app
+      - run: npm install
+      - run: npm -g install create-elm-app
 
       - save_cache:
           paths:
@@ -36,6 +36,6 @@ jobs:
         
       # run tests!
       - run: cd example
-      - run: yarn install
-      - run: yarn run build
+      - run: npm install
+      - run: npm run build
       - run: elm-app build
