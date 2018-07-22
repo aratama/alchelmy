@@ -6,6 +6,8 @@ sudo: false
 cache:
   directories:
     - node_modules
+    - example/elm-stuff
+    - example/node_modules
 
 before_install:
   - npm -g install create-elm-app
@@ -15,4 +17,4 @@ install:
   - cd example
   - npm install
   - npm run build
-  - travis_wait elm-app build
+  - travis_wait 30 elm-app build
