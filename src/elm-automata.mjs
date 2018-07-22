@@ -64,7 +64,10 @@ async function generateRouter() {
 
   if (!fs.existsSync(path.resolve("src", application, "Type.elm"))) {
     console.log(`Generating ${application}/Type.elm`);
-    await renderRootType(application);
+    await fs.writeFile(
+      `./src/${application}/Type.elm`,
+      renderRootType(application)
+    );
   }
 
   // generate NoutFound
