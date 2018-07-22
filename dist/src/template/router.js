@@ -86,7 +86,7 @@ parseLocation location =
             route
 
         Nothing ->
-            NotFound NotFound.initial
+            NotFound ()
 
 navigate : Location -> Msg 
 navigate = Navigate
