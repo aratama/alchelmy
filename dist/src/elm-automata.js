@@ -77,6 +77,7 @@ async function generateRouter() {
       rl.question("Application name? ", async answer => {
         if (/[A-Z][a-zA-Z0-9_]*/.test(answer)) {
           await _fsExtra2.default.ensureDir(answer);
+          rl.close();
           resolve();
         } else {
           reject(new Error(`${answer} is not a valid package name.`));
