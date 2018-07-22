@@ -31,6 +31,10 @@ var _router = require("./template/router");
 
 var _style = require("./template/style");
 
+var _minimist = require("minimist");
+
+var _minimist2 = _interopRequireDefault(_minimist);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 async function getApplicationName() {
@@ -99,6 +103,10 @@ async function generateNewPage(pageName) {
 }
 
 async function main() {
+  var argv = (0, _minimist2.default)(process.argv.slice(2));
+  console.dir(argv);
+  console.dir("foo");
+
   const command = process.argv[2];
   if (process.argv.length === 2) {
     console.log("usage: elm-automata update");

@@ -7,6 +7,7 @@ import { renderUpdate } from "./template/update";
 import { renderType } from "./template/type";
 import { renderRouter } from "./template/router";
 import { renderStyle } from "./template/style";
+import minimist from "minimist";
 
 async function getApplicationName() {
   const filesInRoot = await fs.readdir(`./src`);
@@ -52,6 +53,10 @@ async function generateRouter() {
     })
     .filter(dir => dir !== null);
 
+  if (pages.length === 0) {
+    throw new Error("Pege not found.");
+  }
+
   // generate Routing.elm
   console.log(
     `Generating ./src/${application}/Routing.elm for ${pages
@@ -73,12 +78,19 @@ async function generateRouter() {
 }
 
 async function generateNewPage(pageName) {
+  if (!/[A-Z][a-zA-Z0-9_]*/.test(pageName)) {
+    throw new Error(
+      `Invalid page name: ${pageName}. An page name must be an valid Elm module name.`
+    );
+  }
+
   console.log(`Generating new page: ${pageName}`);
 
   const application = await getApplicationName();
 
   if (fs.existsSync(path.resolve(`./src/`, application, `Page`, pageName))) {
     console.error(`[Error] Directory '${pageName}' already exists.`);
+    process.exitCode = 1;
   } else {
     const dir = path.resolve("./src/", application, "Page", pageName);
     await fs.ensureDir(dir);
@@ -101,15 +113,35 @@ async function generateNewPage(pageName) {
 }
 
 export async function main() {
-  const command = process.argv[2];
-  if (process.argv.length === 2) {
-    console.log("usage: elm-automata update");
+  var argv = minimist(process.argv.slice(2));
+  const command = argv._[0];
+  if (argv._.length === 0) {
+    console.log(
+      `
+usage: 
+
+elm-automata update
+    generate Routing.elm
+
+elm-automata new <name>
+    create new page named <name>
+
+`.trim()
+    );
+
+    try {
+      const application = await getApplicationName();
+      console.log(`\nApplication found: ${application}`);
+    } catch (e) {
+      // ignore
+    }
   } else if (command === "update") {
     await generateRouter();
   } else if (process.argv.length === 4 && command === "new") {
     await generateNewPage(process.argv[3]);
   } else {
-    console.error(`Unknown command: ${process.argv.slice(2).join(" ")}`);
+    console.error(`[ERROR] Unknown command: ${command}`);
+    process.exitCode = 1;
   }
 }
 

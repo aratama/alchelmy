@@ -8,7 +8,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "node ../dist/src/elm-automata.js"
+    "dev": "node --experimental-modules ../src/elm-automata.mjs update",
+    "build": "node ../bin.js updateo"
   },
   "author": "",
   "license": "ISC",

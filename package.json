@@ -16,9 +16,9 @@
   "license": "ISC",
   "dependencies": {
     "fs-extra": "^7.0.0",
-    "glob": "^7.1.2"
+    "glob": "^7.1.2",
+    "minimist": "^1.2.0"
   },
-
   "devDependencies": {
     "eslint": "^5.2.0",
     "babel-cli": "^6.26.0",
