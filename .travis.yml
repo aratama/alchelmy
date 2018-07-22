@@ -15,4 +15,4 @@ install:
   - cd example
   - npm install
   - npm run build
-  - elm-app build
+  - travis_wait elm-app build
