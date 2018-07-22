@@ -1,0 +1,16 @@
+language: node_js
+node_js:
+  - "node"
+dist: trusty
+sudo: false
+cache:
+  directories:
+    - node_modules
+
+before_install:
+  - npm -g install create-elm-app
+
+install:
+  - cd example
+  - npm run build
+  - elm-app build

@@ -11,7 +11,9 @@ elm-automata try to auto-generate those boilerplates. This project is highly exp
 
 ## Commands
 
-* `elm-automata` command will generate `src/<Application>/Routing.elm`.
+elm-automata has a cli:
+
+* `elm-automata update` command will generate `src/<Application>/Routing.elm`.
 * `elm-automata new <name>` command will generate a new page named `<name>`.
 
 ## Tutorial 
@@ -40,7 +42,7 @@ main =
 Please see [example](example) for more information.
 
 
-# Known Limitations
+## Known Limitations
 
 * You can't specify order of precedence of the routes.
 * You must to split an page definition into `View.elm`, `Update.elm` and `Type.elm`. This is just my taste :p
