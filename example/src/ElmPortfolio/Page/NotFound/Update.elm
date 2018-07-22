@@ -7,19 +7,14 @@ import UrlParser as UrlParser exposing (s, Parser, (</>), map, top)
 import Navigation exposing (Location)
 
 
-initial : Model
-initial =
-    {}
-
-
 route : Parser (Route -> a) a
 route =
-    map {} (s "not-found")
+    map () (s "not-found")
 
 
 init : Location -> Route -> Root.Model -> ( Model, Cmd Msg )
 init location _ rootModel =
-    ( initial, Cmd.none )
+    ( {}, Cmd.none )
 
 
 update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg )

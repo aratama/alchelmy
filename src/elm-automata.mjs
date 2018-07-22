@@ -7,7 +7,14 @@ import { renderUpdate } from "./template/update";
 import { renderType } from "./template/type";
 import { renderRouter } from "./template/router";
 import { renderStyle } from "./template/style";
+import { renderRootType } from "./template/root";
 import minimist from "minimist";
+import readline from "readline";
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
 
 async function getApplicationName() {
   const filesInRoot = await fs.readdir(`./src`);
@@ -23,7 +30,7 @@ async function getApplicationName() {
 
   if (dirs.length !== 1) {
     throw new Error(
-      "Too many folders in src directory. Cannot decide application name."
+      "Cannot decide the application name. Too many directory or no directory in src directory. "
     );
   }
 
@@ -33,7 +40,32 @@ async function getApplicationName() {
 }
 
 async function generateRouter() {
+  // ensure application directory
+  try {
+    await getApplicationName();
+  } catch (e) {
+    await new Promise((resolve, reject) => {
+      rl.question("Application name? ", async answer => {
+        if (/[A-Z][a-zA-Z0-9_]*/.test(answer)) {
+          await fs.ensureDir(answer);
+          resolve();
+        } else {
+          reject(new Error(`${answer} is not a valid package name.`));
+        }
+      });
+    });
+  }
+
+  // create root Type.elm
   const application = await getApplicationName();
+
+  if (!fs.existsSync(path.resolve(application, "Type.elm"))) {
+    console.log(`Generating ${application}/Type.elm`);
+    await renderRootType(application);
+  }
+
+  // get page names
+
   console.log(`Found application: ${application}`);
 
   const ds = await util.promisify(glob)(`./src/${application}/Page/**/`);
@@ -74,7 +106,23 @@ async function generateRouter() {
     indexSource
   );
 
+  if (!pageExists("NotFound")) {
+    await generateNewPage("NotFound");
+  }
+
   console.log("Done.");
+}
+
+async function pageExists(pageName) {
+  if (!/[A-Z][a-zA-Z0-9_]*/.test(pageName)) {
+    throw new Error(
+      `Invalid page name: ${pageName}. An page name must be an valid Elm module name.`
+    );
+  }
+
+  const application = await getApplicationName();
+
+  return fs.existsSync(path.resolve(`./src/`, application, `Page`, pageName));
 }
 
 async function generateNewPage(pageName) {
@@ -88,7 +136,7 @@ async function generateNewPage(pageName) {
 
   const application = await getApplicationName();
 
-  if (fs.existsSync(path.resolve(`./src/`, application, `Page`, pageName))) {
+  if (pageExists(pageName)) {
     console.error(`[Error] Directory '${pageName}' already exists.`);
     process.exitCode = 1;
   } else {
@@ -126,14 +174,14 @@ elm-automata update
 elm-automata new <name>
     create new page named <name>
 
-`.trim()
+    `.trim()
     );
 
     try {
       const application = await getApplicationName();
       console.log(`\nApplication found: ${application}`);
     } catch (e) {
-      // ignore
+      console.log(e.toString());
     }
   } else if (command === "update") {
     await generateRouter();

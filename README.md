@@ -29,3 +29,8 @@ $ npx elm-automata
 * `elm-automata new <name>` command will generate a new page named `<name>`.
 
 Please see [example](example) for more information.
+
+* Install `elm-lang/navigation`, `evancz/url-parser`
+* Create `<application>/Type.elm` and define data type `Model`.
+* Execute `npx elm-automata new NotFound` for 404 page.
+* Edit `Main.elm`

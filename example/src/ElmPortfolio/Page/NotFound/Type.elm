@@ -10,4 +10,4 @@ type alias Model =
 
 
 type alias Route =
-    {}
+    ()
