@@ -71,6 +71,7 @@ async function generateRouter() {
   // ensure application directory
   try {
     await getApplicationName();
+    console.log(`Found application: ${application}`);
   } catch (e) {
     await new Promise((resolve, reject) => {
       console.log("No application directory found. It will be generated.");
@@ -89,14 +90,17 @@ async function generateRouter() {
   // create root Type.elm
   const application = await getApplicationName();
 
-  if (!_fsExtra2.default.existsSync(_path2.default.resolve(application, "Type.elm"))) {
+  if (!_fsExtra2.default.existsSync(_path2.default.resolve("src", application, "Type.elm"))) {
     console.log(`Generating ${application}/Type.elm`);
     await (0, _root.renderRootType)(application);
   }
 
-  // get page names
+  // generate NoutFound
+  if (!pageExists("NotFound")) {
+    await generateNewPage("NotFound");
+  }
 
-  console.log(`Found application: ${application}`);
+  // get page names
 
   const ds = await _util2.default.promisify(_glob2.default)(`./src/${application}/Page/**/`);
 
@@ -121,10 +125,6 @@ async function generateRouter() {
   console.log(`Generating ./src/${application}/routing.js...`);
   const indexSource = (0, _style.renderStyle)(application, pages);
   await _fsExtra2.default.writeFile(_path2.default.resolve("./src/", application, "routing.js"), indexSource);
-
-  if (!pageExists("NotFound")) {
-    await generateNewPage("NotFound");
-  }
 
   console.log("Done.");
 }
