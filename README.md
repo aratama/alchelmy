@@ -21,7 +21,7 @@ elm-automata try to auto-generate those boilerplates. This project is highly exp
 ```elm
 module Main exposing (..)
 
-import Routing as Routing exposing (Model, Msg)
+import <application>.Routing as Routing exposing (Model, Msg)
 
 
 main : Program Never Model Msg
