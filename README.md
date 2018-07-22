@@ -16,14 +16,24 @@ elm-automata try to auto-generate those boilerplates. This project is highly exp
 * Install `elm-lang/navigation`, `evancz/url-parser`.
 * Install `elm-automata` with `npm i aratama/elm-automata` command.
 * `npx elm-automata update` to empty application pages.
+* Edit `src/Main.elm` as folowing: 
 
+```elm
+module Main exposing (..)
+
+import Routing as Routing exposing (Model, Msg)
+
+
+main : Program Never Model Msg
+main =
+    Routing.program {}
+```
+
+* Launch the app with `elm-app start`
+
+* Please see [example](example) for more information.
+
+## Commands
 
 * `elm-automata` command will generate `src/<Application>/Routing.elm`.
 * `elm-automata new <name>` command will generate a new page named `<name>`.
-
-Please see [example](example) for more information.
-
-
-* Create `<application>/Type.elm` and define data type `Model`.
-* Execute `npx elm-automata new NotFound` for 404 page.
-* Edit `Main.elm`
