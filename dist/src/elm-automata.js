@@ -73,6 +73,7 @@ async function generateRouter() {
     await getApplicationName();
   } catch (e) {
     await new Promise((resolve, reject) => {
+      console.log("No application directory found. It will be generated.");
       rl.question("Application name? ", async answer => {
         if (/[A-Z][a-zA-Z0-9_]*/.test(answer)) {
           await _fsExtra2.default.ensureDir(answer);
