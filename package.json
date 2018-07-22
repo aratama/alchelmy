@@ -9,8 +9,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint --fix src/**/*.mjs",
-    "build": "webpack",
-    "babel": "babel ./src/**/*.mjs -d dist"
+    "build": "babel ./src/**/*.mjs -d dist"
   },
   "author": "cubbit2@twitter/aratama@github",
   "license": "ISC",
@@ -22,9 +21,6 @@
   "devDependencies": {
     "eslint": "^5.2.0",
     "babel-cli": "^6.26.0",
-    "babel-loader": "^7.1.5",
-    "babel-preset-env": "^1.7.0",
-    "webpack": "^4.16.1",
-    "webpack-cli": "^3.1.0"
+    "babel-preset-env": "^1.7.0"
   }
 }

@@ -43,4 +43,4 @@ Please see [example](example) for more information.
 # Known Limitations
 
 * You can't specify order of precedence of the routes.
-* You must to split an page definition into `View.elm`, `Update.elm` and `Type.elm`. This is just my taste.
+* You must to split an page definition into `View.elm`, `Update.elm` and `Type.elm`. This is just my taste :p
