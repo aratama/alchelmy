@@ -27,7 +27,7 @@ jobs:
           - v1-dependencies-
 
       - run: npm install
-      - run: sudo npm -g install create-elm-app
+      - run: yarn add create-elm-app
 
       - save_cache:
           paths:
@@ -36,6 +36,6 @@ jobs:
         
       # run tests!
       - run: cd example
-      - run: npm install
-      - run: npm run build
-      - run: elm-app build
+      - run: yarn install
+      - run: yarn run build
+      - run: npx elm-app build
