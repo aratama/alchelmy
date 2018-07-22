@@ -62,7 +62,7 @@ async function getApplicationName() {
   return application;
 }
 
-async function generateRouter() {
+async function generateRouter(argv) {
   // ensure application directory
   try {
     const application = await getApplicationName();
@@ -96,8 +96,6 @@ async function generateRouter() {
     await _fsExtra2.default.writeFile(`./src/${application}/Type.elm`, (0, _root.renderRootType)(application));
   }
 
-  debugger;
-
   // generate NoutFound
   const notFoundExists = await pageExists("NotFound");
   if (!notFoundExists) {
@@ -122,7 +120,7 @@ async function generateRouter() {
 
   // generate Routing.elm
   console.log(`Generating ./src/${application}/Routing.elm for ${pages.map(p => p.join(".")).join(", ")}...`);
-  const source = (0, _router.renderRouter)(application, pages);
+  const source = (0, _router.renderRouter)(application, pages, argv);
   await _fsExtra2.default.writeFile(`./src/${application}/Routing.elm`, source);
 
   // generate routing.js
@@ -171,13 +169,21 @@ async function main() {
   const command = argv._[0];
   if (argv._.length === 0) {
     console.log(`
-usage: 
+Usage: 
 
-elm-automata update
-    generate Routing.elm
+  elm-automata update
+    
+    (Re)Generate Routing.elm, routing.js
 
-elm-automata new <name>
-    create new page named <name>
+  elm-automata new <name>
+      
+    Create new page named <name>. <name> must be an valid module name.
+
+Options:
+
+  --parse <hash|path>
+    
+     Specify an url parse function. The default is "hash".
 
     `.trim());
 
@@ -188,10 +194,10 @@ elm-automata new <name>
       console.log(e.toString());
     }
   } else if (command === "update") {
-    await generateRouter();
+    await generateRouter(argv);
   } else if (process.argv.length === 4 && command === "new") {
     await generateNewPage(process.argv[3]);
-    await generateRouter();
+    await generateRouter(argv);
   } else {
     console.error(`[ERROR] Unknown command: ${command}`);
     process.exitCode = 1;
