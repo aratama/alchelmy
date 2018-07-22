@@ -77,8 +77,10 @@ ${pages
           page
         )}__State pageModel_, state = model_ }, Cmd.map ${bars(
         page
-      )}Msg pageCmd)      
-      _ -> (model, Cmd.none)
+      )}Msg pageCmd)     
+      
+      ${1 < pages.length ? "_ -> (model, Cmd.none)" : ""}
+      
   `
     )
     .join("\n")}

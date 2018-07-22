@@ -63,8 +63,10 @@ update msg model = case msg of
 ${pages.map(page => `
   ${bars(page)}Msg pageMsg -> case model.route of 
       ${bars(page)}__State pageModel -> case ${bars(page)}.update pageMsg model.state pageModel of 
-        (model_, pageModel_, pageCmd) -> ( { model | route = ${bars(page)}__State pageModel_, state = model_ }, Cmd.map ${bars(page)}Msg pageCmd)      
-      _ -> (model, Cmd.none)
+        (model_, pageModel_, pageCmd) -> ( { model | route = ${bars(page)}__State pageModel_, state = model_ }, Cmd.map ${bars(page)}Msg pageCmd)     
+      
+      ${1 < pages.length ? "_ -> (model, Cmd.none)" : ""}
+      
   `).join("\n")}
 
 view : Model -> Html Msg

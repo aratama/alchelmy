@@ -11,11 +11,6 @@ import { renderRootType } from "./template/root";
 import minimist from "minimist";
 import readline from "readline";
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
-
 async function getApplicationName() {
   const filesInRoot = await fs.readdir(`./src`);
 
@@ -42,17 +37,23 @@ async function getApplicationName() {
 async function generateRouter() {
   // ensure application directory
   try {
-    await getApplicationName();
+    const application = await getApplicationName();
     console.log(`Found application: ${application}`);
   } catch (e) {
     await new Promise((resolve, reject) => {
       console.log("No application directory found. It will be generated.");
+
+      const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout
+      });
       rl.question("Application name? ", async answer => {
         if (/[A-Z][a-zA-Z0-9_]*/.test(answer)) {
           await fs.ensureDir(path.resolve("src", answer));
           rl.close();
           resolve();
         } else {
+          rl.close();
           reject(new Error(`${answer} is not a valid package name.`));
         }
       });
@@ -70,8 +71,11 @@ async function generateRouter() {
     );
   }
 
+  debugger;
+
   // generate NoutFound
-  if (!pageExists("NotFound")) {
+  const notFoundExists = await pageExists("NotFound");
+  if (!notFoundExists) {
     await generateNewPage("NotFound");
   }
 
@@ -141,7 +145,8 @@ async function generateNewPage(pageName) {
 
   const application = await getApplicationName();
 
-  if (pageExists(pageName)) {
+  const exists = await pageExists(pageName);
+  if (exists) {
     console.error(`[Error] Directory '${pageName}' already exists.`);
     process.exitCode = 1;
   } else {
@@ -160,8 +165,6 @@ async function generateNewPage(pageName) {
       path.resolve(dir, "View.elm"),
       renderView(application, pageName)
     );
-
-    await generateRouter();
   }
 }
 
@@ -192,6 +195,7 @@ elm-automata new <name>
     await generateRouter();
   } else if (process.argv.length === 4 && command === "new") {
     await generateNewPage(process.argv[3]);
+    await generateRouter();
   } else {
     console.error(`[ERROR] Unknown command: ${command}`);
     process.exitCode = 1;
