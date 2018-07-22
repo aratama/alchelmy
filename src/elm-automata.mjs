@@ -48,7 +48,7 @@ async function generateRouter() {
       console.log("No application directory found. It will be generated.");
       rl.question("Application name? ", async answer => {
         if (/[A-Z][a-zA-Z0-9_]*/.test(answer)) {
-          await fs.ensureDir(answer);
+          await fs.ensureDir(path.resolve("src", answer));
           rl.close();
           resolve();
         } else {
