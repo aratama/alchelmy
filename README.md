@@ -1,6 +1,6 @@
 # elm-automata 
 
-[![CircleCI](https://circleci.com/gh/aratama/elm-automata.svg?style=svg)](https://circleci.com/gh/aratama/elm-automata) [![Build status](https://ci.appveyor.com/api/projects/status/1uk1jk36a2e4i0fb?svg=true)](https://ci.appveyor.com/project/aratama/elm-automata)
+[![Build Status](https://travis-ci.org/aratama/elm-automata.svg?branch=master)](https://travis-ci.org/aratama/elm-automata) [![Build status](https://ci.appveyor.com/api/projects/status/1uk1jk36a2e4i0fb?svg=true)](https://ci.appveyor.com/project/aratama/elm-automata)
 
 An experimental project for multipage single page application with auto-generated routing file for Elm.
 
