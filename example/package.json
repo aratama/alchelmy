@@ -9,7 +9,7 @@
   "scripts": {
     "test": "echo \"no test specified\"",
     "dev": "node --experimental-modules ../src/elm-automata.mjs --parse path update",
-    "build": "node --inspect-brk ../bin.js --parse path update"
+    "build": "node ../bin.js --parse path update"
   },
   "author": "",
   "license": "ISC",

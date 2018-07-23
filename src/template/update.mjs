@@ -1,11 +1,11 @@
-export function renderUpdate(application, pageName){
+export function renderUpdate(application, pageName) {
   return `module ${application}.Page.${pageName}.Update exposing (..)
 
 import UrlParser exposing (..)
 import ${application}.Page.${pageName}.Type exposing (Model, Msg(..), Route)
 import ${application}.Type as Root
 import UrlParser as UrlParser exposing (s, Parser, (</>), map)
-import Navigation exposing (Location)
+import Navigation exposing (Location, newUrl)
 
 
 route : Parser (Route -> a) a
@@ -19,12 +19,12 @@ init _ _ rootModel =
 
 
 update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg )
-update msg rootModel model =
-    ( rootModel, model, Cmd.none )
+update msg rootModel model = case msg of 
+    Navigate url = ( rootModel, model, newUrl url )
 
 
 subscriptions : Root.Model -> Sub Msg
 subscriptions model =
     Sub.none
-`
+`;
 }

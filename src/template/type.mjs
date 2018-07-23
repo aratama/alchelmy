@@ -1,9 +1,9 @@
-export function renderType(application, pageName){
+export function renderType(application, pageName) {
   return `module ${application}.Page.${pageName}.Type exposing (..)
 
 
 type Msg
-    = NoOp
+    = Navigate String
 
 
 type alias Model =
@@ -12,5 +12,5 @@ type alias Model =
 
 type alias Route =
     ()
-`
+`;
 }
