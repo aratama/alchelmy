@@ -9,7 +9,7 @@ view : (String -> List (Html msg) -> Html msg) -> Root.Model -> Html msg -> Html
 view navigate model content =
     div [ class "root" ]
         [ header []
-            [ h1 [] [ text "Elm Examples" ]
+            [ h1 [] [ navigate "/" [ text "Elm Examples" ] ]
             , text <| "Theme: " ++ model.theme
             ]
         , div [ class "page" ]
@@ -25,7 +25,6 @@ view navigate model content =
                 , p [] [ navigate "/url-parsing/42" [ text "URL Parsing" ] ]
                 , p [] [ navigate "/preferences" [ text "Preferences" ] ]
                 , p [] [ navigate "/broken-url" [ text "404" ] ]
-                , p [] [ navigate "/" [ text "Top" ] ]
                 ]
             , div []
                 [ content

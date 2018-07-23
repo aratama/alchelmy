@@ -7,9 +7,16 @@ import UrlParser as UrlParser exposing (s, Parser, (</>), map)
 import Navigation exposing (Location, newUrl)
 
 
+-- a `route` function defines a route to the page.
+
+
 route : Parser (Route -> a) a
 route =
     map () (s "counter")
+
+
+
+-- an `init` function initializes the local state of the page with `Location`, `Route` and the global state.
 
 
 init : Location -> Route -> Root.Model -> ( Model, Cmd Msg )

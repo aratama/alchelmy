@@ -1,5 +1,16 @@
 module ElmPortfolio.Page.Counter.Type exposing (..)
 
+-- `Route` is a container that stores parameters from the url and deliver into `init` function.
+-- If it does not extract any parameter from path, `Route` is just `Unit`
+
+
+type alias Route =
+    ()
+
+
+
+-- `Msg` is a local message container of the page.
+
 
 type Msg
     = Increment
@@ -7,13 +18,9 @@ type Msg
     | Navigate String
 
 
+
+-- `Msg` is a local state container that stores the state of the page.
+
+
 type alias Model =
     Int
-
-
-
--- If it does not extract any parameter from path, `Route` is just `Unit`
-
-
-type alias Route =
-    ()

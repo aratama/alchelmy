@@ -38,6 +38,13 @@ header {
   background-color: #333;
   color: white;
   padding: 8px;
+  padding-left: 40px;  
+}
+
+header h1 a {
+  color: white;
+  font-size: 50px;
+  font-weight: bold;
 }
 
 .page {
