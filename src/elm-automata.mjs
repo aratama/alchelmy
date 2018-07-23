@@ -101,20 +101,20 @@ async function generateRouter(argv) {
     throw new Error("Pege not found.");
   }
 
-  // generate Routing.elm
+  // generate <application>.Automata.elm
   console.log(
-    `Generating ./src/${application}/Routing.elm for ${pages
+    `Generating ./src/${application}/Automata.elm for ${pages
       .map(p => p.join("."))
       .join(", ")}...`
   );
   const source = renderRouter(application, pages, argv);
-  await fs.writeFile(`./src/${application}/Routing.elm`, source);
+  await fs.writeFile(`./src/${application}/Automata.elm`, source);
 
   // generate routing.js
-  console.log(`Generating ./src/${application}/routing.js...`);
+  console.log(`Generating ./src/${application}/automata.js...`);
   const indexSource = renderStyle(application, pages);
   await fs.writeFile(
-    path.resolve("./src/", application, "routing.js"),
+    path.resolve("./src/", application, "automata.js"),
     indexSource
   );
 

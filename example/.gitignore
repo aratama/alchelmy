@@ -13,6 +13,5 @@ node_modules
 # Desktop Services Store on macOS
 .DS_Store
 
-src/ElmPortfolio/Routing.elm
-src/ElmPortfolio/routing.js
 src/ElmPortfolio/**/Automata.elm
+src/ElmPortfolio/**/automata.js

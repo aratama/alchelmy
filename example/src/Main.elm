@@ -1,8 +1,8 @@
 module Main exposing (..)
 
-import ElmPortfolio.Routing as Routing exposing (Model, Msg)
+import ElmPortfolio.Automata as Automata exposing (Model, Msg)
 
 
 main : Program Never Model Msg
 main =
-    Routing.program { theme = "goat" }
+    Automata.program { theme = "goat" }
