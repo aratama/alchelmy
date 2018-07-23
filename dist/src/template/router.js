@@ -19,7 +19,7 @@ function renderRouter(application, pages, argv) {
 -- Do not edit this     -- 
 --------------------------
 
-module ${application}.Routing exposing (..)
+module ${application}.Automata exposing (..)
 
 import Navigation exposing (Location)
 import UrlParser as UrlParser exposing (s, oneOf, Parser, parseHash, parsePath, (</>))

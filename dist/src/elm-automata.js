@@ -23,6 +23,8 @@ var _glob2 = _interopRequireDefault(_glob);
 
 var _view = require("./template/view");
 
+var _automata = require("./template/automata");
+
 var _update = require("./template/update");
 
 var _type = require("./template/type");
@@ -118,15 +120,20 @@ async function generateRouter(argv) {
     throw new Error("Pege not found.");
   }
 
-  // generate Routing.elm
-  console.log(`Generating ./src/${application}/Routing.elm for ${pages.map(p => p.join(".")).join(", ")}...`);
+  // generate <application>.Automata.elm
+  console.log(`Generating ./src/${application}/Automata.elm for ${pages.map(p => p.join(".")).join(", ")}...`);
   const source = (0, _router.renderRouter)(application, pages, argv);
-  await _fsExtra2.default.writeFile(`./src/${application}/Routing.elm`, source);
+  await _fsExtra2.default.writeFile(`./src/${application}/Automata.elm`, source);
 
-  // generate routing.js
-  console.log(`Generating ./src/${application}/routing.js...`);
+  // generate automata.js
+  console.log(`Generating ./src/${application}/automata.js...`);
   const indexSource = (0, _style.renderStyle)(application, pages);
-  await _fsExtra2.default.writeFile(_path2.default.resolve("./src/", application, "routing.js"), indexSource);
+  await _fsExtra2.default.writeFile(_path2.default.resolve("./src/", application, "automata.js"), indexSource);
+
+  // generate Automata.elm
+  await Promise.all(pages.map(async page => {
+    await _fsExtra2.default.writeFile(_path2.default.resolve("./src/", application, "Page", page.join("/"), "Automata.elm"), (0, _automata.renderAutomata)(application, page));
+  }));
 
   console.log("Done.");
 }
@@ -173,7 +180,7 @@ Usage:
 
   elm-automata update
     
-    (Re)Generate Routing.elm, routing.js
+    (Re)Generate Automata.elm, automata.js
 
   elm-automata new <name>
       

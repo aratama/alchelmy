@@ -110,7 +110,7 @@ async function generateRouter(argv) {
   const source = renderRouter(application, pages, argv);
   await fs.writeFile(`./src/${application}/Automata.elm`, source);
 
-  // generate routing.js
+  // generate automata.js
   console.log(`Generating ./src/${application}/automata.js...`);
   const indexSource = renderStyle(application, pages);
   await fs.writeFile(
@@ -193,7 +193,7 @@ Usage:
 
   elm-automata update
     
-    (Re)Generate Routing.elm, routing.js
+    (Re)Generate Automata.elm, automata.js
 
   elm-automata new <name>
       
