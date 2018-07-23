@@ -18,4 +18,8 @@ view state model =
 
 navigate : String -> List (Html Msg) -> Html Msg
 navigate url contents =
-    a [ href url, onWithOptions "click" { stopPropagation = True, preventDefault = True } (succeed (Navigate url)) ] contents
+    a
+        [ href url
+        , onWithOptions "click" { stopPropagation = True, preventDefault = True } (succeed (Navigate url))
+        ]
+        contents

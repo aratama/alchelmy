@@ -16,10 +16,10 @@ route =
 init : Location -> Route -> Root.Model -> ( Model, Cmd msg )
 init location route rootModel =
     ( {}
-    , if (location.pathname ++ location.hash) == "/#/" then
+    , if (location.pathname ++ location.hash) == "/" then
         Cmd.none
       else
-        modifyUrl "/#/"
+        modifyUrl "/"
     )
 
 
