@@ -3,6 +3,7 @@ module ElmPortfolio.Page.Time.View exposing (..)
 import Html exposing (Html, text, div, h1, img, a, p, button, h2, img, br)
 import Html.Attributes exposing (src, href, class, src)
 import ElmPortfolio.Page.Time.Type exposing (Model, Msg(..))
+import ElmPortfolio.Page.Time.Automata exposing (navigate)
 import ElmPortfolio.Type as Root
 import ElmPortfolio.View as Root
 import Svg exposing (svg, circle, line)
@@ -32,8 +33,3 @@ view state model =
                     , line [ x1 "50", y1 "50", x2 handX, y2 handY, stroke "#023963" ] []
                     ]
             ]
-
-
-navigate : String -> List (Html Msg) -> Html Msg
-navigate url contents =
-    a [ href url, onWithOptions "click" { stopPropagation = True, preventDefault = True } (succeed (Navigate url)) ] contents

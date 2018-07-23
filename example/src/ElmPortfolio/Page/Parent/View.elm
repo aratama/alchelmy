@@ -3,6 +3,7 @@ module ElmPortfolio.Page.Parent.View exposing (..)
 import Html exposing (Html, text, div, h1, img, a, p)
 import Html.Attributes exposing (src, href, class)
 import ElmPortfolio.Page.Parent.Type exposing (Model, Msg(..))
+import ElmPortfolio.Page.Parent.Automata exposing (navigate)
 import ElmPortfolio.Type as Root
 import ElmPortfolio.View as Root
 import Html.Events exposing (onClick, onWithOptions)
@@ -16,8 +17,3 @@ view state model =
             [ h1 [] [ text "Parent" ]
             , p [] [ a [ href "/#/parent/child" ] [ text "Go to the child page" ] ]
             ]
-
-
-navigate : String -> List (Html Msg) -> Html Msg
-navigate url contents =
-    a [ href url, onWithOptions "click" { stopPropagation = True, preventDefault = True } (succeed (Navigate url)) ] contents

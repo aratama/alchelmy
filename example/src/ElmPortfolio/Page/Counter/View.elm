@@ -4,6 +4,7 @@ import Html exposing (Html, text, div, h1, img, a, p, button)
 import Html.Attributes exposing (src, href, class)
 import Html.Events exposing (onClick, onWithOptions)
 import ElmPortfolio.Page.Counter.Type exposing (Model, Msg(..))
+import ElmPortfolio.Page.Counter.Automata exposing (navigate)
 import ElmPortfolio.Type as Root
 import ElmPortfolio.View as Root
 import Json.Decode exposing (succeed)
@@ -18,8 +19,3 @@ view rootModel model =
             , p [] [ div [] [ text (toString model) ] ]
             , p [] [ button [ onClick Increment ] [ text "+" ] ]
             ]
-
-
-navigate : String -> List (Html Msg) -> Html Msg
-navigate url contents =
-    a [ href url, onWithOptions "click" { stopPropagation = True, preventDefault = True } (succeed (Navigate url)) ] contents

@@ -3,6 +3,7 @@ module ElmPortfolio.Page.URLParsing.View exposing (..)
 import Html exposing (Html, text, div, h1, img, a, p)
 import Html.Attributes exposing (src, href, class)
 import ElmPortfolio.Page.URLParsing.Type exposing (Model, Msg(..))
+import ElmPortfolio.Page.URLParsing.Automata exposing (navigate)
 import ElmPortfolio.Type as Root
 import ElmPortfolio.View as Root
 import Html.Events exposing (onClick, onWithOptions)
@@ -23,8 +24,3 @@ view state model =
                 ]
             , p [] [ text <| "Parameter: " ++ toString model.id ]
             ]
-
-
-navigate : String -> List (Html Msg) -> Html Msg
-navigate url contents =
-    a [ href url, onWithOptions "click" { stopPropagation = True, preventDefault = True } (succeed (Navigate url)) ] contents

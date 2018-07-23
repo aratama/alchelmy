@@ -3,6 +3,7 @@ import util from "util";
 import path from "path";
 import glob from "glob";
 import { renderView } from "./template/view";
+import { renderAutomata } from "./template/automata";
 import { renderUpdate } from "./template/update";
 import { renderType } from "./template/type";
 import { renderRouter } from "./template/router";
@@ -115,6 +116,22 @@ async function generateRouter(argv) {
   await fs.writeFile(
     path.resolve("./src/", application, "routing.js"),
     indexSource
+  );
+
+  // generate Automata.elm
+  await Promise.all(
+    pages.map(async page => {
+      await fs.writeFile(
+        path.resolve(
+          "./src/",
+          application,
+          "Page",
+          page.join("/"),
+          "Automata.elm"
+        ),
+        renderAutomata(application, page)
+      );
+    })
   );
 
   console.log("Done.");
