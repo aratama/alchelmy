@@ -15,3 +15,4 @@ node_modules
 
 src/ElmPortfolio/Routing.elm
 src/ElmPortfolio/routing.js
+src/ElmPortfolio/**/Automata.elm
