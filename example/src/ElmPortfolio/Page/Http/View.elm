@@ -20,7 +20,7 @@ view state model =
             , img [ src model.gifUrl ] []
             , p []
                 [ text "Go to "
-                , a [ href "/#/preferences" ] [ text "the preferences page" ]
+                , navigate "/preferences" [ text "the preferences page" ]
                 , text " to change theme."
                 ]
             ]
