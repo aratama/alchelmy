@@ -1,10 +1,10 @@
 module ElmPortfolio.Page.URLParsing.Update exposing (..)
 
 import UrlParser exposing (..)
-import ElmPortfolio.Page.URLParsing.Type exposing (Model, Msg, Route)
+import ElmPortfolio.Page.URLParsing.Type exposing (Model, Msg(..), Route)
 import ElmPortfolio.Type as Root
 import UrlParser as UrlParser exposing (s, Parser, (</>), int, map)
-import Navigation exposing (Location)
+import Navigation exposing (Location, newUrl)
 
 
 route : Parser (Route -> c) c
@@ -19,7 +19,9 @@ init location id rootModel =
 
 update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg )
 update msg rootModel model =
-    ( rootModel, model, Cmd.none )
+    case msg of
+        Navigate url ->
+            ( rootModel, model, newUrl url )
 
 
 subscriptions : Root.Model -> Sub Msg

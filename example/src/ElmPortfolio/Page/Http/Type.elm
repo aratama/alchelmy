@@ -4,7 +4,8 @@ import Http
 
 
 type Msg
-    = MorePlease
+    = Navigate String
+    | MorePlease
     | NewGif (Result Http.Error String)
 
 

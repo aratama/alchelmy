@@ -1,10 +1,11 @@
 module ElmPortfolio.Page.NotFound.Update exposing (..)
 
 import UrlParser exposing (..)
-import ElmPortfolio.Page.NotFound.Type exposing (Model, Msg, Route)
+import ElmPortfolio.Page.NotFound.Type exposing (Model, Msg(..), Route)
 import ElmPortfolio.Type as Root
 import UrlParser as UrlParser exposing (s, Parser, (</>), map, top)
-import Navigation exposing (Location)
+import Json.Decode as Decode
+import Navigation exposing (Location, newUrl)
 
 
 route : Parser (Route -> a) a
@@ -19,7 +20,9 @@ init location _ rootModel =
 
 update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg )
 update msg rootModel model =
-    ( rootModel, model, Cmd.none )
+    case msg of
+        Navigate url ->
+            ( rootModel, model, newUrl url )
 
 
 subscriptions : Root.Model -> Sub Msg

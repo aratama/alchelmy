@@ -2,7 +2,7 @@ module ElmPortfolio.Page.Parent.Type exposing (..)
 
 
 type Msg
-    = NoOp
+    = Navigate String
 
 
 type alias Model =

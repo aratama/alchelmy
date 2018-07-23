@@ -4,7 +4,7 @@ import Navigation exposing (Location)
 
 
 type Msg
-    = NoOp
+    = Navigate String
 
 
 type alias Model =

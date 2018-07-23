@@ -5,8 +5,8 @@ import Html.Attributes exposing (class, href)
 import ElmPortfolio.Type as Root
 
 
-view : Root.Model -> Html msg -> Html msg
-view model content =
+view : (String -> List (Html msg) -> Html msg) -> Root.Model -> Html msg -> Html msg
+view navigate model content =
     div [ class "root" ]
         [ header []
             [ h1 [] [ text "Elm Examples" ]
@@ -14,18 +14,18 @@ view model content =
             ]
         , div [ class "page" ]
             [ div [ class "index" ]
-                [ p [] [ a [ href "/#/counter" ] [ text "Counter" ] ]
-                , p [] [ a [ href "/#/http" ] [ text "Http" ] ]
-                , p [] [ a [ href "/#/time" ] [ text "Time" ] ]
+                [ p [] [ navigate "/counter" [ text "Counter" ] ]
+                , p [] [ navigate "/http" [ text "Http" ] ]
+                , p [] [ navigate "/time" [ text "Time" ] ]
                 , p []
-                    [ a [ href "/#/parent" ] [ text "Parent" ]
+                    [ navigate "/parent" [ text "Parent" ]
                     , text " / "
-                    , a [ href "/#/parent/child" ] [ text "Child" ]
+                    , navigate "/parent/child" [ text "Child" ]
                     ]
-                , p [] [ a [ href "/#/url-parsing/42" ] [ text "URL Parsing" ] ]
-                , p [] [ a [ href "/#/preferences" ] [ text "Preferences" ] ]
-                , p [] [ a [ href "/#/broken-url" ] [ text "404" ] ]
-                , p [] [ a [ href "/#/" ] [ text "Top" ] ]
+                , p [] [ navigate "/url-parsing/42" [ text "URL Parsing" ] ]
+                , p [] [ navigate "/preferences" [ text "Preferences" ] ]
+                , p [] [ navigate "/broken-url" [ text "404" ] ]
+                , p [] [ navigate "/" [ text "Top" ] ]
                 ]
             , div []
                 [ content

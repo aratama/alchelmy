@@ -4,7 +4,8 @@ import Time exposing (Time)
 
 
 type Msg
-    = Tick Time
+    = Navigate String
+    | Tick Time
 
 
 type alias Model =
