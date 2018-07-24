@@ -5,9 +5,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.renderUpdate = renderUpdate;
 function renderUpdate(application, pageName) {
-    return `module ${application}.Page.${pageName}.Update exposing (..)
+    return `module ${application}.Page.${pageName}.Update exposing (route, init, update, subscriptions)
 
-import UrlParser exposing (route, init, update, subscriptions)
 import ${application}.Page.${pageName}.Type exposing (Model, Msg(..), Route)
 import ${application}.Type as Root
 import UrlParser as UrlParser exposing (Parser, s, (</>), map)
