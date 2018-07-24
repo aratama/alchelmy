@@ -154,7 +154,7 @@ async function pageExists(pageName) {
 }
 
 async function generateNewPage(pageName) {
-  if !(validatePageName(pageName)) {
+  if (!validatePageName(pageName)) {
     throw new Error(
       `Invalid page name: ${pageName}. An page name must be an valid Elm module name.`
     );
