@@ -202,7 +202,7 @@ Options:
     }
   } else if (command === "update") {
     await generateRouter(argv);
-  } else if (process.argv.length === 4 && command === "new") {
+  } else if (command === "new") {
     await generateNewPage(process.argv[3]);
     await generateRouter(argv);
   } else {
