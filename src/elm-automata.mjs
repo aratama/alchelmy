@@ -221,6 +221,7 @@ Options:
     await generateRouter(argv);
   } else {
     console.error(`[ERROR] Unknown command: ${command}`);
+    console.error(JSON.stringify(argv, null, 2));
     process.exitCode = 1;
   }
 }
