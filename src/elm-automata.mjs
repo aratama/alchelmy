@@ -221,12 +221,13 @@ Options:
   } else if (command === "update") {
     await generateRouter(argv);
   } else if (command === "new") {
+    console.error(JSON.stringify(argv, null, 2));
     const pageName = argv._[1];
+
     if (validatePageName(pageName)) {
       console.error(
         `Invalid page name: ${pageName}. An page name must be an valid Elm module name.`
       );
-      console.error(JSON.stringify(argv, null, 2));
     }
     await generateNewPage();
     await generateRouter(argv);
