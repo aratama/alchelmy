@@ -20,7 +20,7 @@ elm-automata has a cli:
 
 ## Tutorial 
 
-* First, `create-elm-app <application> && cd <application>` to make empty project.
+* First, do `create-elm-app <application>` and `cd <application>` to make empty project.
 * Install `elm-lang/navigation`, `evancz/url-parser`.
 * Install `elm-automata` with `npm i aratama/elm-automata` command. elm-automata is not in npm yet.
 * `npx elm-automata update` to generate empty application pages. It will ask about the application name.
@@ -29,12 +29,11 @@ elm-automata has a cli:
 ```elm
 module Main exposing (..)
 
-import <application>.Routing as Routing exposing (Model, Msg)
+import <application>.Automata as Automata exposing (Model, Msg, program)
 
 
 main : Program Never Model Msg
-main =
-    Routing.program {}
+main = program {}
 ```
 
 * Launch the app with `elm-app start`. You should see the `NotFound` page.

@@ -18,6 +18,7 @@ test_script:
   - cd example
   - npm install
   - npm run build
+  - cpx elm-automata new Foo
   - elm-app build
 
 

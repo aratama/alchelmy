@@ -5,3 +5,7 @@ module ElmPortfolio.Type exposing (..)
 
 type alias Model =
     { theme : String }
+
+
+type Msg 
+    = ChangeRoute String
