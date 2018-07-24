@@ -213,6 +213,7 @@ Options:
 
     console.log(JSON.stringify(argv, null, 2));
     const pageName = argv._[1];
+    console.log(pageName);
 
     if (validatePageName(pageName)) {
       console.error(`Invalid page name: ${pageName}. An page name must be an valid Elm module name.`);
