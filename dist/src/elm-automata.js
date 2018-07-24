@@ -138,8 +138,12 @@ async function generateRouter(argv) {
   console.log("Done.");
 }
 
+function validatePageName(pageName) {
+  return !/[A-Z][a-zA-Z0-9_]*/.test(pageName);
+}
+
 async function pageExists(pageName) {
-  if (!/[A-Z][a-zA-Z0-9_]*/.test(pageName)) {
+  if (validatePageName(pageName)) {
     throw new Error(`Invalid page name: ${pageName}. An page name must be an valid Elm module name.`);
   }
 
@@ -149,7 +153,7 @@ async function pageExists(pageName) {
 }
 
 async function generateNewPage(pageName) {
-  if (!/[A-Z][a-zA-Z0-9_]*/.test(pageName)) {
+  if (validatePageName(pageName)) {
     throw new Error(`Invalid page name: ${pageName}. An page name must be an valid Elm module name.`);
   }
 
@@ -203,7 +207,12 @@ Options:
   } else if (command === "update") {
     await generateRouter(argv);
   } else if (command === "new") {
-    await generateNewPage(process.argv[3]);
+    const pageName = process.argv[3];
+    if (validatePageName(pageName)) {
+      console.error(`Invalid page name: ${pageName}. An page name must be an valid Elm module name.`);
+      console.error(JSON.stringify(argv, null, 2));
+    }
+    await generateNewPage();
     await generateRouter(argv);
   } else {
     console.error(`[ERROR] Unknown command: ${command}`);
