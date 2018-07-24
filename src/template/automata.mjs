@@ -7,7 +7,7 @@ export function renderAutomata(application, page) {
 
 module ${application}.Page.${page.join(".")}.Automata exposing (..)
 
-import Html exposing (Html)
+import Html exposing (Html, a)
 import Html.Attributes exposing (href)
 import Html.Events exposing (onWithOptions)
 import Json.Decode exposing (Decoder, succeed, bool, field, fail, map4, andThen)
