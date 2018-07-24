@@ -22,11 +22,9 @@ import ${application}.Type as Root
 ${pages
     .map(page =>
       `
-
 import ${application}.Page.${dots(page)}.View as ${bars(page)}
 import ${application}.Page.${dots(page)}.Type as ${bars(page)}
 import ${application}.Page.${dots(page)}.Update as ${bars(page)}
-
 `.trim()
     )
     .join("\n")}

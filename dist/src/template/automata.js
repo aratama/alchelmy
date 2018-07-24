@@ -13,9 +13,9 @@ function renderAutomata(application, page) {
 
 module ${application}.Page.${page.join(".")}.Automata exposing (..)
 
-import Html exposing (Html, text, a)
+import Html exposing (Html)
 import Html.Attributes exposing (href)
-import Html.Events exposing (onClick, onWithOptions)
+import Html.Events exposing (onWithOptions)
 import Json.Decode exposing (Decoder, succeed, bool, field, fail, map4, andThen)
 import ${application}.Page.${page.join(".")}.Type exposing (Model, Msg(..))
 import ${application}.Type as Root

@@ -5,17 +5,15 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.renderView = renderView;
 function renderView(application, pageName) {
-  return `module ${application}.Page.${pageName}.View exposing (..)
+  return `module ${application}.Page.${pageName}.View exposing (view)
 
-import Html exposing (Html, text, a)
-import Html.Attributes exposing (href)
-import Html.Events exposing (onClick, onWithOptions)
-import Json.Decode exposing (succeed)
+import Html exposing (Html, text, h1, div)
 import ${application}.Page.${pageName}.Type exposing (Model, Msg(..))
 import ${application}.Type as Root
 
 view : Root.Model -> Model -> Html Msg
-view state model = text "${pageName}"
-
+view state model = div [] 
+  [ h1 [] [text "${pageName}"]
+  ]
 `;
 }

@@ -26,11 +26,9 @@ import UrlParser as UrlParser exposing (s, oneOf, Parser, parseHash, parsePath, 
 import Html as Html exposing (Html, text)
 import ${application}.Type as Root
 ${pages.map(page => `
-
 import ${application}.Page.${dots(page)}.View as ${bars(page)}
 import ${application}.Page.${dots(page)}.Type as ${bars(page)}
 import ${application}.Page.${dots(page)}.Update as ${bars(page)}
-
 `.trim()).join("\n")}
 
 
