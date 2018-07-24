@@ -11,8 +11,5 @@ import ${application}.Type as Root
 view : Root.Model -> Model -> Html Msg
 view state model = text "${pageName}"
 
-navigate : String -> List (Html Msg) -> Html Msg
-navigate url contents =
-    a [ href url, onWithOptions "click" { stopPropagation = True, preventDefault = True } (succeed (Navigate url)) ] contents
 `;
 }
