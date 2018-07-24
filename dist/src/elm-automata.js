@@ -202,15 +202,20 @@ Options:
       const application = await getApplicationName();
       console.log(`\nApplication found: ${application}`);
     } catch (e) {
-      console.log(e.toString());
+      console.error(e.toString());
+      process.exitCode = 1;
+      return;
     }
   } else if (command === "update") {
     await generateRouter(argv);
   } else if (command === "new") {
+    console.log("new");
+
+    console.log(JSON.stringify(argv, null, 2));
     const pageName = argv._[1];
+
     if (validatePageName(pageName)) {
       console.error(`Invalid page name: ${pageName}. An page name must be an valid Elm module name.`);
-      console.error(JSON.stringify(argv, null, 2));
     }
     await generateNewPage();
     await generateRouter(argv);
