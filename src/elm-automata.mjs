@@ -118,24 +118,6 @@ async function generateRouter(argv) {
     indexSource
   );
 
-  // generate Automata.elm
-  /*
-  await Promise.all(
-    pages.map(async page => {
-      await fs.writeFile(
-        path.resolve(
-          "./src/",
-          application,
-          "Page",
-          page.join("/"),
-          "Automata.elm"
-        ),
-        renderAutomata(application, page)
-      );
-    })
-  );
-  */
-
   console.log("Done.");
 }
 
