@@ -10,7 +10,6 @@ import Svg exposing (svg, circle, line)
 import Svg.Attributes exposing (viewBox, width, cx, cy, r, fill, x1, y1, x2, y2, stroke)
 import Time as Time
 import Html.Events exposing (onClick, onWithOptions)
-import Json.Decode exposing (succeed)
 
 
 view : Root.Model -> Model -> Html Msg

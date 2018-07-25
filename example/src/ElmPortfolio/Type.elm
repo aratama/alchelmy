@@ -7,5 +7,5 @@ type alias Model =
     { theme : String }
 
 
-type Msg 
+type Msg
     = ChangeRoute String

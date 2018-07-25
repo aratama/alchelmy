@@ -6,8 +6,6 @@ import ElmPortfolio.Page.Parent.Child.Type exposing (Model, Msg(..))
 import ElmPortfolio.Page.Parent.Child.Automata exposing (navigate)
 import ElmPortfolio.Type as Root
 import ElmPortfolio.View as Root
-import Html.Events exposing (onClick, onWithOptions)
-import Json.Decode exposing (succeed)
 
 
 view : Root.Model -> Model -> Html Msg

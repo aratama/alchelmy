@@ -5,8 +5,6 @@ import Html.Attributes exposing (src, href, class)
 import ElmPortfolio.Page.NotFound.Type exposing (Model, Msg(..))
 import ElmPortfolio.Page.NotFound.Automata exposing (navigate)
 import ElmPortfolio.Type as Root
-import Html.Events exposing (onClick, onWithOptions)
-import Json.Decode exposing (succeed)
 
 
 view : Root.Model -> Model -> Html Msg

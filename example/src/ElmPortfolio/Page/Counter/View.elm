@@ -7,7 +7,6 @@ import ElmPortfolio.Page.Counter.Type exposing (Model, Msg(..))
 import ElmPortfolio.Page.Counter.Automata exposing (navigate)
 import ElmPortfolio.Type as Root
 import ElmPortfolio.View as Root
-import Json.Decode exposing (succeed)
 
 
 view : Root.Model -> Model -> Html Msg
