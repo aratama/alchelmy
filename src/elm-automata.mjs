@@ -3,7 +3,7 @@ import util from "util";
 import path from "path";
 import glob from "glob";
 import { renderView } from "./template/view";
-import { renderAutomata } from "./template/automata";
+// import { renderAutomata } from "./template/automata";
 import { renderUpdate } from "./template/update";
 import { renderType } from "./template/type";
 import { renderRouter } from "./template/router";
@@ -119,6 +119,7 @@ async function generateRouter(argv) {
   );
 
   // generate Automata.elm
+  /*
   await Promise.all(
     pages.map(async page => {
       await fs.writeFile(
@@ -133,6 +134,7 @@ async function generateRouter(argv) {
       );
     })
   );
+  */
 
   console.log("Done.");
 }

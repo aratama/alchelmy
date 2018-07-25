@@ -49,6 +49,8 @@ type Msg
   | Root__Msg Root.Msg
 ${pages.map(page => `  | ${bars(page)}__Msg ${bars(page)}.Msg`).join("\n")}
 
+
+
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model = case msg of 
 
