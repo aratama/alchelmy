@@ -1,7 +1,7 @@
 module ElmPortfolio.Update exposing (..)
 
 import UrlParser exposing (..)
-import ElmPortfolio.Type exposing (Model, Msg(..), ExternalMsg(..))
+import ElmPortfolio.Type exposing (Model, Msg(..), AscentMsg(..), DescentMsg)
 import UrlParser as UrlParser exposing (s, Parser, (</>), map)
 import Navigation exposing (Location, newUrl)
 
@@ -11,14 +11,14 @@ init _ =
     ( { theme = "goat" }, Cmd.none )
 
 
-update : Msg -> Model -> ( Model, Cmd Msg )
+update : Msg -> Model -> ( Model, Cmd Msg, Maybe DescentMsg )
 update msg model =
     case msg of
         ChangeRoute route ->
-            ( model, Cmd.none )
+            ( model, Cmd.none, Nothing )
 
 
-updateEx : ExternalMsg -> Model -> ( Model, Cmd Msg )
+updateEx : AscentMsg -> Model -> ( Model, Cmd Msg )
 updateEx msg model =
     case msg of
         NoOp ->

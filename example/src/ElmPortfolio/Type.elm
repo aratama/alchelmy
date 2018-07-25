@@ -17,7 +17,7 @@ type Msg
 -- AscentMsg
 
 
-type ExternalMsg
+type AscentMsg
     = NoOp
     | Nav String
 

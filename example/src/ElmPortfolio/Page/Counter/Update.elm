@@ -24,7 +24,7 @@ init _ _ _ =
     ( 0, Cmd.none )
 
 
-update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg, Root.ExternalMsg )
+update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg, Root.AscentMsg )
 update msg rootModel model =
     case msg of
         Navigate url ->
@@ -35,9 +35,6 @@ update msg rootModel model =
 
         Decrement ->
             ( rootModel, model - 1, Cmd.none, Root.NoOp )
-
-        External ex ->
-            ( rootModel, model, Cmd.none, ex )
 
 
 subscriptions : Root.Model -> Sub Msg

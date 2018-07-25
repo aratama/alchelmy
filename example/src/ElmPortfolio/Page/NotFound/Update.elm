@@ -18,7 +18,7 @@ init location _ rootModel =
     ( {}, Cmd.none )
 
 
-update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg, Root.ExternalMsg )
+update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg, Root.AscentMsg )
 update msg rootModel model =
     case msg of
         Navigate url ->
@@ -28,3 +28,8 @@ update msg rootModel model =
 subscriptions : Root.Model -> Sub Msg
 subscriptions model =
     Sub.none
+
+
+receive : Root.DescentMsg -> Maybe Msg
+receive msg =
+    Nothing

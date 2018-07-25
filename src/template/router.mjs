@@ -53,7 +53,40 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model = case msg of 
 
   Root__Msg rootMsg -> case Root.update rootMsg model.state of
-    (rootModel_, rootCmd) -> ({ model | state = rootModel_ }, Cmd.map Root__Msg rootCmd)
+    (rootModel_, rootCmd, descentMsgMaybe) -> case descentMsgMaybe of
+      Nothing -> 
+        ({ model | state = rootModel_ }, Cmd.map Root__Msg rootCmd)
+      Just descentMsg -> case model.route of 
+
+
+        ${pages.map(page => `${bars(page)}__State pageModel ->  
+          
+          case ${bars(page)}.receive descentMsg of
+
+            Nothing -> ({ model | state = rootModel_ }, Cmd.map Root__Msg rootCmd)
+
+            Just pageMsg -> 
+                
+              case ${bars(page)}.update pageMsg rootModel_ pageModel of 
+                (model_, pageModel_, pageCmd, externalMsg ) -> case Root.updateEx externalMsg model_ of
+                  (model__, externalCmd) -> 
+                    ( { model 
+                      | route = ${bars(page)}__State pageModel_
+                      , state = model__ 
+                      }
+                    , Cmd.batch 
+                        [ Cmd.map ${bars(page)}__Msg pageCmd
+                        , Cmd.map Root__Msg externalCmd 
+                        ]  
+                    )  
+            
+            
+            `).join("\n        ")}
+
+        
+      
+
+
 
   Navigate location -> let route = parseLocation location in case route of ${pages
     .map(
@@ -73,20 +106,19 @@ ${pages
     .map(
       page => `
   ${bars(page)}__Msg pageMsg -> case model.route of 
-      ${bars(page)}__State pageModel -> case ${bars(
-        page
-      )}.update pageMsg model.state pageModel of 
-        (model_, pageModel_, pageCmd, externalMsg ) -> case Root.updateEx externalMsg model_ of
-          (model__, externalCmd) -> 
-            ( { model 
-              | route = ${bars(page)}__State pageModel_
-              , state = model__ 
-              }
-            , Cmd.batch 
-                [ Cmd.map ${bars(page)}__Msg pageCmd
-                , Cmd.map Root__Msg externalCmd 
-                ]  
-            )     
+      ${bars(page)}__State pageModel -> 
+        case ${bars(page)}.update pageMsg model.state pageModel of 
+          (model_, pageModel_, pageCmd, externalMsg ) -> case Root.updateEx externalMsg model_ of
+            (model__, externalCmd) -> 
+              ( { model 
+                | route = ${bars(page)}__State pageModel_
+                , state = model__ 
+                }
+              , Cmd.batch 
+                  [ Cmd.map ${bars(page)}__Msg pageCmd
+                  , Cmd.map Root__Msg externalCmd 
+                  ]  
+              )     
         
       ${1 < pages.length ? "_ -> (model, Cmd.none)" : ""}
       

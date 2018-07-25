@@ -19,7 +19,6 @@ type Msg
     = Increment
     | Decrement
     | Navigate String
-    | External Root.ExternalMsg
 
 
 
