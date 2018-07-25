@@ -1,5 +1,8 @@
 module ElmPortfolio.Page.Counter.Type exposing (..)
 
+import ElmPortfolio.Type as Root
+
+
 -- `Route` is a container that stores parameters from the url and deliver into `init` function.
 -- If it does not extract any parameter from path, `Route` is just `Unit`
 
@@ -16,6 +19,7 @@ type Msg
     = Increment
     | Decrement
     | Navigate String
+    | External Root.ExternalMsg
 
 
 

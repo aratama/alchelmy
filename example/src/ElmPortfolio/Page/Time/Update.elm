@@ -18,14 +18,14 @@ init location route rootModel =
     ( 0, Cmd.none )
 
 
-update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg )
+update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg, Root.ExternalMsg )
 update msg rootModel model =
     case msg of
         Navigate url ->
-            ( rootModel, model, newUrl url )
+            ( rootModel, model, newUrl url, Root.NoOp )
 
         Tick newTime ->
-            ( rootModel, newTime, Cmd.none )
+            ( rootModel, newTime, Cmd.none, Root.NoOp )
 
 
 subscriptions : Root.Model -> Sub Msg

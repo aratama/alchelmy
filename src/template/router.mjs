@@ -76,12 +76,18 @@ ${pages
       ${bars(page)}__State pageModel -> case ${bars(
         page
       )}.update pageMsg model.state pageModel of 
-        (model_, pageModel_, pageCmd) -> ( { model | route = ${bars(
-          page
-        )}__State pageModel_, state = model_ }, Cmd.map ${bars(
-        page
-      )}__Msg pageCmd)     
-      
+        (model_, pageModel_, pageCmd, externalMsg ) -> case Root.updateEx externalMsg model_ of
+          (model__, externalCmd) -> 
+            ( { model 
+              | route = ${bars(page)}__State pageModel_
+              , state = model__ 
+              }
+            , Cmd.batch 
+                [ Cmd.map ${bars(page)}__Msg pageCmd
+                , Cmd.map Root__Msg externalCmd 
+                ]  
+            )     
+        
       ${1 < pages.length ? "_ -> (model, Cmd.none)" : ""}
       
   `
