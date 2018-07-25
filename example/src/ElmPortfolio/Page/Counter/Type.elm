@@ -18,7 +18,7 @@ type alias Route =
 type Msg
     = Increment
     | Decrement
-    | Navigate String
+    | AscentMsg Root.AscentMsg
 
 
 

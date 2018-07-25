@@ -1,8 +1,10 @@
 module ElmPortfolio.Page.Parent.Type exposing (..)
 
+import ElmPortfolio.Type as Root
+
 
 type Msg
-    = Navigate String
+    = AscentMsg Root.AscentMsg
 
 
 type alias Model =

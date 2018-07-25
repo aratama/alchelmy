@@ -1,10 +1,12 @@
 module ElmPortfolio.Page.Preferences.Type exposing (..)
 
+import ElmPortfolio.Type as Root
+
 
 type Msg
     = InputUserName String
     | SaveUserName
-    | Navigate String
+    | AscentMsg Root.AscentMsg
 
 
 type alias Model =

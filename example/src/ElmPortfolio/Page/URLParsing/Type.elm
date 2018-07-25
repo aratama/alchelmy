@@ -1,10 +1,11 @@
 module ElmPortfolio.Page.URLParsing.Type exposing (..)
 
 import Navigation exposing (Location)
+import ElmPortfolio.Type as Root
 
 
 type Msg
-    = Navigate String
+    = AscentMsg Root.AscentMsg
 
 
 type alias Model =

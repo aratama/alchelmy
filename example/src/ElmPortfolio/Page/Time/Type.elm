@@ -1,10 +1,11 @@
 module ElmPortfolio.Page.Time.Type exposing (..)
 
 import Time exposing (Time)
+import ElmPortfolio.Type as Root
 
 
 type Msg
-    = Navigate String
+    = AscentMsg Root.AscentMsg
     | Tick Time
 
 

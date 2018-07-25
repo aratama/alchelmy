@@ -1,10 +1,11 @@
 module ElmPortfolio.Page.Http.Type exposing (..)
 
 import Http
+import ElmPortfolio.Type as Root
 
 
 type Msg
-    = Navigate String
+    = AscentMsg Root.AscentMsg
     | MorePlease
     | NewGif (Result Http.Error String)
 
