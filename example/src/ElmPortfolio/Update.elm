@@ -14,18 +14,18 @@ init _ =
 update : Msg -> Model -> ( Model, Cmd Msg, Maybe DescentMsg )
 update msg model =
     case msg of
-        ChangeRoute route ->
-            ( model, Cmd.none, Nothing )
+        ChangeRoute url ->
+            ( model, newUrl url, Nothing )
 
 
-updateEx : AscentMsg -> Model -> ( Model, Cmd Msg )
-updateEx msg model =
+receive : AscentMsg -> Maybe Msg
+receive msg =
     case msg of
         NoOp ->
-            ( model, Cmd.none )
+            Nothing
 
         Nav url ->
-            ( model, newUrl url )
+            Just (ChangeRoute url)
 
 
 subscriptions : Sub Msg

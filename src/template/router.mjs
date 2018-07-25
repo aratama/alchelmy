@@ -67,20 +67,7 @@ update msg model = case msg of
 
             Nothing -> ({ model | state = rootModel_ }, Cmd.map Root__Msg rootCmd)
 
-            Just pageMsg -> 
-                
-              case ${bars(page)}.update pageMsg rootModel_ pageModel of 
-                (model_, pageModel_, pageCmd, externalMsg ) -> case Root.updateEx externalMsg model_ of
-                  (model__, externalCmd) -> 
-                    ( { model 
-                      | route = ${bars(page)}__State pageModel_
-                      , state = model__ 
-                      }
-                    , Cmd.batch 
-                        [ Cmd.map ${bars(page)}__Msg pageCmd
-                        , Cmd.map Root__Msg externalCmd 
-                        ]  
-                    )  
+            Just pageMsg -> update (${bars(page)}__Msg pageMsg) { model | state = rootModel_ }
             
             
             `).join("\n        ")}
@@ -110,17 +97,9 @@ ${pages
   ${bars(page)}__Msg pageMsg -> case model.route of 
       ${bars(page)}__State pageModel -> 
         case ${bars(page)}.update pageMsg model.state pageModel of 
-          (model_, pageModel_, pageCmd, externalMsg ) -> case Root.updateEx externalMsg model_ of
-            (model__, externalCmd) -> 
-              ( { model 
-                | route = ${bars(page)}__State pageModel_
-                , state = model__ 
-                }
-              , Cmd.batch 
-                  [ Cmd.map ${bars(page)}__Msg pageCmd
-                  , Cmd.map Root__Msg externalCmd 
-                  ]  
-              )     
+          (model_, pageModel_, pageCmd, externalMsg ) -> case Root.receive externalMsg of
+            Nothing -> ({ model | state = model_, route = ${bars(page)}__State pageModel_ }, Cmd.map ${bars(page)}__Msg pageCmd)
+            Just dmsg -> update (Root__Msg dmsg) { model | state = model_, route = ${bars(page)}__State pageModel_ }
         
       ${1 < pages.length ? "_ -> (model, Cmd.none)" : ""}
       
