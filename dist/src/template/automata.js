@@ -1,11 +1,9 @@
-"use strict";
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.renderAutomata = renderAutomata;
-function renderAutomata(application, page) {
-    return `
+
+/*
+
+export function renderAutomata(application, page) {
+  return `
 -------------------------
 -- AUTO GENERATED FILE --
 -- DO NOT EDIT THIS    --
@@ -44,3 +42,6 @@ navigate url contents =
 
 `;
 }
+
+*/
+"use strict";

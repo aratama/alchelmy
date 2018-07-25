@@ -23,8 +23,6 @@ var _glob2 = _interopRequireDefault(_glob);
 
 var _view = require("./template/view");
 
-var _automata = require("./template/automata");
-
 var _update = require("./template/update");
 
 var _type = require("./template/type");
@@ -63,6 +61,8 @@ async function getApplicationName() {
 
   return application;
 }
+// import { renderAutomata } from "./template/automata";
+
 
 async function generateRouter(argv) {
   // ensure application directory
@@ -131,9 +131,22 @@ async function generateRouter(argv) {
   await _fsExtra2.default.writeFile(_path2.default.resolve("./src/", application, "automata.js"), indexSource);
 
   // generate Automata.elm
-  await Promise.all(pages.map(async page => {
-    await _fsExtra2.default.writeFile(_path2.default.resolve("./src/", application, "Page", page.join("/"), "Automata.elm"), (0, _automata.renderAutomata)(application, page));
-  }));
+  /*
+  await Promise.all(
+    pages.map(async page => {
+      await fs.writeFile(
+        path.resolve(
+          "./src/",
+          application,
+          "Page",
+          page.join("/"),
+          "Automata.elm"
+        ),
+        renderAutomata(application, page)
+      );
+    })
+  );
+  */
 
   console.log("Done.");
 }
