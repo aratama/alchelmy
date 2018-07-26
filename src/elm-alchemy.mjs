@@ -2,14 +2,14 @@ import fs from "fs-extra";
 import util from "util";
 import path from "path";
 import glob from "glob";
-import { renderView } from "./template/view";
-import { renderUpdate } from "./template/update";
-import { renderType } from "./template/type";
+import { renderView } from "./template/page/view";
+import { renderUpdate } from "./template/page/update";
+import { renderType } from "./template/page/type";
 import { renderRouter } from "./template/router";
 import { renderStyle } from "./template/style";
-import { renderRootType } from "./template/root";
+import { renderRootType } from "./template/root/type";
+import { renderRootUpdate } from "./template/root/update";
 import minimist from "minimist";
-import readline from "readline";
 
 async function getApplicationName() {
   const filesInRoot = await fs.readdir(`./src`);
@@ -35,30 +35,8 @@ async function getApplicationName() {
 }
 
 async function generateRouter(argv) {
-  // ensure application directory
-  try {
-    const application = await getApplicationName();
-    console.log(`Found application: ${application}`);
-  } catch (e) {
-    await new Promise((resolve, reject) => {
-      console.log("No application directory found. It will be generated.");
 
-      const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout
-      });
-      rl.question("Application name? ", async answer => {
-        if (/[A-Z][a-zA-Z0-9_]*/.test(answer)) {
-          await fs.ensureDir(path.resolve("src", answer));
-          rl.close();
-          resolve();
-        } else {
-          rl.close();
-          reject(new Error(`${answer} is not a valid package name.`));
-        }
-      });
-    });
-  }
+
 
   // create root Type.elm
   const application = await getApplicationName();
@@ -68,6 +46,12 @@ async function generateRouter(argv) {
     await fs.writeFile(
       `./src/${application}/Type.elm`,
       renderRootType(application)
+    );
+
+    console.log(`Generating ${application}/Update.elm`);
+    await fs.writeFile(
+      `./src/${application}/Update.elm`,
+      renderRootUpdate(application)
     );
   }
 
@@ -136,6 +120,17 @@ async function pageExists(pageName) {
   return fs.existsSync(path.resolve(`./src/`, application, `Page`, pageName));
 }
 
+async function createApplication(application){
+  const exists = fs.existsSync(path.resolve(`src`, application));
+  if(exists){
+    throw new Error(`Directory ${application} already exists.`);
+  }else if (/[A-Z][a-zA-Z0-9_]*/.test(application)) {
+    await fs.ensureDir(path.resolve("src", application));    
+  } else {
+    throw new Error(`${application} is not a valid package name.`);
+  }
+}
+
 async function generateNewPage(pageName) {
   if (!validatePageName(pageName)) {
     throw new Error(
@@ -178,6 +173,10 @@ export async function main() {
       `
 Usage: 
 
+  elm-alchemy init <application>
+
+    Create new application. 
+
   elm-alchemy update
     
     (Re)Generate Alchemy.elm, alchemy.js
@@ -203,6 +202,10 @@ Options:
       process.exitCode = 1;
       return;
     }
+
+  } else if (command == "init") {
+    const applicationName = argv._[1];
+    await createApplication(applicationName);
   } else if (command === "update") {
     await generateRouter(argv);
   } else if (command === "new") {

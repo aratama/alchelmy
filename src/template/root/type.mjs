@@ -8,5 +8,25 @@ export function renderRootType(application) {
 type alias Model =
     {}
   
+
+type Msg
+    = ChangeRoute String
+
+
+    
+-- AscentMsg
+
+
+type AscentMsg
+    = Navigate String
+
+
+
+-- DescentMsg
+
+
+type DescentMsg
+    = Initialize
+
 `;
 }

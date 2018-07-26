@@ -63,30 +63,6 @@ async function getApplicationName() {
 }
 
 async function generateRouter(argv) {
-  // ensure application directory
-  try {
-    const application = await getApplicationName();
-    console.log(`Found application: ${application}`);
-  } catch (e) {
-    await new Promise((resolve, reject) => {
-      console.log("No application directory found. It will be generated.");
-
-      const rl = _readline2.default.createInterface({
-        input: process.stdin,
-        output: process.stdout
-      });
-      rl.question("Application name? ", async answer => {
-        if (/[A-Z][a-zA-Z0-9_]*/.test(answer)) {
-          await _fsExtra2.default.ensureDir(_path2.default.resolve("src", answer));
-          rl.close();
-          resolve();
-        } else {
-          rl.close();
-          reject(new Error(`${answer} is not a valid package name.`));
-        }
-      });
-    });
-  }
 
   // create root Type.elm
   const application = await getApplicationName();
@@ -146,6 +122,17 @@ async function pageExists(pageName) {
   return _fsExtra2.default.existsSync(_path2.default.resolve(`./src/`, application, `Page`, pageName));
 }
 
+async function createApplication(application) {
+  const exists = _fsExtra2.default.existsSync(_path2.default.resolve(`src`, application));
+  if (exists) {
+    throw new Error(`Directory ${application} already exists.`);
+  } else if (/[A-Z][a-zA-Z0-9_]*/.test(application)) {
+    await _fsExtra2.default.ensureDir(_path2.default.resolve("src", application));
+  } else {
+    throw new Error(`${application} is not a valid package name.`);
+  }
+}
+
 async function generateNewPage(pageName) {
   if (!validatePageName(pageName)) {
     throw new Error(`Invalid page name: ${pageName}. An page name must be an valid Elm module name.`);
@@ -176,6 +163,10 @@ async function main() {
     console.log(`
 Usage: 
 
+  elm-alchemy init <application>
+
+    Create new application. 
+
   elm-alchemy update
     
     (Re)Generate Alchemy.elm, alchemy.js
@@ -200,6 +191,9 @@ Options:
       process.exitCode = 1;
       return;
     }
+  } else if (command == "init") {
+    const applicationName = argv._[1];
+    await createApplication(applicationName);
   } else if (command === "update") {
     await generateRouter(argv);
   } else if (command === "new") {

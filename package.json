@@ -7,7 +7,6 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "echo \"no test specified\"",
     "lint": "eslint --fix src/**/*.mjs",
     "build": "babel ./src/**/*.mjs -d dist"
   },

@@ -11,6 +11,8 @@ However, you need write a lot of boring boilerplates when you want to add a new 
 For example, in your Main module, You need to add import declarations, add data constructor to hold Msg from child in parent Msg, add routes in routing and so on. 
 elm-alchemy try to auto-generate those boilerplates. This project is highly experimental, so your comments or suggestions are welcome.
 
+elm-alchemy generates two files: `Alchemy.elm` and `alchemy.js`. The former is a Elm source code that orchestrates Web pages written in Elm. The latter is a JavaScipt that lists style scheets.
+
 ## Install
 
 elm-alchemy is not in npm yet. `npm i aratama/elm-alchemy` to install elm-alchemy. 
