@@ -16,3 +16,5 @@ node_modules
 .cache
 
 test/src/**/*.*
+
+tests-elm/src/TestProject
