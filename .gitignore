@@ -18,3 +18,4 @@ node_modules
 test/src/**/*.*
 
 tests-elm/src/TestProject
+tests-elm/index.js
