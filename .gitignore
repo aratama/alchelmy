@@ -17,5 +17,5 @@ node_modules
 
 test/src/**/*.*
 
-tests-elm/src/TestProject
-tests-elm/index.js
+tests-generated/src/TestProject
+tests-generated/index.js
