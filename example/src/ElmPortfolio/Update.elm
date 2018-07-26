@@ -5,6 +5,7 @@ import ElmPortfolio.Type exposing (Model, Msg(..), AscentMsg(..), DescentMsg(Ini
 import UrlParser as UrlParser exposing (s, Parser, (</>), map)
 import Navigation exposing (Location, newUrl)
 import ElmPortfolio.Ports exposing (requestThemeFromLocalStorage, receiveThemeFromLocalStorage)
+import Maybe exposing (withDefault)
 
 
 init : Location -> ( Model, Cmd Msg )
@@ -18,8 +19,8 @@ update msg model =
         ChangeRoute url ->
             ( model, newUrl url, Nothing )
 
-        ReceiveThemeFromLocalStorage theme ->
-            ( { model | theme = theme }, Cmd.none, Just Initialize )
+        ReceiveThemeFromLocalStorage themeMaybe ->
+            ( { model | theme = withDefault model.theme themeMaybe }, Cmd.none, Just Initialize )
 
 
 receive : AscentMsg -> Maybe Msg

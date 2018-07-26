@@ -11,7 +11,7 @@ type alias Model =
 
 type Msg
     = ChangeRoute String
-    | ReceiveThemeFromLocalStorage String
+    | ReceiveThemeFromLocalStorage (Maybe String)
 
 
 
