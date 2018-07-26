@@ -16,6 +16,7 @@
   "license": "ISC",
   "dependencies": {
     "change-case": "^3.0.2",
+    "elm": "^0.18.0",
     "elm-test": "^0.18.12",
     "fs-extra": "^7.0.0",
     "glob": "^7.1.2",
