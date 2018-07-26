@@ -19,8 +19,7 @@ type Msg
 
 
 type AscentMsg
-    = NoOp
-    | Nav String
+    = Navigate String
 
 
 

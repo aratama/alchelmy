@@ -8,12 +8,11 @@ import ElmPortfolio.View as Root
 import Svg exposing (svg, circle, line)
 import Svg.Attributes exposing (viewBox, width, cx, cy, r, fill, x1, y1, x2, y2, stroke)
 import Time as Time
-import Html.Events exposing (onClick, onWithOptions)
 
 
 view : Root.Model -> Model -> Html Msg
 view state model =
-    Root.view (Root.nav (AscentMsg << Root.Nav)) state <|
+    Root.view (Root.link AscentMsg) state <|
         div [ class "page-a container" ]
             [ h1 [] [ text "Time" ]
             , let

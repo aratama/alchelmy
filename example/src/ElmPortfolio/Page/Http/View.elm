@@ -10,7 +10,7 @@ import Html.Events exposing (onClick, onWithOptions)
 
 view : Root.Model -> Model -> Html Msg
 view state model =
-    Root.view (Root.nav (AscentMsg << Root.Nav)) state <|
+    Root.view (Root.link AscentMsg) state <|
         div [ class "page-http container" ]
             [ h1 [] [ text "Http" ]
             , h2 [] [ text <| "Theme: " ++ model.topic ]
@@ -19,7 +19,7 @@ view state model =
             , img [ src model.gifUrl ] []
             , p []
                 [ text "Go to "
-                , Root.nav (AscentMsg << Root.Nav) "/preferences" [ text "the preferences page" ]
+                , Root.link AscentMsg "/preferences" [ text "the preferences page" ]
                 , text " to change theme."
                 ]
             ]

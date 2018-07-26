@@ -11,7 +11,7 @@ import Html.Events exposing (onClick, onWithOptions)
 
 view : Root.Model -> Model -> Html Msg
 view state model =
-    Root.view (Root.nav (AscentMsg << Root.Nav)) state <|
+    Root.view (Root.link AscentMsg) state <|
         div [ class "page-preferences container" ]
             [ h1 [] [ text "Preferences" ]
             , p [] [ text "Theme: ", input [ type_ "text", onInput InputUserName, value model.value ] [] ]

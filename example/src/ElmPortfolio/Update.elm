@@ -26,10 +26,7 @@ update msg model =
 receive : AscentMsg -> Maybe Msg
 receive msg =
     case msg of
-        NoOp ->
-            Nothing
-
-        Nav url ->
+        Navigate url ->
             Just (ChangeRoute url)
 
 

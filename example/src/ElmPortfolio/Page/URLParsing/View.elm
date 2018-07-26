@@ -9,7 +9,7 @@ import ElmPortfolio.View as Root
 
 view : Root.Model -> Model -> Html Msg
 view state model =
-    Root.view (Root.nav (AscentMsg << Root.Nav)) state <|
+    Root.view (Root.link AscentMsg) state <|
         div [ class "page-url-parser container" ]
             [ h1 [] [ text "URL Parsing" ]
             , p []

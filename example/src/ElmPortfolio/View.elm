@@ -35,12 +35,13 @@ view navigate model content =
         ]
 
 
+link : (Root.AscentMsg -> msg) -> String -> List (Html msg) -> Html msg
 link msg =
-    nav (msg << Root.Nav)
+    navigate (msg << Root.Navigate)
 
 
-nav : (String -> msg) -> String -> List (Html msg) -> Html msg
-nav msg url contents =
+navigate : (String -> msg) -> String -> List (Html msg) -> Html msg
+navigate msg url contents =
     let
         decoder : Decoder msg
         decoder =

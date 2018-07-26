@@ -9,8 +9,8 @@ import ElmPortfolio.View as Root
 
 view : Root.Model -> Model -> Html Msg
 view state model =
-    Root.view (Root.nav (AscentMsg << Root.Nav)) state <|
+    Root.view (Root.link AscentMsg) state <|
         div [ class "page-b container" ]
             [ h1 [] [ text "Parent" ]
-            , p [] [ Root.nav (AscentMsg << Root.Nav) "/parent/child" [ text "Go to the child page" ] ]
+            , p [] [ Root.link AscentMsg "/parent/child" [ text "Go to the child page" ] ]
             ]

@@ -11,5 +11,5 @@ view : Root.Model -> Model -> Html Msg
 view state model =
     div [ class "page-not-found" ]
         [ h1 [] [ text "404 Not Found" ]
-        , p [] [ Root.nav (AscentMsg << Root.Nav) "/" [ text "Go to Top" ] ]
+        , p [] [ Root.link AscentMsg "/" [ text "Go to Top" ] ]
         ]
