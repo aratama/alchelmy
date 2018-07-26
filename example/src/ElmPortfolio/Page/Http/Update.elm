@@ -11,7 +11,7 @@ import Navigation exposing (Location, newUrl)
 
 route : Parser (Route -> a) a
 route =
-    map {} (s "http")
+    map () (s "http")
 
 
 init : Location -> Route -> Root.Model -> ( Model, Cmd Msg )

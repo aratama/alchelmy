@@ -11,9 +11,15 @@ However, you need write a lot of boring boilerplates when you want to add a new 
 For example, in your Main module, You need to add import declarations, add data constructor to hold Msg from child in parent Msg, add routes in routing and so on. 
 elm-automata try to auto-generate those boilerplates. This project is highly experimental, so your comments or suggestions are welcome.
 
+## Install
+
+elm-automata is not in npm yet. `npm i aratama/elm-automata` to install elm-automata. 
+You can `npx` to execute elm-automata from cli.
+You also need to install `elm-lang/navigation` and `evancz/url-parser` as elm-package dependencies.
+
 ## Commands
 
-elm-automata has a cli:
+elm-automata has a command line interface:
 
 * `elm-automata update` command will generate `src/<Application>/Routing.elm`.
 * `elm-automata new <name>` command will generate a new page named `<name>`.
@@ -21,9 +27,7 @@ elm-automata has a cli:
 ## Tutorial 
 
 * First, do `create-elm-app <application>` and `cd <application>` to make empty project.
-* Install `elm-lang/navigation`, `evancz/url-parser`.
-* Install `elm-automata` with `npm i aratama/elm-automata` command. elm-automata is not in npm yet.
-* `npx elm-automata update` to generate empty application pages. It will ask about the application name.
+* `npx elm-automata update` to generate empty application pages. It will ask about the application name and create an application directory in `src`. 
 * Edit `src/Main.elm` as folowing: 
 
 ```elm
@@ -33,10 +37,10 @@ import <application>.Automata as Automata exposing (Model, Msg, program)
 
 
 main : Program Never Model Msg
-main = program {}
+main = program
 ```
 
-* Launch the app with `elm-app start`. You should see the `NotFound` page.
+* Launch the app with `elm-app start`. You should see the `NotFound` page because you don't have the `top` page yet.
 * `npx elm-automata new Cat` will generate a page "Cat".
 * Go to [http://localhost:3000/#/cat](http://localhost:3000/#/cat) and check the page.
 
