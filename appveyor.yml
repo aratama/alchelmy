@@ -20,6 +20,7 @@ test_script:
   - npm install aratama/elm-alchemy
   - npx elm-alchemy --parse path new Foo
   - elm-app build
+  - cd .. 
   - npm run test
 
 
