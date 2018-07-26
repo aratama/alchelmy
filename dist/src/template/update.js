@@ -28,11 +28,11 @@ receive msg =
     Nothing
     
 
-update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg, Root.AscentMsg )
+update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg, Maybe Root.AscentMsg )
 update msg rootModel model =
     case msg of
         AscentMsg amsg ->
-            ( rootModel, model, Cmd.none, amsg )
+            ( rootModel, model, Cmd.none, Just amsg )
 
 
 subscriptions : Root.Model -> Sub Msg
