@@ -7,7 +7,7 @@
     "test-clean": "rimraf src/TestProject index.js",
     "test-init": "node --experimental-modules ../src/elm-alchemy.mjs init TestProject && node --experimental-modules ../src/elm-alchemy.mjs new Bar",
     "test-make": "elm-make src/Main.elm --output=index.js",
-    "test": "npm run test-clean && npm run test-init && npm run test-make"
+    "test-build": "npm run test-clean && npm run test-init && npm run test-make"
   },
   "author": "",
   "license": "ISC",

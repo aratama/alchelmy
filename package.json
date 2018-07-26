@@ -8,7 +8,8 @@
   },
   "scripts": {
     "lint": "eslint --fix src/**/*.mjs",
-    "build": "babel ./src/**/*.mjs -d dist"
+    "build": "babel ./src/**/*.mjs -d dist",
+    "test": "cd tests-elm && npm run test-build && cd .. && elm-test"
   },
   "author": "cubbit2@twitter/aratama@github",
   "license": "ISC",
