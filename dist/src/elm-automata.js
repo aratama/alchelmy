@@ -130,24 +130,6 @@ async function generateRouter(argv) {
   const indexSource = (0, _style.renderStyle)(application, pages);
   await _fsExtra2.default.writeFile(_path2.default.resolve("./src/", application, "automata.js"), indexSource);
 
-  // generate Automata.elm
-  /*
-  await Promise.all(
-    pages.map(async page => {
-      await fs.writeFile(
-        path.resolve(
-          "./src/",
-          application,
-          "Page",
-          page.join("/"),
-          "Automata.elm"
-        ),
-        renderAutomata(application, page)
-      );
-    })
-  );
-  */
-
   console.log("Done.");
 }
 

@@ -23,20 +23,20 @@ init location route rootModel =
         ( Model topic "waiting.gif", getRandomGif topic )
 
 
-update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg, Root.AscentMsg )
+update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg, Maybe Root.AscentMsg )
 update msg rootModel model =
     case msg of
         AscentMsg amsg ->
-            ( rootModel, model, Cmd.none, amsg )
+            ( rootModel, model, Cmd.none, Just amsg )
 
         MorePlease ->
-            ( rootModel, { model | gifUrl = "waiting.gif" }, getRandomGif model.topic, Root.NoOp )
+            ( rootModel, { model | gifUrl = "waiting.gif" }, getRandomGif model.topic, Nothing )
 
         NewGif (Ok newUrl) ->
-            ( rootModel, Model model.topic newUrl, Cmd.none, Root.NoOp )
+            ( rootModel, Model model.topic newUrl, Cmd.none, Nothing )
 
         NewGif (Err _) ->
-            ( rootModel, model, Cmd.none, Root.NoOp )
+            ( rootModel, model, Cmd.none, Nothing )
 
 
 getRandomGif : String -> Cmd Msg

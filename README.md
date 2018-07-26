@@ -43,6 +43,11 @@ main = program {}
 Please see [example](example) for more information.
 
 
+## Parent-Child Communicaton
+
+In the root type, you must define types named `AscentMsg` and `DescentMsg`.
+
+
 ## Known Limitations
 
 * You can't specify order of precedence of the routes.

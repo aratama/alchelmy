@@ -18,6 +18,7 @@ module ${application}.Automata exposing (..)
 import Navigation exposing (Location)
 import UrlParser as UrlParser exposing (s, oneOf, Parser, parseHash, parsePath, (</>))
 import Html as Html exposing (Html, text)
+import Maybe as Maybe
 import ${application}.Type as Root
 import ${application}.Update as Root
 ${pages
@@ -97,7 +98,7 @@ ${pages
   ${bars(page)}__Msg pageMsg -> case model.route of 
       ${bars(page)}__State pageModel -> 
         case ${bars(page)}.update pageMsg model.state pageModel of 
-          (model_, pageModel_, pageCmd, externalMsg ) -> case Root.receive externalMsg of
+          (model_, pageModel_, pageCmd, externalMsgMaybe ) -> case Maybe.andThen Root.receive externalMsgMaybe of
             Nothing -> ({ model | state = model_, route = ${bars(page)}__State pageModel_ }, Cmd.map ${bars(page)}__Msg pageCmd)
             Just dmsg -> update (Root__Msg dmsg) { model | state = model_, route = ${bars(page)}__State pageModel_ }
         
