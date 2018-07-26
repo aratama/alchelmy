@@ -35,6 +35,10 @@ view navigate model content =
         ]
 
 
+link msg =
+    nav (msg << Root.Nav)
+
+
 nav : (String -> msg) -> String -> List (Html msg) -> Html msg
 nav msg url contents =
     let

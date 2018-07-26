@@ -7,6 +7,7 @@ type Msg
     = InputUserName String
     | SaveUserName
     | AscentMsg Root.AscentMsg
+    | Initialize
 
 
 type alias Model =

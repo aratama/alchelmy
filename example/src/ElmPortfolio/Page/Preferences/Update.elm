@@ -5,6 +5,7 @@ import ElmPortfolio.Page.Preferences.Type exposing (Model, Msg(..), Route)
 import ElmPortfolio.Type as Root
 import UrlParser as UrlParser exposing (s, Parser, (</>), map)
 import Navigation exposing (Location, newUrl)
+import ElmPortfolio.Ports exposing (saveThemeToLocalStorage)
 
 
 route : Parser (Route -> a) a
@@ -27,7 +28,10 @@ update msg rootModel model =
             ( rootModel, { model | value = str }, Cmd.none, Root.NoOp )
 
         SaveUserName ->
-            ( { rootModel | theme = model.value }, model, Cmd.none, Root.NoOp )
+            ( { rootModel | theme = model.value }, model, saveThemeToLocalStorage model.value, Root.NoOp )
+
+        Initialize ->
+            ( rootModel, { model | value = rootModel.theme }, Cmd.none, Root.NoOp )
 
 
 subscriptions : Root.Model -> Sub Msg
@@ -37,4 +41,6 @@ subscriptions model =
 
 receive : Root.DescentMsg -> Maybe Msg
 receive msg =
-    Nothing
+    case msg of
+        Root.Initialize ->
+            Just Initialize

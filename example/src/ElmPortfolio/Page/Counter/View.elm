@@ -10,7 +10,7 @@ import ElmPortfolio.View as Root
 
 view : Root.Model -> Model -> Html Msg
 view rootModel model =
-    Root.view (Root.nav (AscentMsg << Root.Nav)) rootModel <|
+    Root.view (Root.link AscentMsg) rootModel <|
         div [ class "page-counter container" ]
             [ h1 [] [ text "Counter" ]
             , p [] [ button [ onClick Decrement ] [ text "-" ] ]
