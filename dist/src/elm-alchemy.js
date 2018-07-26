@@ -61,8 +61,6 @@ async function getApplicationName() {
 
   return application;
 }
-// import { renderAutomata } from "./template/automata";
-
 
 async function generateRouter(argv) {
   // ensure application directory
@@ -120,15 +118,15 @@ async function generateRouter(argv) {
     throw new Error("Pege not found.");
   }
 
-  // generate <application>.Automata.elm
-  console.log(`Generating ./src/${application}/Automata.elm for ${pages.map(p => p.join(".")).join(", ")}...`);
+  // generate <application>.Alchemy.elm
+  console.log(`Generating ./src/${application}/Alchemy.elm for ${pages.map(p => p.join(".")).join(", ")}...`);
   const source = (0, _router.renderRouter)(application, pages, argv);
-  await _fsExtra2.default.writeFile(`./src/${application}/Automata.elm`, source);
+  await _fsExtra2.default.writeFile(`./src/${application}/Alchemy.elm`, source);
 
-  // generate automata.js
-  console.log(`Generating ./src/${application}/automata.js...`);
+  // generate alchemy.js
+  console.log(`Generating ./src/${application}/alchemy.js...`);
   const indexSource = (0, _style.renderStyle)(application, pages);
-  await _fsExtra2.default.writeFile(_path2.default.resolve("./src/", application, "automata.js"), indexSource);
+  await _fsExtra2.default.writeFile(_path2.default.resolve("./src/", application, "alchemy.js"), indexSource);
 
   console.log("Done.");
 }
@@ -178,11 +176,11 @@ async function main() {
     console.log(`
 Usage: 
 
-  elm-automata update
+  elm-alchemy update
     
-    (Re)Generate Automata.elm, automata.js
+    (Re)Generate Alchemy.elm, alchemy.js
 
-  elm-automata new <name>
+  elm-alchemy new <name>
       
     Create new page named <name>. <name> must be an valid module name.
 

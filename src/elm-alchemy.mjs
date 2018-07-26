@@ -3,7 +3,6 @@ import util from "util";
 import path from "path";
 import glob from "glob";
 import { renderView } from "./template/view";
-// import { renderAutomata } from "./template/automata";
 import { renderUpdate } from "./template/update";
 import { renderType } from "./template/type";
 import { renderRouter } from "./template/router";
@@ -101,20 +100,20 @@ async function generateRouter(argv) {
     throw new Error("Pege not found.");
   }
 
-  // generate <application>.Automata.elm
+  // generate <application>.Alchemy.elm
   console.log(
-    `Generating ./src/${application}/Automata.elm for ${pages
+    `Generating ./src/${application}/Alchemy.elm for ${pages
       .map(p => p.join("."))
       .join(", ")}...`
   );
   const source = renderRouter(application, pages, argv);
-  await fs.writeFile(`./src/${application}/Automata.elm`, source);
+  await fs.writeFile(`./src/${application}/Alchemy.elm`, source);
 
-  // generate automata.js
-  console.log(`Generating ./src/${application}/automata.js...`);
+  // generate alchemy.js
+  console.log(`Generating ./src/${application}/alchemy.js...`);
   const indexSource = renderStyle(application, pages);
   await fs.writeFile(
-    path.resolve("./src/", application, "automata.js"),
+    path.resolve("./src/", application, "alchemy.js"),
     indexSource
   );
 
@@ -179,11 +178,11 @@ export async function main() {
       `
 Usage: 
 
-  elm-automata update
+  elm-alchemy update
     
-    (Re)Generate Automata.elm, automata.js
+    (Re)Generate Alchemy.elm, alchemy.js
 
-  elm-automata new <name>
+  elm-alchemy new <name>
       
     Create new page named <name>. <name> must be an valid module name.
 

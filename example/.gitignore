@@ -13,5 +13,5 @@ node_modules
 # Desktop Services Store on macOS
 .DS_Store
 
-src/ElmPortfolio/**/Automata.elm
-src/ElmPortfolio/**/automata.js
+src/ElmPortfolio/**/Alchemy.elm
+src/ElmPortfolio/**/alchemy.js

@@ -1,3 +1,3 @@
 #!/usr/bin/env node
 
-require("./dist/src/elm-automata.js");
+require("./dist/src/elm-alchemy.js");
