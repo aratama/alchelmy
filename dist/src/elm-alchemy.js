@@ -195,6 +195,7 @@ Options:
   } else if (command == "init") {
     const applicationName = argv._[1];
     await createApplication(applicationName);
+    await generateRouter(argv);
   } else if (command === "update") {
     await generateRouter(argv);
   } else if (command === "new") {
