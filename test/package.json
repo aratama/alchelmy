@@ -8,14 +8,14 @@
   },
   "scripts": {
     "test-clean": "rimraf src/TestProject index.js",
-    "test-init": "node --experimental-modules ../src/elm-alchemy.mjs init TestProject && node --experimental-modules ../src/elm-alchemy.mjs new Bar",
-    "test-build": "npm run test-clean && npm run test-init",
+    "test-init": "npx elm-alchemy init TestProject && npx elm-alchemy new Bar",
     "test": "npm run test-clean && npm run test-init && elm-test"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "elm": "^0.18.0",
+    "elm-alchemy": "github:aratama/elm-alchemy",
     "elm-test": "^0.18.12",
     "rimraf": "^2.6.2"
   }

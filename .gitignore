@@ -15,7 +15,5 @@ node_modules
 
 .cache
 
-test/src/**/*.*
-
 tests-generated/src/TestProject
 tests-generated/index.js
