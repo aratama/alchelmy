@@ -14,13 +14,7 @@ test_script:
   - node --version
   - npm --version
   # run tests
-  - npm install  
-  - cd example
-  - npm install
-  - npm install aratama/elm-alchemy
-  - npx elm-alchemy --parse path new Foo
-  - elm-app build
-  - cd .. 
+  - npm install   
   - npm run test
 
 

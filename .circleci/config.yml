@@ -34,8 +34,4 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
         
       # run tests!
-      - run: cd example && npm install
-      - run: cd example && npm run build
-      - run: cd example && npm install create-elm-app
-      - run: cd example && npx elm-app build
       - run: npm run test

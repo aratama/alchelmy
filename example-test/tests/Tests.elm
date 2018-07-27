@@ -9,10 +9,9 @@ import TestProject.Update as Root
 all : Test
 all =
     describe "A Test Suite"
-        [ test "Addition" <|
+        [ test "Root.update" <|
             \_ ->
-                Expect.equal 10 (3 + 7)
-        , test "String.left" <|
-            \_ ->
-                Expect.equal "a" (String.left 1 "abcdefg")
+                case Root.update (Root.ChangeRoute "/path/to/someware") {} of
+                    ( model, msg, dmsg ) ->
+                        Expect.equal model {}
         ]
