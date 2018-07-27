@@ -7,7 +7,7 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "echo \"no test specified\"",
+    "test": "elm-test",
     "dev": "node --experimental-modules ../src/elm-alchemy.mjs --parse path update",
     "build": "node ../bin.js --parse path update",
     "new": "node ../bin.js --parse path new Foo"

@@ -26,7 +26,7 @@ type AscentMsg
 
 
 type DescentMsg
-    = Initialize
+    = DescentMsgNoOp
 
 `;
 }

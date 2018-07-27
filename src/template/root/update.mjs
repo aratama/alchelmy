@@ -4,7 +4,7 @@ export function renderRootUpdate(application){
 module ${application}.Update exposing (..)
 
 import UrlParser exposing (..)
-import ${application}.Type exposing (Model, Msg(..), AscentMsg(..), DescentMsg(Initialize))
+import ${application}.Type exposing (Model, Msg(..), AscentMsg(..), DescentMsg)
 import UrlParser as UrlParser exposing (s, Parser, (</>), map)
 import Navigation exposing (Location, newUrl)
 import Maybe exposing (withDefault)
