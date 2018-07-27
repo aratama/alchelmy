@@ -4,10 +4,7 @@
     "repository": "https://github.com/user/project.git",
     "license": "BSD3",
     "source-directories": [
-        "src",
-        "testa/src",
-        "test/src",
-        "../src"
+        "src"
     ],
     "exposed-modules": [],
     "dependencies": {
