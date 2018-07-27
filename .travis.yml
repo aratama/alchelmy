@@ -19,4 +19,4 @@ install:
   - npm run build
   - travis_wait 30 elm-app build
   - cd ..
-  - npm run test
+  - travis_wait 30 npm run test
