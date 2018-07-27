@@ -1,11 +1,12 @@
 import "./main.css";
 import { Main } from "./Main.elm";
-import registerServiceWorker from "./registerServiceWorker";
+import { register, unregister } from "./registerServiceWorker";
 import "./ElmPortfolio/alchemy.js";
 
 const app = Main.embed(document.getElementById("root"));
 
-// registerServiceWorker();
+//register();
+unregister();
 
 app.ports.saveThemeToLocalStorage.subscribe(function (theme) {
     localStorage.setItem("theme", theme)
