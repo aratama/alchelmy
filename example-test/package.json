@@ -1,12 +1,16 @@
 {
-  "name": "test",
+  "name": "example-test",
   "version": "1.0.0",
-  "description": "",
+  "description": "This project is bootstrapped with [Create Elm App](https://github.com/halfzebra/create-elm-app).",
   "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
   "scripts": {
     "test-clean": "rimraf src/TestProject index.js",
     "test-init": "node --experimental-modules ../src/elm-alchemy.mjs init TestProject && node --experimental-modules ../src/elm-alchemy.mjs new Bar",
-    "test-build": "npm run test-clean && npm run test-init"
+    "test-build": "npm run test-clean && npm run test-init",
+    "test": "npm run test-clean && npm run test-init && elm-test"
   },
   "author": "",
   "license": "ISC",

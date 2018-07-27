@@ -9,7 +9,9 @@
   "scripts": {
     "lint": "eslint --fix src/**/*.mjs",
     "build": "babel ./src/**/*.mjs -d dist",
-    "test": "cd tests-generated && npm run test-build && cd .. && elm-test && cd example && npm run test",
+    "test-example": "cd example && npm run test",
+    "test-example-test": "cd example-test && npm test", 
+    "test": "npm run test-example && npm run test-example-test",   
     "clean": "rimraf tests-generated/index.js tests-generated/src/TestProject"
   },
   "author": "cubbit2@twitter/aratama@github",
