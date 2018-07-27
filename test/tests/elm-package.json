@@ -6,7 +6,9 @@
     "source-directories": [
         ".",
         "../src",
-        "src"
+        "src",
+        "testa/src",
+        "test/src"
     ],
     "exposed-modules": [],
     "dependencies": {

@@ -21,25 +21,23 @@ var _glob = require("glob");
 
 var _glob2 = _interopRequireDefault(_glob);
 
-var _view = require("./template/view");
+var _view = require("./template/page/view");
 
-var _update = require("./template/update");
+var _update = require("./template/page/update");
 
-var _type = require("./template/type");
+var _type = require("./template/page/type");
 
 var _router = require("./template/router");
 
 var _style = require("./template/style");
 
-var _root = require("./template/root");
+var _type2 = require("./template/root/type");
+
+var _update2 = require("./template/root/update");
 
 var _minimist = require("minimist");
 
 var _minimist2 = _interopRequireDefault(_minimist);
-
-var _readline = require("readline");
-
-var _readline2 = _interopRequireDefault(_readline);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -69,7 +67,10 @@ async function generateRouter(argv) {
 
   if (!_fsExtra2.default.existsSync(_path2.default.resolve("src", application, "Type.elm"))) {
     console.log(`Generating ${application}/Type.elm`);
-    await _fsExtra2.default.writeFile(`./src/${application}/Type.elm`, (0, _root.renderRootType)(application));
+    await _fsExtra2.default.writeFile(`./src/${application}/Type.elm`, (0, _type2.renderRootType)(application));
+
+    console.log(`Generating ${application}/Update.elm`);
+    await _fsExtra2.default.writeFile(`./src/${application}/Update.elm`, (0, _update2.renderRootUpdate)(application));
   }
 
   // generate NoutFound
