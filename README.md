@@ -24,8 +24,9 @@ You also need to install `elm-lang/navigation` and `evancz/url-parser` as elm-pa
 
 elm-alchemy has a command line interface:
 
-* `elm-alchemy update` command will generate `src/<Application>/Routing.elm`.
-* `elm-alchemy new <name>` command will generate a new page named `<name>`.
+* `elm-alchemy init <application>` command will generate `src/<Application>` directory.
+* `elm-alchemy update` command will (re)generate `src/<Application>/Routing.elm`.
+* `elm-alchemy new <page>` command will generate a new page named `<page>`.
 
 ## Tutorial 
 
