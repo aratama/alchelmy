@@ -1,6 +1,5 @@
 # elm-alchemy 
 
-[![Build Status](https://travis-ci.org/aratama/elm-alchemy.svg?branch=master)](https://travis-ci.org/aratama/elm-alchemy) 
 [![Build status](https://ci.appveyor.com/api/projects/status/8yvgjo92gk8jkw1j?svg=true)](https://ci.appveyor.com/project/aratama/elm-alchemy)
 [![CircleCI](https://circleci.com/gh/aratama/elm-alchemy.svg?style=svg)](https://circleci.com/gh/aratama/elm-alchemy)
 
