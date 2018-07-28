@@ -28,22 +28,11 @@ elm-alchemy has a command line interface:
 * `elm-alchemy update` command will (re)generate `src/<Application>/Routing.elm`.
 * `elm-alchemy new <page>` command will generate a new page named `<page>`.
 
-## Tutorial 
+## Quick Tutorial 
 
 * First, do `create-elm-app <application>` and `cd <application>` to make empty project.
 * `npx elm-alchemy update` to generate empty application pages. It will ask about the application name and create an application directory in `src`. 
-* Edit `src/Main.elm` as folowing: 
-
-```elm
-module Main exposing (..)
-
-import <application>.Alchemy as Alchemy exposing (Model, Msg, program)
-
-
-main : Program Never Model Msg
-main = program
-```
-
+* In `src/Main.elm`, import `<application>.Alchemy` and use `program` like `main = program`.
 * Launch the app with `elm-app start`. You should see the `NotFound` page because you don't have the `top` page yet.
 * `npx elm-alchemy new Cat` will generate a page "Cat".
 * Go to [http://localhost:3000/#/cat](http://localhost:3000/#/cat) and check the page.
@@ -51,9 +40,11 @@ main = program
 Please see [example](example) for more information.
 
 
-## Parent-Child Communicaton
+### Parent-Child Communicaton
 
-In the root type, you must define types named `AscentMsg` and `DescentMsg`.
+** TODO: need more explanations.** 
+
+In the root type, you must define types named `AscentMsg` and `DescentMsg`. 
 
 
 ## Known Limitations
