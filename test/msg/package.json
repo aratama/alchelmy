@@ -7,11 +7,8 @@
     "test": "tests"
   },
   "scripts": {
-    "clean": "rimraf src/TestProject elm-stuff tests/elm-stuff",
-    "test-clean": "rimraf src/TestProject",
-    "test-init": "npx elm-alchemy init TestProject && npx elm-alchemy update ",
-    "test-test": "npm run test-clean && npm run test-init && elm-test",
-    "test": "npm run test-test"
+    "clean": "rimraf elm-stuff tests/elm-stuff src/TestProject/Alchemy.elm src/TestProject/alchemy.js",
+    "test": "npm run clean && npx elm-alchemy update && elm-test"
   },
   "author": "",
   "license": "ISC",
