@@ -4,14 +4,40 @@ import Test exposing (..)
 import Expect
 import TestProject.Type as Root
 import TestProject.Update as Root
+import TestProject.Alchemy as Alchemy
 
 
 all : Test
 all =
     describe "A Test Suite"
-        [ test "Root.update" <|
+        [ test "Alchemy.update" <|
             \_ ->
-                case Root.update (Root.ChangeRoute "/path/to/someware") {} of
-                    ( model, msg, dmsg ) ->
-                        Expect.equal model {}
+                let
+                    route =
+                        Alchemy.MsgTest__State {}
+
+                    state =
+                        "initial"
+
+                    msg =
+                        Alchemy.Root__Msg (Root.SetState "value")
+                in
+                    case Alchemy.update msg { route = route, state = state } of
+                        ( model, msg ) ->
+                            Expect.equal model.state "value"
+        , test "Alchemy.update with amsg and dmsg" <|
+            \_ ->
+                let
+                    route =
+                        Alchemy.MsgTest__State {}
+
+                    state =
+                        "initial"
+
+                    msg =
+                        Alchemy.Root__Msg (Root.StartTest "value")
+                in
+                    case Alchemy.update msg { route = route, state = state } of
+                        ( model, msg ) ->
+                            Expect.equal model.state "value"
         ]

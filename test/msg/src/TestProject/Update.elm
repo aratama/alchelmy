@@ -1,7 +1,7 @@
 module TestProject.Update exposing (..)
 
 import UrlParser exposing (..)
-import TestProject.Type exposing (Model, Msg(..), AscentMsg(..), DescentMsg)
+import TestProject.Type exposing (Model, Msg(..), AscentMsg(..), DescentMsg(..))
 import UrlParser as UrlParser exposing (s, Parser, (</>), map)
 import Navigation exposing (Location, newUrl)
 import Maybe exposing (withDefault)
@@ -9,21 +9,24 @@ import Maybe exposing (withDefault)
 
 init : Location -> ( Model, Cmd Msg )
 init _ =
-    ( {}, Cmd.none )
+    ( "initial", Cmd.none )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg, Maybe DescentMsg )
 update msg model =
     case msg of
-        ChangeRoute url ->
-            ( model, newUrl url, Nothing )
+        StartTest state ->
+            ( model, Cmd.none, Just (SendToChild state) )
+
+        SetState state ->
+            ( state, Cmd.none, Nothing )
 
 
 receive : AscentMsg -> Maybe Msg
 receive msg =
     case msg of
-        Navigate url ->
-            Just (ChangeRoute url)
+        SetRootState state ->
+            Just (SetState state)
 
 
 subscriptions : Sub Msg

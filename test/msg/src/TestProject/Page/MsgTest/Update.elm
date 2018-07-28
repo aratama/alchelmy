@@ -18,8 +18,10 @@ init _ _ rootModel =
 
 receive : Root.DescentMsg -> Maybe Msg
 receive msg =
-    Nothing
-    
+    case msg of
+        Root.SendToChild state ->
+            Just (AscentMsg (Root.SetRootState state))
+
 
 update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg, Maybe Root.AscentMsg )
 update msg rootModel model =

@@ -1,23 +1,23 @@
 module TestProject.Type exposing (..)
 
-
 -- Application global state type.
 
 
 type alias Model =
-    {}
-  
+    String
+
 
 type Msg
-    = ChangeRoute String
+    = StartTest Model
+    | SetState Model
 
 
-    
+
 -- AscentMsg
 
 
 type AscentMsg
-    = Navigate String
+    = SetRootState Model
 
 
 
@@ -25,5 +25,4 @@ type AscentMsg
 
 
 type DescentMsg
-    = DescentMsgNoOp
-
+    = SendToChild Model
