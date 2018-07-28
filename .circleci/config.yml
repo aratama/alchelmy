@@ -26,9 +26,9 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
-      - run: npm -g install elm
-      - run: npm -g install elm-test
-      - run: npm -g install create-elm-app            
+      - run: sudo npm -g install elm
+      - run: sudo npm -g install elm-test
+      - run: sudo npm -g install create-elm-app            
       - run: npm install
 
       - save_cache:
