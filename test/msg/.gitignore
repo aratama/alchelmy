@@ -14,3 +14,5 @@ node_modules
 .DS_Store
 
 
+src/TestProject/Alchemy.elm
+src/TestProject/alchemy.js
