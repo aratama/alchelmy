@@ -10,6 +10,8 @@ cache:
     - example/node_modules
 
 before_install:
+  - npm -g install elm
+  - npm -g install elm-test
   - npm -g install create-elm-app
 
 install:
