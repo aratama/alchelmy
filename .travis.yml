@@ -10,9 +10,9 @@ cache:
     - example/node_modules
 
 before_install:
-  - npm -g install elm
-  - npm -g install elm-test
-  - npm -g install create-elm-app
+  - npm -g install elm --unsafe-perm=true --allow-root
+  - npm -g install elm-test --unsafe-perm=true --allow-root
+  - npm -g install create-elm-app --unsafe-perm=true --allow-root
 
 install:
   - npm install

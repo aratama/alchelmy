@@ -6,9 +6,9 @@ environment:
 install:
   # Get the latest stable version of Node.js or io.js
   - ps: Install-Product node $env:nodejs_version
-  - npm -g install elm
-  - npm -g install elm-test
-  - npm -g install create-elm-app
+  - npm -g install elm --unsafe-perm=true --allow-root
+  - npm -g install elm-test --unsafe-perm=true --allow-root
+  - npm -g install create-elm-app --unsafe-perm=true --allow-root
 
 # Post-install test scripts.
 test_script:

@@ -28,7 +28,7 @@ jobs:
 
       - run: sudo npm -g install elm --unsafe-perm=true --allow-root
       - run: sudo npm -g install elm-test --unsafe-perm=true --allow-root
-      - run: sudo npm -g install create-elm-app            
+      - run: sudo npm -g install create-elm-app --unsafe-perm=true --allow-root            
       - run: npm install
 
       - save_cache:
