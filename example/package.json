@@ -11,7 +11,7 @@
     "dev": "node --experimental-modules ../src/elm-alchemy.mjs --parse path update",
     "build": "npx elm-alchemy --parse path update",
     "new": "npx elm-alchemy --parse path new Foo",
-    "clean": "rimraf src/Alchemy.elm src/alchemy.js elm-stuff"
+    "clean": "rimraf src/Alchemy.elm src/alchemy.js elm-stuff tests/elm-stuff"
   },
   "author": "",
   "license": "ISC",
