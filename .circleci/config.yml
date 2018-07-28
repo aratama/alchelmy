@@ -26,8 +26,8 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
-      - run: sudo npm -g install elm
-      - run: sudo npm -g install elm-test
+      - run: sudo npm -g install elm --unsafe-perm=true --allow-root
+      - run: sudo npm -g install elm-test --unsafe-perm=true --allow-root
       - run: sudo npm -g install create-elm-app            
       - run: npm install
 
