@@ -10,9 +10,13 @@
     "lint": "eslint --fix src/**/*.mjs",
     "build": "babel ./src/**/*.mjs -d dist",
     "test-example": "cd example && npm install && npm run test",
-    "test-test": "cd test && npm install && npm test",
-    "test": "npm run test-example && npm run test-test",
-    "clean": "cd example && npm run clean && cd .. && cd test && npm run clean"
+    "test-test-init": "cd test/init && npm install && npm test",
+    "test-test-msg": "cd test/msg && npm install && npm test",    
+    "test": "npm run test-example && npm run test-test-init && npm run test-test-msg",
+    "clean-example": "cd example && npm run clean",    
+    "clean-test-init": "cd test/init && npm run clean",
+    "clean-test-msg": "cd test/msg && npm run clean",
+    "clean": "npm run clean-example && npm run clean-test-init && npm run clean-test-msg"        
   },
   "author": "cubbit2@twitter/aratama@github",
   "license": "ISC",

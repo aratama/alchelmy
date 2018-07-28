@@ -1,0 +1,22 @@
+{
+  "name": "test",
+  "version": "1.0.0",
+  "description": "This project is bootstrapped with [Create Elm App](https://github.com/halfzebra/create-elm-app).",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "clean": "rimraf src/TestProject elm-stuff tests/elm-stuff",
+    "test-clean": "rimraf src/TestProject",
+    "test-init": "npx elm-alchemy init TestProject && npx elm-alchemy update ",
+    "test-test": "npm run test-clean && npm run test-init && elm-test",
+    "test": "npm run test-test"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "elm-alchemy": "github:aratama/elm-alchemy",
+    "rimraf": "^2.6.2"
+  }
+}
