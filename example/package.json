@@ -9,10 +9,14 @@
   "scripts": {
     "test": "elm-test",
     "dev": "node --experimental-modules ../src/elm-alchemy.mjs --parse path update",
-    "build": "node ../bin.js --parse path update",
-    "new": "node ../bin.js --parse path new Foo"
+    "build": "npx elm-alchemy --parse path update",
+    "new": "npx elm-alchemy --parse path new Foo",
+    "clean": "rimraf src/Alchemy.elm src/alchemy.js elm-stuff"
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {}
+  "dependencies": {
+    "elm-alchemy": "github:aratama/elm-alchemy",
+    "rimraf": "^2.6.2"
+  }
 }
