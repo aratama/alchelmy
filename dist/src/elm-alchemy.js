@@ -176,12 +176,6 @@ Usage:
       
     Create new page named <name>. <name> must be an valid module name.
 
-Options:
-
-  --parse <hash|path>
-    
-     Specify an url parse function. The default is "hash".
-
     `.trim());
 
     try {
