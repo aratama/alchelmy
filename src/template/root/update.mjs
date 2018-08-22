@@ -5,7 +5,7 @@ module ${application}.Update exposing (..)
 
 import UrlParser exposing (..)
 import ${application}.Type exposing (Model, Msg(..), AscentMsg(..), DescentMsg)
-import UrlParser as UrlParser exposing (s, Parser, (</>), map)
+import UrlParser as UrlParser exposing (s, Parser, (</>), map, parseHash)
 import Navigation exposing (Location, newUrl)
 import Maybe exposing (withDefault)
 
@@ -33,6 +33,9 @@ subscriptions : Sub Msg
 subscriptions =
     Sub.none
 
+
+parse : Parser (a -> a) a -> Location -> Maybe a
+parse = parseHash
 
 `.trim()
 }

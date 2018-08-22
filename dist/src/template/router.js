@@ -101,7 +101,7 @@ ${pages.map(page => `        UrlParser.map ${bars(page)} ${bars(page)}.route`).j
 
 parseLocation : Location -> Route
 parseLocation location =
-    case (${argv.parse === "path" ? "parsePath" : "parseHash"} matchers location) of
+    case Root.parse matchers location of
         Just route ->
             route
 

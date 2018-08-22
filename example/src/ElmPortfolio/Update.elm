@@ -2,7 +2,7 @@ module ElmPortfolio.Update exposing (..)
 
 import UrlParser exposing (..)
 import ElmPortfolio.Type exposing (Model, Msg(..), AscentMsg(..), DescentMsg(Initialize))
-import UrlParser as UrlParser exposing (s, Parser, (</>), map)
+import UrlParser as UrlParser exposing (s, Parser, (</>), map, parsePath)
 import Navigation exposing (Location, newUrl)
 import ElmPortfolio.Ports exposing (requestThemeFromLocalStorage, receiveThemeFromLocalStorage)
 import Maybe exposing (withDefault)
@@ -33,3 +33,8 @@ receive msg =
 subscriptions : Sub Msg
 subscriptions =
     receiveThemeFromLocalStorage ReceiveThemeFromLocalStorage
+
+
+parse : Parser (a -> a) a -> Location -> Maybe a
+parse =
+    parsePath
