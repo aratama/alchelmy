@@ -26,9 +26,9 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
-      - run: sudo npm -g install elm --unsafe-perm=true --allow-root
-      - run: sudo npm -g install elm-test --unsafe-perm=true --allow-root
-      - run: sudo npm -g install create-elm-app --unsafe-perm=true --allow-root            
+      - run: sudo npm -g install elm@0.18.0-exp5 --unsafe-perm=true --allow-root
+      - run: sudo npm -g install elm-test@0.18.12 --unsafe-perm=true --allow-root
+      - run: sudo npm -g install create-elm-app@1.10.4 --unsafe-perm=true --allow-root            
       - run: npm install
 
       - save_cache:
