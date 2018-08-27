@@ -13,15 +13,6 @@ type Msg
     = Navigate String
 
 
-    
--- AscentMsg
-
-
-type AscentMsg
-    = AscentMsgNoOp
-
-
-
 -- DescentMsg
 
 

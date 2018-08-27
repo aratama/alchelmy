@@ -10,17 +10,7 @@ type alias Model =
 
 
 type Msg
-    = ChangeRoute String
-    | ReceiveThemeFromLocalStorage (Maybe String)
-
-
-
--- AscentMsg
-
-
-type AscentMsg
-    = Navigate String
-
+    = ReceiveThemeFromLocalStorage (Maybe String)
 
 
 -- DescentMsg

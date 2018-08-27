@@ -35,11 +35,6 @@ view link model content =
         ]
 
 
-link : (Root.AscentMsg -> msg) -> String -> List (Html msg) -> Html msg
-link msg =
-    navigate (msg << Root.Navigate)
-
-
 navigate : (String -> msg) -> String -> List (Html msg) -> Html msg
 navigate msg url contents =
     let

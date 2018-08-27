@@ -87,9 +87,8 @@ ${pages
   ${bars(page)}__Msg pageMsg -> case model.route of 
       ${bars(page)}__State pageModel -> 
         case ${bars(page)}.update pageMsg model.state pageModel of 
-          (model_, pageModel_, pageCmd, externalMsgMaybe ) -> case Maybe.andThen Root.receive externalMsgMaybe of
-            Nothing -> ({ model | state = model_, route = ${bars(page)}__State pageModel_ }, Cmd.map ${bars(page)}__Msg pageCmd)
-            Just dmsg -> update (Root__Msg dmsg) { model | state = model_, route = ${bars(page)}__State pageModel_ }
+          (model_, pageModel_, pageCmd ) -> 
+            ({ model | state = model_, route = ${bars(page)}__State pageModel_ }, Cmd.map ${bars(page)}__Msg pageCmd)
         
       ${1 < pages.length ? "_ -> (model, Cmd.none)" : ""}
       

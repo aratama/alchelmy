@@ -18,20 +18,20 @@ init location route rootModel =
     ( { value = rootModel.theme }, Cmd.none )
 
 
-update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg, Maybe Root.AscentMsg )
+update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg )
 update msg rootModel model =
     case msg of
         Navigate url ->
-            ( rootModel, model, newUrl url, Nothing )
+            ( rootModel, model, newUrl url )
 
         InputUserName str ->
-            ( rootModel, { model | value = str }, Cmd.none, Nothing )
+            ( rootModel, { model | value = str }, Cmd.none )
 
         SaveUserName ->
-            ( { rootModel | theme = model.value }, model, saveThemeToLocalStorage model.value, Nothing )
+            ( { rootModel | theme = model.value }, model, saveThemeToLocalStorage model.value )
 
         Initialize ->
-            ( rootModel, { model | value = rootModel.theme }, Cmd.none, Nothing )
+            ( rootModel, { model | value = rootModel.theme }, Cmd.none )
 
 
 subscriptions : Root.Model -> Sub Msg

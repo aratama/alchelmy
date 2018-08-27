@@ -22,11 +22,11 @@ receive msg =
     Nothing
     
 
-update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg, Maybe Root.AscentMsg )
+update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg )
 update msg rootModel model =
   case msg of
     Navigate url ->
-      ( rootModel, model, newUrl url, Nothing )
+      ( rootModel, model, newUrl url )
 
 
 subscriptions : Root.Model -> Sub Msg

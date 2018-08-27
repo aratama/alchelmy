@@ -24,17 +24,17 @@ init _ _ _ =
     ( 0, Cmd.none )
 
 
-update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg, Maybe Root.AscentMsg )
+update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg )
 update msg rootModel model =
     case msg of
         Navigate url ->
-            ( rootModel, model, newUrl url, Nothing )
+            ( rootModel, model, newUrl url )
 
         Increment ->
-            ( rootModel, model + 1, Cmd.none, Nothing )
+            ( rootModel, model + 1, Cmd.none )
 
         Decrement ->
-            ( rootModel, model - 1, Cmd.none, Nothing )
+            ( rootModel, model - 1, Cmd.none )
 
 
 subscriptions : Root.Model -> Sub Msg
