@@ -25,7 +25,7 @@ update : Msg -> Model -> ( Model, Cmd Msg, Maybe DescentMsg )
 update msg model =
     case msg of
         Navigate url ->
-            Just (ChangeRoute url)
+            (model, newUrl url, Nothing)
 
 receive : AscentMsg -> Maybe Msg
 receive msg =

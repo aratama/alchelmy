@@ -11,7 +11,7 @@ all =
     describe "A Test Suite"
         [ test "Root.update" <|
             \_ ->
-                case Root.update (Root.ChangeRoute "/path/to/someware") {} of
+                case Root.update (Root.Navigate "/path/to/someware") {} of
                     ( model, msg, dmsg ) ->
                         Expect.equal model {}
         ]
