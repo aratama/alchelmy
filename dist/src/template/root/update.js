@@ -10,7 +10,7 @@ function renderRootUpdate(application) {
 module ${application}.Update exposing (..)
 
 import UrlParser exposing (..)
-import ${application}.Type exposing (Model, Msg(..), AscentMsg(..), DescentMsg)
+import ${application}.Type exposing (Model, Msg(..), DescentMsg)
 import UrlParser as UrlParser exposing (s, Parser, (</>), map, parseHash)
 import Navigation exposing (Location, newUrl)
 import Maybe exposing (withDefault)
@@ -26,10 +26,6 @@ update msg model =
     case msg of
         Navigate url ->
             (model, newUrl url, Nothing)
-
-receive : AscentMsg -> Maybe Msg
-receive msg =
-    Nothing
 
 
 subscriptions : Sub Msg

@@ -1,7 +1,7 @@
 module TestProject.Update exposing (..)
 
 import UrlParser exposing (..)
-import TestProject.Type exposing (Model, Msg(..), AscentMsg(..), DescentMsg(..))
+import TestProject.Type exposing (Model, Msg(..), DescentMsg(..))
 import UrlParser as UrlParser exposing (s, Parser, (</>), map, parseHash)
 import Navigation exposing (Location, newUrl)
 import Maybe exposing (withDefault)
@@ -20,13 +20,6 @@ update msg model =
 
         SetState state ->
             ( state, Cmd.none, Nothing )
-
-
-receive : AscentMsg -> Maybe Msg
-receive msg =
-    case msg of
-        SetRootState state ->
-            Just (SetState state)
 
 
 subscriptions : Sub Msg

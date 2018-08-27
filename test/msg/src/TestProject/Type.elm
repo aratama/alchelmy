@@ -12,15 +12,6 @@ type Msg
     | SetState Model
 
 
-
--- AscentMsg
-
-
-type AscentMsg
-    = SetRootState Model
-
-
-
 -- DescentMsg
 
 

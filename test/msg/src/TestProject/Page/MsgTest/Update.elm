@@ -17,17 +17,14 @@ init _ _ rootModel =
 
 
 receive : Root.DescentMsg -> Maybe Msg
-receive msg =
-    case msg of
-        Root.SendToChild state ->
-            Just (AscentMsg (Root.SetRootState state))
+receive msg = Nothing
 
 
-update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg, Maybe Root.AscentMsg )
+update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg )
 update msg rootModel model =
     case msg of
-        AscentMsg amsg ->
-            ( rootModel, model, Cmd.none, Just amsg )
+        Navigate url ->
+            ( rootModel, model, newUrl url )
 
 
 subscriptions : Root.Model -> Sub Msg

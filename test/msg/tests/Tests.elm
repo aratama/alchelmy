@@ -25,19 +25,5 @@ all =
                     case Alchemy.update msg { route = route, state = state } of
                         ( model, msg ) ->
                             Expect.equal model.state "value"
-        , test "Alchemy.update with amsg and dmsg" <|
-            \_ ->
-                let
-                    route =
-                        Alchemy.MsgTest__State {}
 
-                    state =
-                        "initial"
-
-                    msg =
-                        Alchemy.Root__Msg (Root.StartTest "value")
-                in
-                    case Alchemy.update msg { route = route, state = state } of
-                        ( model, msg ) ->
-                            Expect.equal model.state "value"
         ]
