@@ -4,7 +4,7 @@ import ElmPortfolio.Type as Root
 
 
 type Msg
-    = AscentMsg Root.AscentMsg
+    = Navigate String
 
 
 type alias Model =

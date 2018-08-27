@@ -5,7 +5,7 @@ import ElmPortfolio.Type as Root
 
 
 type Msg
-    = AscentMsg Root.AscentMsg
+    = Navigate String
     | MorePlease
     | NewGif (Result Http.Error String)
 

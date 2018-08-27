@@ -7,26 +7,26 @@ import Html.Events exposing (onClick, onWithOptions)
 import Json.Decode exposing (Decoder, succeed, bool, field, fail, map4, andThen)
 
 
-view : (String -> List (Html msg) -> Html msg) -> Root.Model -> Html msg -> Html msg
-view navigate model content =
+view : (String -> String -> Html msg) -> Root.Model -> Html msg -> Html msg
+view link model content =
     div [ class "root" ]
         [ header []
-            [ h1 [] [ navigate "/" [ text "Elm Examples" ] ]
+            [ h1 [] [ link "/" "Elm Examples" ]
             , text <| "Theme: " ++ model.theme
             ]
         , div [ class "page" ]
             [ div [ class "index" ]
-                [ p [] [ navigate "/counter" [ text "Counter" ] ]
-                , p [] [ navigate "/http" [ text "Http" ] ]
-                , p [] [ navigate "/time" [ text "Time" ] ]
+                [ p [] [ link "/counter" "Counter"  ]
+                , p [] [ link "/http" "Http"  ]
+                , p [] [ link "/time" "Time"  ]
                 , p []
-                    [ navigate "/parent" [ text "Parent" ]
+                    [ link "/parent" "Parent" 
                     , text " / "
-                    , navigate "/parent/child" [ text "Child" ]
+                    , link "/parent/child" "Child" 
                     ]
-                , p [] [ navigate "/url-parsing/42" [ text "URL Parsing" ] ]
-                , p [] [ navigate "/preferences" [ text "Preferences" ] ]
-                , p [] [ navigate "/broken-url" [ text "404" ] ]
+                , p [] [ link "/url-parsing/42"  "URL Parsing"  ]
+                , p [] [ link "/preferences"  "Preferences"  ]
+                , p [] [ link "/broken-url" "404" ]
                 ]
             , div []
                 [ content

@@ -27,8 +27,8 @@ init _ _ _ =
 update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg, Maybe Root.AscentMsg )
 update msg rootModel model =
     case msg of
-        AscentMsg amsg ->
-            ( rootModel, model, Cmd.none, Just amsg )
+        Navigate url ->
+            ( rootModel, model, newUrl url, Nothing )
 
         Increment ->
             ( rootModel, model + 1, Cmd.none, Nothing )

@@ -8,10 +8,13 @@ import ElmPortfolio.Type as Root
 import ElmPortfolio.View as Root
 import Html.Events exposing (onClick, onWithOptions)
 
+link : String -> String -> Html Msg
+link href label =
+    Root.navigate Navigate href [ text label ]
 
 view : Root.Model -> Model -> Html Msg
 view state model =
-    Root.view (Root.link AscentMsg) state <|
+    Root.view link state <|
         div [ class "page-preferences container" ]
             [ h1 [] [ text "Preferences" ]
             , p [] [ text "Theme: ", input [ type_ "text", onInput InputUserName, value model.value ] [] ]

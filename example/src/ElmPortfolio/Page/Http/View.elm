@@ -7,10 +7,13 @@ import ElmPortfolio.Type as Root
 import ElmPortfolio.View as Root
 import Html.Events exposing (onClick, onWithOptions)
 
+link : String -> String -> Html Msg
+link href label =
+    Root.navigate Navigate href [ text label ]
 
 view : Root.Model -> Model -> Html Msg
 view state model =
-    Root.view (Root.link AscentMsg) state <|
+    Root.view link state <|
         div [ class "page-http container" ]
             [ h1 [] [ text "Http" ]
             , h2 [] [ text <| "Theme: " ++ model.topic ]
@@ -19,7 +22,7 @@ view state model =
             , img [ src model.gifUrl ] []
             , p []
                 [ text "Go to "
-                , Root.link AscentMsg "/preferences" [ text "the preferences page" ]
+                , link "/preferences" "the preferences page" 
                 , text " to change theme."
                 ]
             ]

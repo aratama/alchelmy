@@ -4,9 +4,9 @@ import ElmPortfolio.Type as Root
 
 
 type Msg
-    = InputUserName String
+    = Navigate String
+    | InputUserName String
     | SaveUserName
-    | AscentMsg Root.AscentMsg
     | Initialize
 
 

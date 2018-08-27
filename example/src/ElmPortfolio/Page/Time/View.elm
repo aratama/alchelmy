@@ -9,10 +9,13 @@ import Svg exposing (svg, circle, line)
 import Svg.Attributes exposing (viewBox, width, cx, cy, r, fill, x1, y1, x2, y2, stroke)
 import Time as Time
 
+link : String -> String -> Html Msg
+link href label =
+    Root.navigate Navigate href [ text label ]
 
 view : Root.Model -> Model -> Html Msg
 view state model =
-    Root.view (Root.link AscentMsg) state <|
+    Root.view link state <|
         div [ class "page-a container" ]
             [ h1 [] [ text "Time" ]
             , let

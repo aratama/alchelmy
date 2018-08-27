@@ -26,8 +26,8 @@ init location route rootModel =
 update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg, Maybe Root.AscentMsg )
 update msg rootModel model =
     case msg of
-        AscentMsg amsg ->
-            ( rootModel, model, Cmd.none, Just amsg )
+        Navigate url ->
+            ( rootModel, model, newUrl url, Nothing )
 
         MorePlease ->
             ( rootModel, { model | gifUrl = "waiting.gif" }, getRandomGif model.topic, Nothing )

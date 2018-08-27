@@ -16,10 +16,10 @@ type alias Route =
 
 
 type Msg
-    = Increment
+    = Navigate String 
+    | Increment
     | Decrement
-    | AscentMsg Root.AscentMsg
-
+    
 
 
 -- `Msg` is a local state container that stores the state of the page.

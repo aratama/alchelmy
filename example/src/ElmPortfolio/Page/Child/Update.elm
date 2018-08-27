@@ -1,7 +1,7 @@
-module ElmPortfolio.Page.Parent.Child.Update exposing (..)
+module ElmPortfolio.Page.Child.Update exposing (..)
 
 import UrlParser exposing (..)
-import ElmPortfolio.Page.Parent.Child.Type exposing (Model, Msg(..), Route)
+import ElmPortfolio.Page.Child.Type exposing (Model, Msg(..), Route)
 import ElmPortfolio.Type as Root
 import UrlParser as UrlParser exposing (s, Parser, (</>), map)
 import Navigation exposing (Location, newUrl)
@@ -20,8 +20,8 @@ init location _ rootModel =
 update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg, Maybe Root.AscentMsg )
 update msg rootModel model =
     case msg of
-        AscentMsg amsg ->
-            ( rootModel, model, Cmd.none, Just amsg )
+        Navigate url ->
+            ( rootModel, model, newUrl url, Nothing )
 
 
 subscriptions : Root.Model -> Sub Msg

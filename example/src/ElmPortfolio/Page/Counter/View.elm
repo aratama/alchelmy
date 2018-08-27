@@ -7,10 +7,13 @@ import ElmPortfolio.Page.Counter.Type exposing (Model, Msg(..))
 import ElmPortfolio.Type as Root
 import ElmPortfolio.View as Root
 
+link : String -> String -> Html Msg
+link href label =
+    Root.navigate Navigate href [ text label ]
 
 view : Root.Model -> Model -> Html Msg
 view rootModel model =
-    Root.view (Root.link AscentMsg) rootModel <|
+    Root.view link rootModel <|
         div [ class "page-counter container" ]
             [ h1 [] [ text "Counter" ]
             , p [] [ button [ onClick Decrement ] [ text "-" ] ]
