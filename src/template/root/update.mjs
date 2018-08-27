@@ -18,15 +18,12 @@ init _ =
 update : Msg -> Model -> ( Model, Cmd Msg, Maybe DescentMsg )
 update msg model =
     case msg of
-        ChangeRoute url ->
-            ( model, newUrl url, Nothing )
-
+        Navigate url ->
+            Just (ChangeRoute url)
 
 receive : AscentMsg -> Maybe Msg
 receive msg =
-    case msg of
-        Navigate url ->
-            Just (ChangeRoute url)
+    Nothing
 
 
 subscriptions : Sub Msg
