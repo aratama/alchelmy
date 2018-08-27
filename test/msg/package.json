@@ -13,7 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "elm-alchemy": "file:../..",
+    "elm-alchemy": "github:aratama/elm-alchemy",
     "rimraf": "^2.6.2"
   }
 }
