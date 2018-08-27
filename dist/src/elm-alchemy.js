@@ -35,6 +35,8 @@ var _type2 = require("./template/root/type");
 
 var _update2 = require("./template/root/update");
 
+var _view2 = require("./template/root/view");
+
 var _minimist = require("minimist");
 
 var _minimist2 = _interopRequireDefault(_minimist);
@@ -62,7 +64,7 @@ async function getApplicationName() {
 
 async function generateRouter(argv) {
 
-  // create root Type.elm
+  // create root Type.elm, Update.elm and View.elm
   const application = await getApplicationName();
 
   if (!_fsExtra2.default.existsSync(_path2.default.resolve("src", application, "Type.elm"))) {
@@ -71,6 +73,9 @@ async function generateRouter(argv) {
 
     console.log(`Generating ${application}/Update.elm`);
     await _fsExtra2.default.writeFile(`./src/${application}/Update.elm`, (0, _update2.renderRootUpdate)(application));
+
+    console.log(`Generating ${application}/View.elm`);
+    await _fsExtra2.default.writeFile(`./src/${application}/View.elm`, (0, _view2.renderRootView)(application));
   }
 
   // generate NoutFound

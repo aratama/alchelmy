@@ -30,9 +30,9 @@ receive msg =
 
 update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg, Maybe Root.AscentMsg )
 update msg rootModel model =
-    case msg of
-        AscentMsg amsg ->
-            ( rootModel, model, Cmd.none, Just amsg )
+  case msg of
+    Navigate url ->
+      ( rootModel, model, newUrl url, Nothing )
 
 
 subscriptions : Root.Model -> Sub Msg

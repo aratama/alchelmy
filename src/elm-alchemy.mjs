@@ -9,6 +9,7 @@ import { renderRouter } from "./template/router";
 import { renderStyle } from "./template/style";
 import { renderRootType } from "./template/root/type";
 import { renderRootUpdate } from "./template/root/update";
+import { renderRootView } from "./template/root/view";
 import minimist from "minimist";
 
 async function getApplicationName() {
@@ -38,7 +39,7 @@ async function generateRouter(argv) {
 
 
 
-  // create root Type.elm
+  // create root Type.elm, Update.elm and View.elm
   const application = await getApplicationName();
 
   if (!fs.existsSync(path.resolve("src", application, "Type.elm"))) {
@@ -52,6 +53,12 @@ async function generateRouter(argv) {
     await fs.writeFile(
       `./src/${application}/Update.elm`,
       renderRootUpdate(application)
+    );
+
+    console.log(`Generating ${application}/View.elm`);
+    await fs.writeFile(
+      `./src/${application}/View.elm`,
+      renderRootView(application)
     );
   }
 

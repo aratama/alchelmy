@@ -10,7 +10,7 @@ type alias Model =
   
 
 type Msg
-    = ChangeRoute String
+    = Navigate String
 
 
     
@@ -18,7 +18,7 @@ type Msg
 
 
 type AscentMsg
-    = Navigate String
+    = AscentMsgNoOp
 
 
 

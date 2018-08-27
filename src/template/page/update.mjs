@@ -1,5 +1,5 @@
 export function renderUpdate(application, pageName) {
-  return `module ${application}.Page.${pageName}.Update exposing (route, init, update, subscriptions, receive)
+    return `module ${application}.Page.${pageName}.Update exposing (route, init, update, subscriptions, receive)
 
 import ${application}.Page.${pageName}.Type exposing (Model, Msg(..), Route)
 import ${application}.Type as Root
@@ -24,9 +24,9 @@ receive msg =
 
 update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg, Maybe Root.AscentMsg )
 update msg rootModel model =
-    case msg of
-        AscentMsg amsg ->
-            ( rootModel, model, Cmd.none, Just amsg )
+  case msg of
+    Navigate url ->
+      ( rootModel, model, newUrl url, Nothing )
 
 
 subscriptions : Root.Model -> Sub Msg
