@@ -6,6 +6,8 @@ import Html exposing (Html, a)
 import Html.Attributes exposing (href)
 import Json.Decode exposing (Decoder, andThen, bool, fail, field, map4, succeed)
 
+{-| Helper function for path routing. You can remove this function if you use Hash routing (\`parseHash\`).
+-}
 navigate : (String -> msg) -> String -> List (Html msg) -> Html msg
 navigate msg url contents =
     let
@@ -14,7 +16,7 @@ navigate msg url contents =
             andThen
                 identity
                 (map4
-                    (\ctrl shift alt meta ->
+                    (\\ctrl shift alt meta ->
                         if shift || ctrl || alt || meta then
                             -- do browser default behavior
                             fail ""
