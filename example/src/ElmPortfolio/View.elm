@@ -19,11 +19,6 @@ view link model content =
                 [ p [] [ link "/counter" "Counter"  ]
                 , p [] [ link "/http" "Http"  ]
                 , p [] [ link "/time" "Time"  ]
-                , p []
-                    [ link "/parent" "Parent" 
-                    , text " / "
-                    , link "/parent/child" "Child" 
-                    ]
                 , p [] [ link "/url-parsing/42"  "URL Parsing"  ]
                 , p [] [ link "/preferences"  "Preferences"  ]
                 , p [] [ link "/broken-url" "404" ]
