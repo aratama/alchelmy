@@ -2,8 +2,14 @@ export function renderBlankPage(application, pageName) {
   return `module ${application}.Page.${pageName} exposing (Route, Model, Msg, route, page)
 
 import ${application}.Root as Root
-import UrlParser as UrlParser exposing (Parser, s, (</>), map)
 import Navigation exposing (Location, newUrl)
+import UrlParser as UrlParser exposing (s, Parser, (</>), map)
+import ElmPortfolio.Ports exposing (requestThemeFromLocalStorage, receiveThemeFromLocalStorage)
+import Maybe exposing (withDefault)
+import Html exposing (Html, text, div, header, h1, p, a)
+import Html.Attributes exposing (class, href)
+import Html.Events exposing (onClick, onWithOptions)
+import Json.Decode exposing (Decoder, succeed, bool, field, fail, map4, andThen)
 
 type Msg
   = Navigate String
