@@ -2,10 +2,10 @@ import fs from "fs-extra";
 import util from "util";
 import path from "path";
 import glob from "glob";
-import { renderBlankPage } from "./template/page.mjs";
+import { renderBlankPage } from "./template/page";
 import { renderRouter } from "./template/router";
 import { renderStyle } from "./template/style";
-import { renderRoot } from "./template/root.mjs";
+import { renderRoot } from "./template/root";
 import minimist from "minimist";
 
 async function getApplicationName() {
