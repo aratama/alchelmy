@@ -6,7 +6,7 @@ function bars(page) {
   return page;
 }
 
-export function renderRouter(application, pages, argv) {
+export function renderRouter(application, pages) {
   return `
 --------------------------
 -- Auto-generated codes --
@@ -60,9 +60,9 @@ update msg model = case msg of
   Navigate location -> let route = parseLocation location in case route of ${pages
     .map(
       page => `
-          ${bars(page)} routeValue -> case ${bars(
+          ${bars(page)} routeValue -> case let page = ${bars(
         page
-      )}.init location routeValue model.state of
+      )}.page in page.init location routeValue model.state of
               (initialModel, initialCmd) -> 
                 ( { model | route = ${bars(page)}__State initialModel }
                 , Cmd.map ${bars(page)}__Msg initialCmd
@@ -76,7 +76,7 @@ ${pages
       page => `
   ${bars(page)}__Msg pageMsg -> case model.route of 
       ${bars(page)}__State pageModel -> 
-        case ${bars(page)}.update pageMsg model.state pageModel of 
+        case let page = ${bars(page)}.page in page.update pageMsg model.state pageModel of 
           (model_, pageModel_, pageCmd ) -> 
             ({ model | state = model_, route = ${bars(page)}__State pageModel_ }, Cmd.map ${bars(page)}__Msg pageCmd)
         
@@ -91,9 +91,9 @@ view model = case model.route of
 ${pages
     .map(
       page =>
-        `  ${bars(page)}__State m -> Html.map ${bars(page)}__Msg (${bars(
+        `  ${bars(page)}__State m -> Html.map ${bars(page)}__Msg (let page = ${bars(
           page
-        )}.view model.state m)`
+        )}.page in page.view model.state m)`
     )
     .join("\n")}
 
@@ -128,9 +128,9 @@ init location =
 ${pages
     .map(
       page => `
-            ${bars(page)} routeValue -> case ${bars(
+            ${bars(page)} routeValue -> case let page = ${bars(
         page
-      )}.init location routeValue rootInitialModel of
+      )}.page in page.init location routeValue rootInitialModel of
                 (initialModel, initialCmd) -> 
                     ( { route = ${bars(page)}__State initialModel
                       , state = rootInitialModel
@@ -150,9 +150,9 @@ subscriptions model =
         (Sub.map Root__Msg Root.subscriptions :: [  ${pages
           .map(
             page =>
-              `Sub.map ${bars(page)}__Msg (${bars(
+              `Sub.map ${bars(page)}__Msg (let page = ${bars(
                 page
-              )}.subscriptions model.state)`
+              )}.page in page.subscriptions model.state)`
           )
           .join("\n        , ")}
         ])

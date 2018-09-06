@@ -1,4 +1,4 @@
-module ElmPortfolio.Page.Top exposing (..)
+module ElmPortfolio.Page.Top exposing (Route, Model, Msg, route, page)
 
 import ElmPortfolio.Root as Root
 import UrlParser exposing (..)
@@ -57,3 +57,11 @@ view state model =
         div [ class "page-top" ]
             [ h1 [] [ text "Top" ]
             ]
+
+page : Root.Page Route Model Msg
+page = 
+  { init = init
+  , view = view
+  , update = update
+  , subscriptions = subscriptions
+  }

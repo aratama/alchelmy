@@ -1,4 +1,4 @@
-module ElmPortfolio.Page.Counter exposing (..)
+module ElmPortfolio.Page.Counter exposing (Route, Model, Msg, route, page)
 
 import UrlParser as UrlParser exposing (s, Parser, (</>), map)
 import Navigation exposing (Location, newUrl)
@@ -85,9 +85,9 @@ view rootModel model =
             ]
 
 page : Root.Page Route Model Msg
-page = {
-    init = init,
-    view = view,
-    update = update,
-    subscriptions = subscriptions
-    }
+page = 
+  { init = init
+  , view = view
+  , update = update
+  , subscriptions = subscriptions
+  }

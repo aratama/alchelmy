@@ -1,4 +1,4 @@
-module ElmPortfolio.Page.Preferences exposing (..)
+module ElmPortfolio.Page.Preferences exposing (Route, Model, Msg, route, page)
 
 import ElmPortfolio.Root as Root
 import UrlParser as UrlParser exposing (s, Parser, (</>), map)
@@ -68,3 +68,11 @@ view state model =
             , p [] [ text "Theme: ", input [ type_ "text", onInput InputUserName, value model.value ] [] ]
             , p [] [ button [ onClick SaveUserName ] [ text "Save" ] ]
             ]
+
+page : Root.Page Route Model Msg
+page = 
+  { init = init
+  , view = view
+  , update = update
+  , subscriptions = subscriptions
+  }

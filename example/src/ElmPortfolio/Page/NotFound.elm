@@ -1,4 +1,4 @@
-module ElmPortfolio.Page.NotFound exposing (..)
+module ElmPortfolio.Page.NotFound exposing (Route, Model, Msg, route, page)
 
 import UrlParser as UrlParser exposing (s, Parser, (</>), map, top)
 import Json.Decode as Decode
@@ -53,9 +53,9 @@ view state model =
         ]
 
 page : Root.Page Route Model Msg
-page = {
-    init = init,
-    view = view,
-    update = update,
-    subscriptions = subscriptions
-    }
+page = 
+  { init = init
+  , view = view
+  , update = update
+  , subscriptions = subscriptions
+  }

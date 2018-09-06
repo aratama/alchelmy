@@ -1,4 +1,4 @@
-module ElmPortfolio.Page.Time exposing (..)
+module ElmPortfolio.Page.Time exposing (Route, Model, Msg, route, page)
 
 import Time exposing (Time)
 import ElmPortfolio.Root as Root
@@ -71,3 +71,11 @@ view state model =
                     , line [ x1 "50", y1 "50", x2 handX, y2 handY, stroke "#023963" ] []
                     ]
             ]
+
+page : Root.Page Route Model Msg
+page = 
+  { init = init
+  , view = view
+  , update = update
+  , subscriptions = subscriptions
+  }

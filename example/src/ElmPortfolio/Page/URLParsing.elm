@@ -1,4 +1,4 @@
-module ElmPortfolio.Page.URLParsing exposing (..)
+module ElmPortfolio.Page.URLParsing exposing (Route, Model, Msg, route, page)
 
 import Navigation exposing (Location)
 import ElmPortfolio.Root as Root
@@ -60,3 +60,11 @@ view state model =
                 ]
             , p [] [ text <| "Parameter: " ++ toString model.id ]
             ]
+
+page : Root.Page Route Model Msg
+page = 
+  { init = init
+  , view = view
+  , update = update
+  , subscriptions = subscriptions
+  }

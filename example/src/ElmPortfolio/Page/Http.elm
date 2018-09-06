@@ -1,4 +1,4 @@
-module ElmPortfolio.Page.Http exposing (..)
+module ElmPortfolio.Page.Http exposing (Route, Model, Msg, route, page)
 
 import UrlParser as UrlParser exposing (s, Parser, (</>), map)
 import Json.Decode as Decode
@@ -95,3 +95,13 @@ view state model =
                 , text " to change theme."
                 ]
             ]
+
+
+
+page : Root.Page Route Model Msg
+page = 
+  { init = init
+  , view = view
+  , update = update
+  , subscriptions = subscriptions
+  }
