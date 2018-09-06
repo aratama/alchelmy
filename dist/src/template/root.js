@@ -12,6 +12,7 @@ import Navigation exposing (Location, newUrl)
 import Maybe exposing (withDefault)
 import Html exposing (Html, a)
 import Html.Attributes exposing (href)
+import Html.Events exposing (onWithOptions)
 import Json.Decode exposing (Decoder, andThen, bool, fail, field, map4, succeed)
 
 
