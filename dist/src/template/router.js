@@ -12,7 +12,7 @@ function bars(page) {
   return page;
 }
 
-function renderRouter(application, pages, argv) {
+function renderRouter(application, pages) {
   return `
 --------------------------
 -- Auto-generated codes --
@@ -54,19 +54,11 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model = case msg of 
 
   Root__Msg rootMsg -> case Root.update rootMsg model.state of
-    (rootModel_, rootCmd, descentMsgMaybe) -> case descentMsgMaybe of
-      Nothing -> 
+    (rootModel_, rootCmd) -> 
         ({ model | state = rootModel_ }, Cmd.map Root__Msg rootCmd)
-      Just descentMsg -> case model.route of 
-        ${pages.map(page => `${bars(page)}__State pageModel ->            
-          case ${bars(page)}.receive descentMsg of
-            Nothing -> ({ model | state = rootModel_ }, Cmd.map Root__Msg rootCmd)
-            Just pageMsg -> update (${bars(page)}__Msg pageMsg) { model | state = rootModel_ }
-            `).join("\n        ")}
-
 
   Navigate location -> let route = parseLocation location in case route of ${pages.map(page => `
-          ${bars(page)} routeValue -> case ${bars(page)}.init location routeValue model.state of
+          ${bars(page)} routeValue -> case let page = ${bars(page)}.page in page.init location routeValue model.state of
               (initialModel, initialCmd) -> 
                 ( { model | route = ${bars(page)}__State initialModel }
                 , Cmd.map ${bars(page)}__Msg initialCmd
@@ -76,7 +68,7 @@ update msg model = case msg of
 ${pages.map(page => `
   ${bars(page)}__Msg pageMsg -> case model.route of 
       ${bars(page)}__State pageModel -> 
-        case ${bars(page)}.update pageMsg model.state pageModel of 
+        case let page = ${bars(page)}.page in page.update pageMsg model.state pageModel of 
           (model_, pageModel_, pageCmd ) -> 
             ({ model | state = model_, route = ${bars(page)}__State pageModel_ }, Cmd.map ${bars(page)}__Msg pageCmd)
         
@@ -86,14 +78,14 @@ ${pages.map(page => `
 
 view : Model -> Html Msg
 view model = case model.route of 
-${pages.map(page => `  ${bars(page)}__State m -> Html.map ${bars(page)}__Msg (${bars(page)}.view model.state m)`).join("\n")}
+${pages.map(page => `  ${bars(page)}__State m -> Html.map ${bars(page)}__Msg (let page = ${bars(page)}.page in page.view model.state m)`).join("\n")}
 
 
 matchers : Parser (Route -> a) a
 matchers =
     oneOf
         [
-${pages.map(page => `        UrlParser.map ${bars(page)} ${bars(page)}.route`).join(",\n")}
+${pages.map(page => `        UrlParser.map ${bars(page)} (let page = ${bars(page)}.page in page.route)`).join(",\n")}
         ]   
 
 parseLocation : Location -> Route
@@ -115,7 +107,7 @@ init location =
       (rootInitialModel, rootInitialCmd) -> 
         case route of
 ${pages.map(page => `
-            ${bars(page)} routeValue -> case ${bars(page)}.init location routeValue rootInitialModel of
+            ${bars(page)} routeValue -> case let page = ${bars(page)}.page in page.init location routeValue rootInitialModel of
                 (initialModel, initialCmd) -> 
                     ( { route = ${bars(page)}__State initialModel
                       , state = rootInitialModel
@@ -130,7 +122,7 @@ ${pages.map(page => `
 subscriptions : Model -> Sub Msg
 subscriptions model = 
     Sub.batch
-        (Sub.map Root__Msg Root.subscriptions :: [  ${pages.map(page => `Sub.map ${bars(page)}__Msg (${bars(page)}.subscriptions model.state)`).join("\n        , ")}
+        (Sub.map Root__Msg Root.subscriptions :: [  ${pages.map(page => `Sub.map ${bars(page)}__Msg (let page = ${bars(page)}.page in page.subscriptions model.state)`).join("\n        , ")}
         ])
 
 

@@ -103,7 +103,7 @@ matchers =
     oneOf
         [
 ${pages
-    .map(page => `        UrlParser.map ${bars(page)} ${bars(page)}.route`)
+    .map(page => `        UrlParser.map ${bars(page)} (let page = ${bars(page)}.page in page.route)`)
     .join(",\n")}
         ]   
 

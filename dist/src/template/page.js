@@ -62,5 +62,13 @@ view state model = div []
   [ h1 [] [text "${pageName}"]
   ]
 
+page : Root.Page Route Model Msg
+page = 
+  { init = init
+  , view = view
+  , update = update
+  , subscriptions = subscriptions
+  }
+
   `;
 }

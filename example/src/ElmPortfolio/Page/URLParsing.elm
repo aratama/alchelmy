@@ -61,9 +61,10 @@ view state model =
             , p [] [ text <| "Parameter: " ++ toString model.id ]
             ]
 
-page : Root.Page Route Model Msg
+page : Root.Page a Route Model Msg
 page = 
-  { init = init
+  { route = route
+  , init = init
   , view = view
   , update = update
   , subscriptions = subscriptions
