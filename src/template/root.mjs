@@ -1,7 +1,6 @@
 export function renderRoot(application) {
   return `module ${application}.Root exposing (..)
 
-import ${application}.Root exposing (Model, Msg(..), DescentMsg)
 import UrlParser as UrlParser exposing (s, Parser, (</>), map, parseHash)
 import Navigation exposing (Location, newUrl)
 import Maybe exposing (withDefault)
