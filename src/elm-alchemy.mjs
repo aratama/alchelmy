@@ -121,8 +121,7 @@ async function generateNewPage(pageName) {
     console.error(`[Error] Directory '${pageName}' already exists.`);
     process.exitCode = 1;
   } else {
-    const dir = path.resolve("./src/", application, "Page", pageName);
-    await fs.ensureDir(dir);
+    const dir = path.resolve("./src/", application, "Page");
     await fs.writeFile(path.resolve(dir, pageName + ".css"), "");
     await fs.writeFile(path.resolve(dir, pageName + ".elm"), renderBlankPage(application, pageName));
   }
