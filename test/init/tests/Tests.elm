@@ -13,6 +13,6 @@ all =
         [ test "Root.update" <|
             \_ ->
                 case Root.update (Root.Navigate "/path/to/someware") {} of
-                    ( model, msg, dmsg ) ->
+                    ( model, msg ) ->
                         Expect.equal model {}
         ]
