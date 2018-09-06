@@ -122,6 +122,7 @@ async function generateNewPage(pageName) {
     process.exitCode = 1;
   } else {
     const dir = path.resolve("./src/", application, "Page");
+    await fs.ensureDir(dir);
     await fs.writeFile(path.resolve(dir, pageName + ".css"), "");
     await fs.writeFile(path.resolve(dir, pageName + ".elm"), renderBlankPage(application, pageName));
   }

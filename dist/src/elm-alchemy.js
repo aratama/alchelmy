@@ -132,6 +132,7 @@ async function generateNewPage(pageName) {
     process.exitCode = 1;
   } else {
     const dir = _path2.default.resolve("./src/", application, "Page");
+    await _fsExtra2.default.ensureDir(dir);
     await _fsExtra2.default.writeFile(_path2.default.resolve(dir, pageName + ".css"), "");
     await _fsExtra2.default.writeFile(_path2.default.resolve(dir, pageName + ".elm"), (0, _page.renderBlankPage)(application, pageName));
   }
