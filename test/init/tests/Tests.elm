@@ -2,8 +2,9 @@ module Tests exposing (..)
 
 import Test exposing (..)
 import Expect
-import TestProject.Type as Root
-import TestProject.Update as Root
+import TestProject.Root as Root
+
+
 
 
 all : Test
