@@ -54,16 +54,8 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model = case msg of 
 
   Root__Msg rootMsg -> case Root.update rootMsg model.state of
-    (rootModel_, rootCmd, descentMsgMaybe) -> case descentMsgMaybe of
-      Nothing -> 
+    (rootModel_, rootCmd) -> 
         ({ model | state = rootModel_ }, Cmd.map Root__Msg rootCmd)
-      Just descentMsg -> case model.route of 
-        ${pages.map(page => `${bars(page)}__State pageModel ->            
-          case ${bars(page)}.receive descentMsg of
-            Nothing -> ({ model | state = rootModel_ }, Cmd.map Root__Msg rootCmd)
-            Just pageMsg -> update (${bars(page)}__Msg pageMsg) { model | state = rootModel_ }
-            `).join("\n        ")}
-
 
   Navigate location -> let route = parseLocation location in case route of ${pages
     .map(

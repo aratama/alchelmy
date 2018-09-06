@@ -70,12 +70,6 @@ subscriptions model =
     Sub.none
 
 
-receive : Root.DescentMsg -> Maybe Msg
-receive msg =
-    Nothing
-
-
-
 link : String -> String -> Html Msg
 link href label =
     Root.navigate Navigate href [ text label ]
@@ -90,11 +84,10 @@ view rootModel model =
             , p [] [ button [ onClick Increment ] [ text "+" ] ]
             ]
 
-
+page : Root.Page Route Model Msg
 page = {
     init = init,
     view = view,
     update = update,
-    subscriptions = subscriptions,
-    receive = receive
+    subscriptions = subscriptions
     }

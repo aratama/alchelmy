@@ -76,12 +76,6 @@ subscriptions model =
     Sub.none
 
 
-receive : Root.DescentMsg -> Maybe Msg
-receive msg =
-    Nothing
-
-
-
 link : String -> String -> Html Msg
 link href label =
     Root.navigate Navigate href [ text label ]

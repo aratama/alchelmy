@@ -47,10 +47,6 @@ subscriptions model =
     Time.every second Tick
 
 
-receive : Root.DescentMsg -> Maybe Msg
-receive msg =
-    Nothing
-
 link : String -> String -> Html Msg
 link href label =
     Root.navigate Navigate href [ text label ]

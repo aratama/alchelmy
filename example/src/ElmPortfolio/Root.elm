@@ -20,11 +20,15 @@ type Msg
     = ReceiveThemeFromLocalStorage (Maybe String)
 
 
--- DescentMsg
 
 
-type DescentMsg
-    = Initialize
+type alias Page route model msg =
+    { init : Location -> route -> Model -> (model, Cmd msg )
+    , update : msg -> Model -> model -> (Model, model, Cmd msg )
+    , subscriptions : Model -> Sub msg
+    , view : Model -> model -> Html msg
+    }
+
 
 
 
@@ -33,11 +37,11 @@ init _ =
     ( { theme = "goat" }, requestThemeFromLocalStorage () )
 
 
-update : Msg -> Model -> ( Model, Cmd Msg, Maybe DescentMsg )
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         ReceiveThemeFromLocalStorage themeMaybe ->
-            ( { model | theme = withDefault model.theme themeMaybe }, Cmd.none, Just Initialize )
+            ( { model | theme = withDefault model.theme themeMaybe }, Cmd.none )
 
 
 subscriptions : Sub Msg
