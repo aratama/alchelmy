@@ -6,9 +6,6 @@ import { renderBlankPage } from "./template/page.mjs";
 import { renderRouter } from "./template/router";
 import { renderStyle } from "./template/style";
 import { renderRoot } from "./template/root.mjs";
-import { renderRootType } from "./template/root/type";
-import { renderRootUpdate } from "./template/root/update";
-import { renderRootView } from "./template/root/view";
 import minimist from "minimist";
 
 async function getApplicationName() {
@@ -57,7 +54,6 @@ async function generateRouter(argv) {
 
   // get page names
 
-  debugger
   const pageFiles = await util.promisify(glob)(`./src/${application}/Page/*.elm`);
   const pages = pageFiles.map(p => path.basename(p, ".elm"))
   if (pages.length === 0) {
