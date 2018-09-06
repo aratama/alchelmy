@@ -37,11 +37,6 @@ init _ _ rootModel =
     ( {}, Cmd.none )
 
 
-receive : Root.DescentMsg -> Maybe Msg
-receive msg =
-    Nothing
-    
-
 update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg )
 update msg rootModel model =
   case msg of
