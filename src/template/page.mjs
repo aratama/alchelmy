@@ -1,8 +1,7 @@
 export function renderBlankPage(application, pageName) {
-  return `module ${application}.Page.${pageName} exposing (..)
+  return `module ${application}.Page.${pageName} exposing (Route, Model, Msg, route, page)
 
 import ${application}.Root as Root
-import ${application}.Page.${pageName}.Type exposing (Model, Msg(..), Route)
 import UrlParser as UrlParser exposing (Parser, s, (</>), map)
 import Navigation exposing (Location, newUrl)
 

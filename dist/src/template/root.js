@@ -27,23 +27,16 @@ type Msg
     = Navigate String
 
 
--- DescentMsg
-
-
-type DescentMsg
-    = DescentMsgNoOp
-
-
 init : Location -> ( Model, Cmd Msg )
 init _ =
     ( {}, Cmd.none )
 
 
-update : Msg -> Model -> ( Model, Cmd Msg, Maybe DescentMsg )
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Navigate url ->
-            (model, newUrl url, Nothing)
+            (model, newUrl url)
 
 
 subscriptions : Sub Msg
