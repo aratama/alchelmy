@@ -1,11 +1,23 @@
-module ElmPortfolio.Page.Top.Update exposing (..)
+module ElmPortfolio.Page.Top exposing (..)
 
+import ElmPortfolio.Root as Root
 import UrlParser exposing (..)
-import ElmPortfolio.Page.Top.Type exposing (Model, Msg(..), Route)
-import ElmPortfolio.Type as Root
 import UrlParser as UrlParser exposing (s, Parser, (</>), map, top)
 import Navigation exposing (modifyUrl)
 import Navigation exposing (Location, newUrl)
+import Html exposing (Html, text, div, h1, img, a, p)
+import Html.Attributes exposing (src, href, class)
+
+type Msg
+    = Navigate String
+
+
+type alias Model =
+    {}
+
+
+type alias Route =
+    {}
 
 
 route : Parser (Route -> a) a
@@ -38,3 +50,14 @@ subscriptions model =
 receive : Root.DescentMsg -> Maybe Msg
 receive msg =
     Nothing
+
+link : String -> String -> Html Msg
+link href label =
+    Root.navigate Navigate href [ text label ]
+
+view : Root.Model -> Model -> Html Msg
+view state model =
+    Root.view link state <|
+        div [ class "page-top" ]
+            [ h1 [] [ text "Top" ]
+            ]

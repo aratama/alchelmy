@@ -9,6 +9,7 @@
   "scripts": {
     "test": "elm-test",
     "dev": "node --experimental-modules ../src/elm-alchemy.mjs update",
+    "inspect": "node --experimental-modules --inspect-brk ../src/elm-alchemy.mjs update",
     "build": "npx elm-alchemy update",
     "new": "npx elm-alchemy new Foo",
     "clean": "rimraf src/Alchemy.elm src/alchemy.js elm-stuff tests/elm-stuff"
@@ -16,6 +17,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "create-elm-app": "^1.10.4",
     "elm-alchemy": "github:aratama/elm-alchemy",
     "rimraf": "^2.6.2"
   }

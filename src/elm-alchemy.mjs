@@ -2,11 +2,10 @@ import fs from "fs-extra";
 import util from "util";
 import path from "path";
 import glob from "glob";
-import { renderView } from "./template/page/view";
-import { renderUpdate } from "./template/page/update";
-import { renderType } from "./template/page/type";
+import { renderBlankPage } from "./template/page.mjs";
 import { renderRouter } from "./template/router";
 import { renderStyle } from "./template/style";
+import { renderRoot } from "./template/root.mjs";
 import { renderRootType } from "./template/root/type";
 import { renderRootUpdate } from "./template/root/update";
 import { renderRootView } from "./template/root/view";
@@ -42,23 +41,11 @@ async function generateRouter(argv) {
   // create root Type.elm, Update.elm and View.elm
   const application = await getApplicationName();
 
-  if (!fs.existsSync(path.resolve("src", application, "Type.elm"))) {
-    console.log(`Generating ${application}/Type.elm`);
+  if (!fs.existsSync(path.resolve("src", application, "Root.elm"))) {
+    console.log(`Generating ${application}/Root.elm`);    
     await fs.writeFile(
-      `./src/${application}/Type.elm`,
-      renderRootType(application)
-    );
-
-    console.log(`Generating ${application}/Update.elm`);
-    await fs.writeFile(
-      `./src/${application}/Update.elm`,
-      renderRootUpdate(application)
-    );
-
-    console.log(`Generating ${application}/View.elm`);
-    await fs.writeFile(
-      `./src/${application}/View.elm`,
-      renderRootView(application)
+      path.resolve(".", "src", application, "Root.elm"),
+      renderRoot(application)
     );
   }
 
@@ -70,32 +57,16 @@ async function generateRouter(argv) {
 
   // get page names
 
-  const ds = await util.promisify(glob)(`./src/${application}/Page/**/`);
-
-  const pages = ds
-    .map(dir => {
-      if (
-        fs.existsSync(path.resolve(dir, "style.css")) &&
-        fs.existsSync(path.resolve(dir, "Type.elm")) &&
-        fs.existsSync(path.resolve(dir, "Update.elm")) &&
-        fs.existsSync(path.resolve(dir, "View.elm"))
-      ) {
-        return path.relative(`./src/${application}/Page/`, dir).split(path.sep);
-      } else {
-        return null;
-      }
-    })
-    .filter(dir => dir !== null);
-
+  debugger
+  const pageFiles = await util.promisify(glob)(`./src/${application}/Page/*.elm`);
+  const pages = pageFiles.map(p => path.basename(p, ".elm"))
   if (pages.length === 0) {
     throw new Error("Pege not found.");
   }
 
   // generate <application>.Alchemy.elm
   console.log(
-    `Generating ./src/${application}/Alchemy.elm for ${pages
-      .map(p => p.join("."))
-      .join(", ")}...`
+    `Generating ./src/${application}/Alchemy.elm for ${pages.join(", ")}...`
   );
   const source = renderRouter(application, pages, argv);
   await fs.writeFile(`./src/${application}/Alchemy.elm`, source);
@@ -124,7 +95,7 @@ async function pageExists(pageName) {
 
   const application = await getApplicationName();
 
-  return fs.existsSync(path.resolve(`./src/`, application, `Page`, pageName));
+  return fs.existsSync(path.resolve(`./src/`, application, `Page`, pageName + ".elm"));
 }
 
 async function createApplication(application){
@@ -156,19 +127,8 @@ async function generateNewPage(pageName) {
   } else {
     const dir = path.resolve("./src/", application, "Page", pageName);
     await fs.ensureDir(dir);
-    await fs.writeFile(path.resolve(dir, "style.css"), "");
-    await fs.writeFile(
-      path.resolve(dir, "Type.elm"),
-      renderType(application, pageName)
-    );
-    await fs.writeFile(
-      path.resolve(dir, "Update.elm"),
-      renderUpdate(application, pageName)
-    );
-    await fs.writeFile(
-      path.resolve(dir, "View.elm"),
-      renderView(application, pageName)
-    );
+    await fs.writeFile(path.resolve(dir, pageName + ".css"), "");
+    await fs.writeFile(path.resolve(dir, pageName + ".elm"), renderBlankPage(application, pageName));
   }
 }
 

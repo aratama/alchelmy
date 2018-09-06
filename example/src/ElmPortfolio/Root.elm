@@ -1,13 +1,57 @@
-module ElmPortfolio.View exposing (..)
+module ElmPortfolio.Root exposing (..)
 
+-- Application global state type.
+
+import Navigation exposing (Location)
+import UrlParser as UrlParser exposing (s, Parser, (</>), map, parsePath)
+import Navigation exposing (Location, newUrl)
+import ElmPortfolio.Ports exposing (requestThemeFromLocalStorage, receiveThemeFromLocalStorage)
+import Maybe exposing (withDefault)
 import Html exposing (Html, text, div, header, h1, p, a)
 import Html.Attributes exposing (class, href)
-import ElmPortfolio.Type as Root
 import Html.Events exposing (onClick, onWithOptions)
 import Json.Decode exposing (Decoder, succeed, bool, field, fail, map4, andThen)
 
+type alias Model =
+    { theme : String }
 
-view : (String -> String -> Html msg) -> Root.Model -> Html msg -> Html msg
+
+type Msg
+    = ReceiveThemeFromLocalStorage (Maybe String)
+
+
+-- DescentMsg
+
+
+type DescentMsg
+    = Initialize
+
+
+
+init : Location -> ( Model, Cmd Msg )
+init _ =
+    ( { theme = "goat" }, requestThemeFromLocalStorage () )
+
+
+update : Msg -> Model -> ( Model, Cmd Msg, Maybe DescentMsg )
+update msg model =
+    case msg of
+        ReceiveThemeFromLocalStorage themeMaybe ->
+            ( { model | theme = withDefault model.theme themeMaybe }, Cmd.none, Just Initialize )
+
+
+subscriptions : Sub Msg
+subscriptions =
+    receiveThemeFromLocalStorage ReceiveThemeFromLocalStorage
+
+
+parse : Parser (a -> a) a -> Location -> Maybe a
+parse =
+    parsePath
+
+
+
+view : (String -> String -> Html msg) -> Model -> Html msg -> Html msg
 view link model content =
     div [ class "root" ]
         [ header []

@@ -1,13 +1,55 @@
-module ElmPortfolio.Page.Time.View exposing (..)
+module ElmPortfolio.Page.Time exposing (..)
 
+import Time exposing (Time)
+import ElmPortfolio.Root as Root
+import UrlParser as UrlParser exposing (s, Parser, (</>), map)
+import Time as Time exposing (second)
+import Navigation exposing (Location, newUrl)
 import Html exposing (Html, text, div, h1, img, a, p, button, h2, img, br)
 import Html.Attributes exposing (src, href, class, src)
-import ElmPortfolio.Page.Time.Type exposing (Model, Msg(..))
-import ElmPortfolio.Type as Root
-import ElmPortfolio.View as Root
 import Svg exposing (svg, circle, line)
 import Svg.Attributes exposing (viewBox, width, cx, cy, r, fill, x1, y1, x2, y2, stroke)
-import Time as Time
+
+type Msg
+    = Navigate String
+    | Tick Time
+
+
+type alias Model =
+    Time
+
+
+type alias Route =
+    {}
+
+route : Parser (Route -> a) a
+route =
+    map {} (s "time")
+
+
+init : Location -> Route -> Root.Model -> ( Model, Cmd Msg )
+init location route rootModel =
+    ( 0, Cmd.none )
+
+
+update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg )
+update msg rootModel model =
+    case msg of
+        Navigate url ->
+            ( rootModel, model, newUrl url )
+
+        Tick newTime ->
+            ( rootModel, newTime, Cmd.none )
+
+
+subscriptions : Root.Model -> Sub Msg
+subscriptions model =
+    Time.every second Tick
+
+
+receive : Root.DescentMsg -> Maybe Msg
+receive msg =
+    Nothing
 
 link : String -> String -> Html Msg
 link href label =

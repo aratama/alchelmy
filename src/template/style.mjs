@@ -1,3 +1,4 @@
+
 export function renderStyle(application, pages){
   return `
 /////////////////////////
@@ -6,7 +7,7 @@ export function renderStyle(application, pages){
 /////////////////////////
 ${
   pages.map(page => {
-    return `import './Page/${page.join("/")}/style.css'`
+    return `import './Page/${page}.css'`
   }).join("\n")
 }
 `

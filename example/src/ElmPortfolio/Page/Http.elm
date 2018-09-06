@@ -1,12 +1,30 @@
-module ElmPortfolio.Page.Http.Update exposing (..)
+module ElmPortfolio.Page.Http exposing (..)
 
-import UrlParser exposing (..)
-import ElmPortfolio.Page.Http.Type exposing (Model, Msg(..), Route)
-import ElmPortfolio.Type as Root
 import UrlParser as UrlParser exposing (s, Parser, (</>), map)
 import Json.Decode as Decode
 import Http
 import Navigation exposing (Location, newUrl)
+import Html exposing (Html, text, div, h1, img, a, p, button, h2, img, br)
+import Html.Attributes exposing (src, href, class, src, href)
+import ElmPortfolio.Root as Root
+import Html.Events exposing (onClick, onWithOptions)
+
+type Msg
+    = Navigate String
+    | MorePlease
+    | NewGif (Result Http.Error String)
+
+
+type alias Model =
+    { topic : String
+    , gifUrl : String
+    }
+
+
+type alias Route =
+    ()
+
+
 
 
 route : Parser (Route -> a) a
@@ -61,3 +79,25 @@ subscriptions model =
 receive : Root.DescentMsg -> Maybe Msg
 receive msg =
     Nothing
+
+
+
+link : String -> String -> Html Msg
+link href label =
+    Root.navigate Navigate href [ text label ]
+
+view : Root.Model -> Model -> Html Msg
+view state model =
+    Root.view link state <|
+        div [ class "page-http container" ]
+            [ h1 [] [ text "Http" ]
+            , h2 [] [ text <| "Theme: " ++ model.topic ]
+            , button [ onClick MorePlease ] [ text "More Please!" ]
+            , br [] []
+            , img [ src model.gifUrl ] []
+            , p []
+                [ text "Go to "
+                , link "/preferences" "the preferences page" 
+                , text " to change theme."
+                ]
+            ]
