@@ -21,13 +21,13 @@ var _glob = require("glob");
 
 var _glob2 = _interopRequireDefault(_glob);
 
-var _page = require("./template/page.mjs");
+var _page = require("./template/page");
 
 var _router = require("./template/router");
 
 var _style = require("./template/style");
 
-var _root = require("./template/root.mjs");
+var _root = require("./template/root");
 
 var _minimist = require("minimist");
 
