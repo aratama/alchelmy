@@ -63,7 +63,8 @@ view state model = div []
 
 page : Root.Page a Route Model Msg
 page = 
-  { init = init
+  { route = route
+  , init = init
   , view = view
   , update = update
   , subscriptions = subscriptions
