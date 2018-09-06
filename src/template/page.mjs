@@ -4,7 +4,6 @@ export function renderBlankPage(application, pageName) {
 import ${application}.Root as Root
 import Navigation exposing (Location, newUrl)
 import UrlParser as UrlParser exposing (s, Parser, (</>), map)
-import ElmPortfolio.Ports exposing (requestThemeFromLocalStorage, receiveThemeFromLocalStorage)
 import Maybe exposing (withDefault)
 import Html exposing (Html, text, div, header, h1, p, a)
 import Html.Attributes exposing (class, href)
