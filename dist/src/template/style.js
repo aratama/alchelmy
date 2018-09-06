@@ -11,7 +11,7 @@ function renderStyle(application, pages) {
 // DO NOT EDIT IT      //
 /////////////////////////
 ${pages.map(page => {
-    return `import './Page/${page.join("/")}/style.css'`;
+    return `import './Page/${page}.css'`;
   }).join("\n")}
 `;
 }

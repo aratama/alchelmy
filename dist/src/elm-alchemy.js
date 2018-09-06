@@ -21,21 +21,13 @@ var _glob = require("glob");
 
 var _glob2 = _interopRequireDefault(_glob);
 
-var _view = require("./template/page/view");
-
-var _update = require("./template/page/update");
-
-var _type = require("./template/page/type");
+var _page = require("./template/page.mjs");
 
 var _router = require("./template/router");
 
 var _style = require("./template/style");
 
-var _type2 = require("./template/root/type");
-
-var _update2 = require("./template/root/update");
-
-var _view2 = require("./template/root/view");
+var _root = require("./template/root.mjs");
 
 var _minimist = require("minimist");
 
@@ -67,15 +59,9 @@ async function generateRouter(argv) {
   // create root Type.elm, Update.elm and View.elm
   const application = await getApplicationName();
 
-  if (!_fsExtra2.default.existsSync(_path2.default.resolve("src", application, "Type.elm"))) {
-    console.log(`Generating ${application}/Type.elm`);
-    await _fsExtra2.default.writeFile(`./src/${application}/Type.elm`, (0, _type2.renderRootType)(application));
-
-    console.log(`Generating ${application}/Update.elm`);
-    await _fsExtra2.default.writeFile(`./src/${application}/Update.elm`, (0, _update2.renderRootUpdate)(application));
-
-    console.log(`Generating ${application}/View.elm`);
-    await _fsExtra2.default.writeFile(`./src/${application}/View.elm`, (0, _view2.renderRootView)(application));
+  if (!_fsExtra2.default.existsSync(_path2.default.resolve("src", application, "Root.elm"))) {
+    console.log(`Generating ${application}/Root.elm`);
+    await _fsExtra2.default.writeFile(_path2.default.resolve(".", "src", application, "Root.elm"), (0, _root.renderRoot)(application));
   }
 
   // generate NoutFound
@@ -86,22 +72,14 @@ async function generateRouter(argv) {
 
   // get page names
 
-  const ds = await _util2.default.promisify(_glob2.default)(`./src/${application}/Page/**/`);
-
-  const pages = ds.map(dir => {
-    if (_fsExtra2.default.existsSync(_path2.default.resolve(dir, "style.css")) && _fsExtra2.default.existsSync(_path2.default.resolve(dir, "Type.elm")) && _fsExtra2.default.existsSync(_path2.default.resolve(dir, "Update.elm")) && _fsExtra2.default.existsSync(_path2.default.resolve(dir, "View.elm"))) {
-      return _path2.default.relative(`./src/${application}/Page/`, dir).split(_path2.default.sep);
-    } else {
-      return null;
-    }
-  }).filter(dir => dir !== null);
-
+  const pageFiles = await _util2.default.promisify(_glob2.default)(`./src/${application}/Page/*.elm`);
+  const pages = pageFiles.map(p => _path2.default.basename(p, ".elm"));
   if (pages.length === 0) {
     throw new Error("Pege not found.");
   }
 
   // generate <application>.Alchemy.elm
-  console.log(`Generating ./src/${application}/Alchemy.elm for ${pages.map(p => p.join(".")).join(", ")}...`);
+  console.log(`Generating ./src/${application}/Alchemy.elm for ${pages.join(", ")}...`);
   const source = (0, _router.renderRouter)(application, pages, argv);
   await _fsExtra2.default.writeFile(`./src/${application}/Alchemy.elm`, source);
 
@@ -125,7 +103,7 @@ async function pageExists(pageName) {
 
   const application = await getApplicationName();
 
-  return _fsExtra2.default.existsSync(_path2.default.resolve(`./src/`, application, `Page`, pageName));
+  return _fsExtra2.default.existsSync(_path2.default.resolve(`./src/`, application, `Page`, pageName + ".elm"));
 }
 
 async function createApplication(application) {
@@ -155,10 +133,8 @@ async function generateNewPage(pageName) {
   } else {
     const dir = _path2.default.resolve("./src/", application, "Page", pageName);
     await _fsExtra2.default.ensureDir(dir);
-    await _fsExtra2.default.writeFile(_path2.default.resolve(dir, "style.css"), "");
-    await _fsExtra2.default.writeFile(_path2.default.resolve(dir, "Type.elm"), (0, _type.renderType)(application, pageName));
-    await _fsExtra2.default.writeFile(_path2.default.resolve(dir, "Update.elm"), (0, _update.renderUpdate)(application, pageName));
-    await _fsExtra2.default.writeFile(_path2.default.resolve(dir, "View.elm"), (0, _view.renderView)(application, pageName));
+    await _fsExtra2.default.writeFile(_path2.default.resolve(dir, pageName + ".css"), "");
+    await _fsExtra2.default.writeFile(_path2.default.resolve(dir, pageName + ".elm"), (0, _page.renderBlankPage)(application, pageName));
   }
 }
 

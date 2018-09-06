@@ -5,11 +5,11 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.renderRouter = renderRouter;
 function dots(page) {
-  return page.join(".");
+  return page;
 }
 
 function bars(page) {
-  return page.join("_");
+  return page;
 }
 
 function renderRouter(application, pages, argv) {
@@ -25,12 +25,10 @@ import Navigation exposing (Location)
 import UrlParser as UrlParser exposing (s, oneOf, Parser, parseHash, parsePath, (</>))
 import Html as Html exposing (Html, text)
 import Maybe as Maybe
-import ${application}.Type as Root
-import ${application}.Update as Root
+import ${application}.Root as Root
 ${pages.map(page => `
-import ${application}.Page.${dots(page)}.View as ${bars(page)}
-import ${application}.Page.${dots(page)}.Type as ${bars(page)}
-import ${application}.Page.${dots(page)}.Update as ${bars(page)}
+import ${application}.Page.${dots(page)} as ${bars(page)}
+
 `.trim()).join("\n")}
 
 

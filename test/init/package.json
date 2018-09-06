@@ -16,7 +16,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "elm": "^0.18.0-exp5",
     "elm-alchemy": "github:aratama/elm-alchemy",
+    "elm-test": "^0.18.13-beta",
     "rimraf": "^2.6.2"
   }
 }
