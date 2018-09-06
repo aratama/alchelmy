@@ -55,7 +55,7 @@ view state model = div []
   [ h1 [] [text "${pageName}"]
   ]
 
-page : Root.Page Route Model Msg
+page : Root.Page a Route Model Msg
 page = 
   { init = init
   , view = view
