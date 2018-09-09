@@ -1,11 +1,12 @@
-module ElmPortfolio.Page.URLParsing exposing (Route, Model, Msg, route, page)
+module ElmPortfolio.Page.URLParsing exposing (Model, Msg, Route, page, route)
 
-import Navigation exposing (Location)
+import Browser exposing (Document)
+import Browser.Navigation exposing (pushUrl)
 import ElmPortfolio.Root as Root
-import UrlParser as UrlParser exposing (s, Parser, (</>), int, map)
-import Navigation exposing (Location, newUrl)
-import Html exposing (Html, text, div, h1, img, a, p)
-import Html.Attributes exposing (src, href, class)
+import Html exposing (Html, a, div, h1, img, p, text)
+import Html.Attributes exposing (class, href, src)
+import Url exposing (Url)
+import Url.Parser as UrlParser exposing ((</>), Parser, int, map, s)
 
 
 type Msg
@@ -13,7 +14,7 @@ type Msg
 
 
 type alias Model =
-    { id : Int, location : Location }
+    { id : Int, location : Url }
 
 
 type alias Route =
@@ -25,7 +26,7 @@ route =
     s "url-parsing" </> int
 
 
-init : Location -> Route -> Root.Model -> ( Model, Cmd Msg )
+init : Url -> Route -> Root.Model -> ( Model, Cmd Msg )
 init location id rootModel =
     ( { id = id, location = location }, Cmd.none )
 
@@ -34,7 +35,7 @@ update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg )
 update msg rootModel model =
     case msg of
         Navigate url ->
-            ( rootModel, model, newUrl url )
+            ( rootModel, model, pushUrl rootModel.key url )
 
 
 subscriptions : Root.Model -> Sub Msg
@@ -43,29 +44,35 @@ subscriptions model =
 
 
 link : String -> String -> Html Msg
-link href label =
-    Root.navigate Navigate href [ text label ]
+link url label =
+    a [ href url ] [ text label ]
 
-view : Root.Model -> Model -> Html Msg
+
+view : Root.Model -> Model -> Document Msg
 view state model =
-    Root.view link state <|
-        div [ class "page-url-parser container" ]
-            [ h1 [] [ text "URL Parsing" ]
-            , p []
-                [ text <|
-                    model.location.origin
-                        ++ model.location.pathname
-                        ++ model.location.search
-                        ++ model.location.hash
+    { title = ""
+    , body =
+        [ Root.view link state <|
+            div [ class "page-url-parser container" ]
+                [ h1 [] [ text "URL Parsing" ]
+                , p []
+                    [ text <|
+                        model.location.host
+                            ++ model.location.path
+                            ++ Maybe.withDefault "" model.location.query
+                            ++ Maybe.withDefault "" model.location.fragment
+                    ]
+                , p [] [ text <| "Parameter: " ++ String.fromInt model.id ]
                 ]
-            , p [] [ text <| "Parameter: " ++ toString model.id ]
-            ]
+        ]
+    }
+
 
 page : Root.Page a Route Model Msg
-page = 
-  { route = route
-  , init = init
-  , view = view
-  , update = update
-  , subscriptions = subscriptions
-  }
+page =
+    { route = route
+    , init = init
+    , view = view
+    , update = update
+    , subscriptions = subscriptions
+    }

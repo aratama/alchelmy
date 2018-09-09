@@ -1,9 +1,13 @@
 import "./main.css";
-import { Main } from "./Main.elm";
+import { Elm } from "./Main.elm";
 import { register, unregister } from "./registerServiceWorker";
 import "./ElmPortfolio/alchemy.js";
 
-const app = Main.embed(document.getElementById("root"));
+
+
+const app = Elm.Main.init({
+    node: document.getElementById('root')
+});
 
 //register();
 unregister();

@@ -15,8 +15,10 @@ export function renderRouter(application, pages) {
 
 module ${application}.Alchemy exposing (..)
 
-import Navigation exposing (Location)
-import UrlParser as UrlParser exposing (s, oneOf, Parser, parseHash, parsePath, (</>))
+import Browser exposing (Document, UrlRequest(..), application)
+import Browser.Navigation exposing (Key, load, pushUrl)
+import Url exposing (Url)
+import Url.Parser as UrlParser exposing (s, oneOf, Parser, parse, (</>))
 import Html as Html exposing (Html, text)
 import Maybe as Maybe
 import ${application}.Root as Root
@@ -33,6 +35,7 @@ import ${application}.Page.${dots(page)} as ${bars(page)}
 type alias Model 
   = { route : RouteState
     , state : Root.Model
+    , key : Key
     }
 
 type Route
@@ -44,7 +47,8 @@ type RouteState
     .join("\n  | ")}
   
 type Msg
-  = Navigate Location
+  = UrlRequest UrlRequest
+  | Navigate Url
   | Root__Msg Root.Msg
 ${pages.map(page => `  | ${bars(page)}__Msg ${bars(page)}.Msg`).join("\n")}
 
@@ -56,6 +60,18 @@ update msg model = case msg of
   Root__Msg rootMsg -> case Root.update rootMsg model.state of
     (rootModel_, rootCmd) -> 
         ({ model | state = rootModel_ }, Cmd.map Root__Msg rootCmd)
+
+  UrlRequest urlRequest ->
+    case urlRequest of
+      Internal url ->
+        ( model
+        , pushUrl model.key (Url.toString url)
+        )
+
+      External url ->
+        ( model
+        , load url
+        )
 
   Navigate location -> let route = parseLocation location in case route of ${pages
     .map(
@@ -86,12 +102,15 @@ ${pages
     )
     .join("\n")}
 
-view : Model -> Html Msg
+documentMap : (msg -> Msg) -> Document msg -> Document Msg
+documentMap f { title, body } = { title = title, body = List.map (Html.map f) body }
+
+view : Model -> Document Msg
 view model = case model.route of 
 ${pages
     .map(
       page =>
-        `  ${bars(page)}__State m -> Html.map ${bars(page)}__Msg (let page = ${bars(
+        `  ${bars(page)}__State m -> documentMap ${bars(page)}__Msg (let page = ${bars(
           page
         )}.page in page.view model.state m)`
     )
@@ -107,22 +126,22 @@ ${pages
     .join(",\n")}
         ]   
 
-parseLocation : Location -> Route
+parseLocation : Url -> Route
 parseLocation location =
-    case Root.parse matchers location of
+    case parse matchers location of
         Just route ->
             route
 
         Nothing ->
             NotFound ()
 
-navigate : Location -> Msg 
+navigate : Url -> Msg 
 navigate = Navigate
 
-init : Location -> ( Model, Cmd Msg )
-init location = 
+init : () -> Url -> Key -> ( Model, Cmd Msg )
+init flags location key = 
   let route = parseLocation location in 
-    case Root.init location of 
+    case Root.init location key of 
       (rootInitialModel, rootInitialCmd) -> 
         case route of
 ${pages
@@ -134,6 +153,7 @@ ${pages
                 (initialModel, initialCmd) -> 
                     ( { route = ${bars(page)}__State initialModel
                       , state = rootInitialModel
+                      , key = key
                       }
                     , Cmd.batch 
                       [ Cmd.map Root__Msg rootInitialCmd
@@ -158,13 +178,15 @@ subscriptions model =
         ])
 
 
-program : Program Never Model Msg
+program : Program () Model Msg
 program =
-    Navigation.program navigate
+    application
         { init = init
         , view = view
         , update = update
         , subscriptions = subscriptions
+        , onUrlRequest = UrlRequest
+        , onUrlChange = Navigate
         }
         
 

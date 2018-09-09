@@ -1,42 +1,45 @@
-module ElmPortfolio.Page.Time exposing (Route, Model, Msg, route, page)
+module ElmPortfolio.Page.Time exposing (Model, Msg, Route, page, route)
 
-import Time exposing (Time)
+import Browser exposing (Document)
+import Browser.Navigation exposing (pushUrl)
 import ElmPortfolio.Root as Root
-import UrlParser as UrlParser exposing (s, Parser, (</>), map)
-import Time as Time exposing (second)
-import Navigation exposing (Location, newUrl)
-import Html exposing (Html, text, div, h1, img, a, p, button, h2, img, br)
-import Html.Attributes exposing (src, href, class, src)
-import Svg exposing (svg, circle, line)
-import Svg.Attributes exposing (viewBox, width, cx, cy, r, fill, x1, y1, x2, y2, stroke)
+import Html exposing (Html, a, br, button, div, h1, h2, img, p, text)
+import Html.Attributes exposing (class, href, src)
+import Svg exposing (circle, line, svg)
+import Svg.Attributes exposing (cx, cy, fill, r, stroke, viewBox, width, x1, x2, y1, y2)
+import Time as Time exposing (Posix, here, millisToPosix, toMinute, toSecond, utc)
+import Url exposing (Url)
+import Url.Parser as UrlParser exposing ((</>), Parser, map, s)
+
 
 type Msg
     = Navigate String
-    | Tick Time
+    | Tick Posix
 
 
 type alias Model =
-    Time
+    Posix
 
 
 type alias Route =
     {}
+
 
 route : Parser (Route -> a) a
 route =
     map {} (s "time")
 
 
-init : Location -> Route -> Root.Model -> ( Model, Cmd Msg )
-init location route rootModel =
-    ( 0, Cmd.none )
+init : Url -> Route -> Root.Model -> ( Model, Cmd Msg )
+init location _ rootModel =
+    ( millisToPosix 0, Cmd.none )
 
 
 update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg )
 update msg rootModel model =
     case msg of
         Navigate url ->
-            ( rootModel, model, newUrl url )
+            ( rootModel, model, pushUrl rootModel.key url )
 
         Tick newTime ->
             ( rootModel, newTime, Cmd.none )
@@ -44,39 +47,45 @@ update msg rootModel model =
 
 subscriptions : Root.Model -> Sub Msg
 subscriptions model =
-    Time.every second Tick
+    Time.every 1000 Tick
 
 
 link : String -> String -> Html Msg
-link href label =
-    Root.navigate Navigate href [ text label ]
+link url label =
+    a [ href url ] [ text label ]
 
-view : Root.Model -> Model -> Html Msg
+
+view : Root.Model -> Model -> Document Msg
 view state model =
-    Root.view link state <|
-        div [ class "page-a container" ]
-            [ h1 [] [ text "Time" ]
-            , let
-                angle =
-                    turns (Time.inMinutes model)
+    { title = ""
+    , body =
+        [ Root.view link state <|
+            div [ class "page-a container" ]
+                [ h1 [] [ text "Time" ]
+                , let
+                    angle =
+                        turns (toFloat (toSecond utc model) / 60)
 
-                handX =
-                    toString (50 + 40 * cos angle)
+                    handX =
+                        String.fromFloat (50 + 40 * cos angle)
 
-                handY =
-                    toString (50 + 40 * sin angle)
-              in
-                svg [ viewBox "0 0 100 100", width "300px" ]
+                    handY =
+                        String.fromFloat (50 + 40 * sin angle)
+                  in
+                  svg [ viewBox "0 0 100 100", width "300px" ]
                     [ circle [ cx "50", cy "50", r "45", fill "#5b91ba" ] []
                     , line [ x1 "50", y1 "50", x2 handX, y2 handY, stroke "#023963" ] []
                     ]
-            ]
+                ]
+        ]
+    }
+
 
 page : Root.Page a Route Model Msg
-page = 
-  { route = route
-  , init = init
-  , view = view
-  , update = update
-  , subscriptions = subscriptions
-  }
+page =
+    { route = route
+    , init = init
+    , view = view
+    , update = update
+    , subscriptions = subscriptions
+    }

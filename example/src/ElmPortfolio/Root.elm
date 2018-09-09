@@ -1,41 +1,39 @@
-module ElmPortfolio.Root exposing (..)
+module ElmPortfolio.Root exposing (Model, Msg(..), Page, init, subscriptions, update, view)
 
 -- Application global state type.
 
-import Navigation exposing (Location)
-import UrlParser as UrlParser exposing (s, Parser, (</>), map, parsePath)
-import Navigation exposing (Location, newUrl)
-import ElmPortfolio.Ports exposing (requestThemeFromLocalStorage, receiveThemeFromLocalStorage)
-import Maybe exposing (withDefault)
-import Html exposing (Html, text, div, header, h1, p, a)
+import Browser exposing (Document)
+import Browser.Navigation exposing (Key, pushUrl)
+import ElmPortfolio.Ports exposing (receiveThemeFromLocalStorage, requestThemeFromLocalStorage)
+import Html exposing (Html, a, div, h1, header, p, text)
 import Html.Attributes exposing (class, href)
-import Html.Events exposing (onClick, onWithOptions)
-import Json.Decode exposing (Decoder, succeed, bool, field, fail, map4, andThen)
+import Html.Events exposing (custom, onClick)
+import Json.Decode exposing (Decoder, andThen, bool, fail, field, map4, succeed)
+import Maybe exposing (withDefault)
+import Url exposing (Url)
+import Url.Parser as UrlParser exposing ((</>), Parser, map, parse, s)
+
 
 type alias Model =
-    { theme : String }
+    { theme : String, key : Key }
 
 
 type Msg
     = ReceiveThemeFromLocalStorage (Maybe String)
 
 
-
-
 type alias Page a route model msg =
     { route : Parser (route -> a) a
-    , init : Location -> route -> Model -> (model, Cmd msg )
-    , update : msg -> Model -> model -> (Model, model, Cmd msg )
+    , init : Url -> route -> Model -> ( model, Cmd msg )
+    , update : msg -> Model -> model -> ( Model, model, Cmd msg )
     , subscriptions : Model -> Sub msg
-    , view : Model -> model -> Html msg
+    , view : Model -> model -> Document msg
     }
 
 
-
-
-init : Location -> ( Model, Cmd Msg )
-init _ =
-    ( { theme = "goat" }, requestThemeFromLocalStorage () )
+init : Url -> Key -> ( Model, Cmd Msg )
+init _ key =
+    ( { theme = "goat", key = key }, requestThemeFromLocalStorage () )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -50,12 +48,6 @@ subscriptions =
     receiveThemeFromLocalStorage ReceiveThemeFromLocalStorage
 
 
-parse : Parser (a -> a) a -> Location -> Maybe a
-parse =
-    parsePath
-
-
-
 view : (String -> String -> Html msg) -> Model -> Html msg -> Html msg
 view link model content =
     div [ class "root" ]
@@ -65,11 +57,11 @@ view link model content =
             ]
         , div [ class "page" ]
             [ div [ class "index" ]
-                [ p [] [ link "/counter" "Counter"  ]
-                , p [] [ link "/http" "Http"  ]
-                , p [] [ link "/time" "Time"  ]
-                , p [] [ link "/url-parsing/42"  "URL Parsing"  ]
-                , p [] [ link "/preferences"  "Preferences"  ]
+                [ p [] [ link "/counter" "Counter" ]
+                , p [] [ link "/http" "Http" ]
+                , p [] [ link "/time" "Time" ]
+                , p [] [ link "/url-parsing/42" "URL Parsing" ]
+                , p [] [ link "/preferences" "Preferences" ]
                 , p [] [ link "/broken-url" "404" ]
                 ]
             , div []
@@ -79,24 +71,28 @@ view link model content =
         ]
 
 
-navigate : (String -> msg) -> String -> List (Html msg) -> Html msg
-navigate msg url contents =
-    let
-        decoder : Decoder msg
-        decoder =
-            andThen
-                identity
-                (map4
-                    (\ctrl shift alt meta ->
-                        if shift || ctrl || alt || meta then
-                            fail ""
-                        else
-                            succeed (msg url)
-                    )
-                    (field "ctrlKey" bool)
-                    (field "shiftKey" bool)
-                    (field "altKey" bool)
-                    (field "metaKey" bool)
-                )
-    in
-        a [ href url, onWithOptions "click" { stopPropagation = True, preventDefault = True } decoder ] contents
+
+{-
+   navigate : (String -> msg) -> String -> List (Html msg) -> Html msg
+   navigate msg url contents =
+       let
+           decoder : Decoder msg
+           decoder =
+               andThen
+                   identity
+                   (map4
+                       (\ctrl shift alt meta ->
+                           if shift || ctrl || alt || meta then
+                               fail ""
+
+                           else
+                               succeed (msg url)
+                       )
+                       (field "ctrlKey" bool)
+                       (field "shiftKey" bool)
+                       (field "altKey" bool)
+                       (field "metaKey" bool)
+                   )
+       in
+       a [ href url, custom "click" decoder ] contents
+-}
