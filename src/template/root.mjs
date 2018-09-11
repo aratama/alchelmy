@@ -6,6 +6,9 @@ import Browser.Navigation exposing (Key)
 import Url exposing (Url)
 import Url.Parser exposing (Parser)
 
+type alias Flags 
+  = ()
+
 -- Application global state type.
 
 
@@ -25,8 +28,8 @@ type alias Page a route model msg =
     , view : Model -> model -> Document msg
     }
 
-init : Url -> Key -> ( Model, Cmd Msg )
-init _ key =
+init : Flags -> Url -> Key -> ( Model, Cmd Msg )
+init _ _ key =
     ( { key = key }, Cmd.none )
 
 
