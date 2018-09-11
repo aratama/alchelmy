@@ -28,7 +28,7 @@ type Msg
 
 type alias Page a route model msg =
     { route : Parser ( route -> a ) a
-    , init : Url -> route -> Model -> Key -> ( model, Cmd msg )
+    , init : Url -> route -> Model -> ( model, Cmd msg )
     , update : msg -> Model -> model -> ( Model, model, Cmd msg )
     , subscriptions : Model -> Sub msg
     , view : Model -> model -> Document msg
