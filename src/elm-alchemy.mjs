@@ -116,6 +116,8 @@ async function generateNewPage(pageName) {
 
   const application = await getApplicationName();
 
+  console.log(`found application: ${application}`)
+
   const exists = await pageExists(pageName);
   if (exists) {
     console.error(`[Error] Directory '${pageName}' already exists.`);
@@ -161,9 +163,13 @@ Usage:
 
   } else if (command == "init") {
     const applicationName = argv._[1];
-    await createApplication(applicationName);
-    await generateRouter(argv);
-  } else if (command === "update") {
+    if(applicationName){
+      await createApplication(applicationName);
+      await generateRouter(argv);
+    }else{
+      console.error("Too few argumant in the command")
+    }
+   } else if (command === "update") {
     await generateRouter(argv);
   } else if (command === "new") {
     const pageName = argv._[1];
