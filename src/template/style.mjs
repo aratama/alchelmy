@@ -4,7 +4,7 @@ export function renderStyle(application, pages){
   return `
 /////////////////////////
 // AUTO GENERATED FILE //
-// DO NOT EDIT IT      //
+// DO NOT EDIT THIS    //
 /////////////////////////
 ${
   pages.filter(page => fs.existsSync(`./src/${application}/Page/${page}.css`)).map(page => {

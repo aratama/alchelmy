@@ -13,31 +13,32 @@ type Msg
   = NoOp
 
 
-type alias Model =
-  {}
+type alias Model 
+  = {}
 
 
-type alias Route =
-  ()
+type alias Route 
+  = ()
 
 
 route : Parser (Route -> a) a
 route =
-    map () (s "${pageName.toLowerCase()}")
+  map () (s "${pageName.toLowerCase()}")
 
 
 init : Url -> Route -> Root.Model -> ( Model, Cmd Msg )
-init _ _ _ =
-    ( {}, Cmd.none )
+init _ _ _ 
+  = ( {}, Cmd.none )
 
 
 update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg )
-update msg root model = ( root, model, Cmd.none )
+update msg root model 
+  = ( root, model, Cmd.none )
 
 
 subscriptions : Root.Model -> Sub Msg
-subscriptions model =
-    Sub.none
+subscriptions model 
+  = Sub.none
 
 
 view : Root.Model -> Model -> Document Msg
