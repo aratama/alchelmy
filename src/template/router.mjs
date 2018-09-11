@@ -140,7 +140,7 @@ navigate = Navigate
 
 init : Root.Flags -> Url -> Key -> ( Model, Cmd Msg )
 init flags location key = 
-  let route = parseLocation location key in 
+  let route = parseLocation location in 
     case Root.init flags location key of 
       (rootInitialModel, rootInitialCmd) -> 
         case route of
