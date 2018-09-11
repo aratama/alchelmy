@@ -138,10 +138,10 @@ parseLocation location =
 navigate : Url -> Msg 
 navigate = Navigate
 
-init : () -> Url -> Key -> ( Model, Cmd Msg )
+init : Root.Flags -> Url -> Key -> ( Model, Cmd Msg )
 init flags location key = 
   let route = parseLocation location in 
-    case Root.init location key of 
+    case Root.init flags location key of 
       (rootInitialModel, rootInitialCmd) -> 
         case route of
 ${pages

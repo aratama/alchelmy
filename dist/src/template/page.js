@@ -7,17 +7,16 @@ exports.renderBlankPage = renderBlankPage;
 function renderBlankPage(application, pageName) {
   return `module ${application}.Page.${pageName} exposing (Route, Model, Msg, route, page)
 
+import Browser exposing (Document)
+import Browser.Navigation exposing (Key)
+import Html exposing (text, h1)
+import Url exposing (Url)
+import Url.Parser exposing (s, Parser, map)
 import ${application}.Root as Root
-import Navigation exposing (Location, newUrl)
-import UrlParser as UrlParser exposing (s, Parser, (</>), map)
-import Maybe exposing (withDefault)
-import Html exposing (Html, text, div, header, h1, p, a)
-import Html.Attributes exposing (class, href)
-import Html.Events exposing (onClick, onWithOptions)
-import Json.Decode exposing (Decoder, succeed, bool, field, fail, map4, andThen)
+
 
 type Msg
-  = Navigate String
+  = NoOp
 
 
 type alias Model =
@@ -27,21 +26,19 @@ type alias Model =
 type alias Route =
   ()
 
+
 route : Parser (Route -> a) a
 route =
     map () (s "${pageName.toLowerCase()}")
 
 
-init : Location -> Route -> Root.Model -> ( Model, Cmd Msg )
-init _ _ rootModel =
+init : Location -> Route -> Root.Model -> Key -> ( Model, Cmd Msg )
+init _ _ _ _ =
     ( {}, Cmd.none )
 
 
 update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg )
-update msg rootModel model =
-  case msg of
-    Navigate url ->
-      ( rootModel, model, newUrl url )
+update msg root model = ( root, model, Cmd.none )
 
 
 subscriptions : Root.Model -> Sub Msg
@@ -49,17 +46,11 @@ subscriptions model =
     Sub.none
 
 
-{-| Auto-generated link function for path routing (\`UrlParser.parsePath\`). 
-You can remove this function if you use Hash routing (\`UrlParser.parseHash\`).
--}
-link : String -> String -> Html Msg
-link href label =
-    Root.navigate Navigate href [ text label ]
-
-view : Root.Model -> Model -> Html Msg
-view state model = div [] 
-  [ h1 [] [text "${pageName}"]
-  ]
+view : Root.Model -> Model -> Document Msg
+view state model = 
+  { title = "${pageName} - ${application}"
+  , body = [ h1 [] [text "${pageName}"] ]
+  }
 
 page : Root.Page a Route Model Msg
 page = 

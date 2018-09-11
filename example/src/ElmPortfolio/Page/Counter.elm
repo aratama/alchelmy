@@ -1,9 +1,8 @@
 module ElmPortfolio.Page.Counter exposing (Model, Msg, Route, page, route)
 
 import Browser exposing (Document)
-import Browser.Navigation exposing (pushUrl)
 import ElmPortfolio.Root as Root
-import Html exposing (Html, a, button, div, h1, img, p, text)
+import Html exposing (Html, a, button, div, h1, p, text)
 import Html.Attributes exposing (class, href, src)
 import Html.Events exposing (custom, onClick)
 import Url exposing (Url)
@@ -24,8 +23,7 @@ type alias Route =
 
 
 type Msg
-    = Navigate String
-    | Increment
+    = Increment
     | Decrement
 
 
@@ -58,9 +56,6 @@ init _ _ _ =
 update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg )
 update msg rootModel model =
     case msg of
-        Navigate url ->
-            ( rootModel, model, pushUrl rootModel.key url )
-
         Increment ->
             ( rootModel, model + 1, Cmd.none )
 

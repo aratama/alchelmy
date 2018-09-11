@@ -1,4 +1,4 @@
-module ElmPortfolio.Root exposing (Model, Msg(..), Page, init, subscriptions, update, view)
+module ElmPortfolio.Root exposing (Flags, Model, Msg(..), Page, init, subscriptions, update, view)
 
 -- Application global state type.
 
@@ -12,6 +12,10 @@ import Json.Decode exposing (Decoder, andThen, bool, fail, field, map4, succeed)
 import Maybe exposing (withDefault)
 import Url exposing (Url)
 import Url.Parser as UrlParser exposing ((</>), Parser, map, parse, s)
+
+
+type alias Flags =
+    ()
 
 
 type alias Model =
@@ -31,8 +35,8 @@ type alias Page a route model msg =
     }
 
 
-init : Url -> Key -> ( Model, Cmd Msg )
-init _ key =
+init : Flags -> Url -> Key -> ( Model, Cmd Msg )
+init _ _ key =
     ( { theme = "goat", key = key }, requestThemeFromLocalStorage () )
 
 
