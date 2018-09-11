@@ -19,7 +19,6 @@
   "author": "cubbit2@twitter/aratama@github",
   "license": "ISC",
   "dependencies": {
-    "change-case": "^3.0.2",
     "fs-extra": "^7.0.0",
     "glob": "^7.1.2",
     "minimist": "^1.2.0"
