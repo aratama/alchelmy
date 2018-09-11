@@ -1,3 +1,4 @@
+import fs from "fs";
 
 export function renderStyle(application, pages){
   return `
@@ -6,7 +7,7 @@ export function renderStyle(application, pages){
 // DO NOT EDIT IT      //
 /////////////////////////
 ${
-  pages.map(page => {
+  pages.filter(page => fs.existsSync(`./src/${application}/Page/${page}.css`)).map(page => {
     return `import './Page/${page}.css'`
   }).join("\n")
 }
