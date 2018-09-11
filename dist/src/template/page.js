@@ -32,7 +32,7 @@ route =
     map () (s "${pageName.toLowerCase()}")
 
 
-init : Location -> Route -> Root.Model -> Key -> ( Model, Cmd Msg )
+init : Url -> Route -> Root.Model -> Key -> ( Model, Cmd Msg )
 init _ _ _ _ =
     ( {}, Cmd.none )
 
