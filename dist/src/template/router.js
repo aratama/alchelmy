@@ -19,32 +19,31 @@ function renderRouter(application, pages) {
 -- Do not edit this     -- 
 --------------------------
 
-module ${application}.Alchemy exposing (..)
+module ${application}.Alchemy exposing (Model, Msg, program)
 
 import Browser exposing (Document, UrlRequest(..), application)
 import Browser.Navigation exposing (Key, load, pushUrl)
-import Url exposing (Url)
-import Url.Parser as UrlParser exposing (s, oneOf, Parser, parse, (</>))
 import Html as Html exposing (Html, text)
 import Maybe as Maybe
+import Url exposing (Url)
+import Url.Parser as UrlParser exposing (s, oneOf, Parser, parse, (</>))
 import ${application}.Root as Root
 ${pages.map(page => `
 import ${application}.Page.${dots(page)} as ${bars(page)}
-
 `.trim()).join("\n")}
 
 
-type alias Model 
-  = { route : RouteState
-    , state : Root.Model
-    , key : Key
-    }
+type Model = Model 
+  { route : RouteState
+  , state : Root.Model
+  , key : Key
+  }
 
-type Route
-  = ${pages.map(page => `${bars(page)} ${bars(page)}.Route`).join("\n  | ")}
+type Route = 
+  ${pages.map(page => `${bars(page)} ${bars(page)}.Route`).join("\n  | ")}
 
-type RouteState
-  = ${pages.map(page => `${bars(page)}__State ${bars(page)}.Model`).join("\n  | ")}
+type RouteState = 
+  ${pages.map(page => `${bars(page)}__State ${bars(page)}.Model`).join("\n  | ")}
   
 type Msg
   = UrlRequest UrlRequest
@@ -55,40 +54,57 @@ ${pages.map(page => `  | ${bars(page)}__Msg ${bars(page)}.Msg`).join("\n")}
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model = case msg of 
+update msg (Model model) = 
+  case msg of 
 
-  Root__Msg rootMsg -> case Root.update rootMsg model.state of
-    (rootModel_, rootCmd) -> 
-        ({ model | state = rootModel_ }, Cmd.map Root__Msg rootCmd)
+    Root__Msg rootMsg -> case Root.update rootMsg model.state of
+      (rootModel_, rootCmd) -> 
+          (Model { model | state = rootModel_ }, Cmd.map Root__Msg rootCmd)
 
-  UrlRequest urlRequest ->
-    case urlRequest of
-      Internal url ->
-        ( model
-        , pushUrl model.key (Url.toString url)
-        )
+    UrlRequest urlRequest ->
+      case urlRequest of
+        Internal url ->
+          ( Model model
+          , pushUrl model.key (Url.toString url)
+          )
 
-      External url ->
-        ( model
-        , load url
-        )
+        External url ->
+          ( Model model
+          , load url
+          )
 
-  Navigate location -> let route = parseLocation location in case route of ${pages.map(page => `
-          ${bars(page)} routeValue -> case let page = ${bars(page)}.page in page.init location routeValue model.state of
+    Navigate location -> 
+      let 
+          route = 
+            parseLocation location 
+      in 
+      case route of ${pages.map(page => `
+        ${bars(page)} routeValue -> 
+          case 
+            let 
+              page = ${bars(page)}.page 
+            in page.init location routeValue model.state 
+          of
               (initialModel, initialCmd) -> 
-                ( { model | route = ${bars(page)}__State initialModel }
+                ( Model { model | route = ${bars(page)}__State initialModel }
                 , Cmd.map ${bars(page)}__Msg initialCmd
                 )
-  `).join("\n")}
+    `).join("\n")}
 
 ${pages.map(page => `
-  ${bars(page)}__Msg pageMsg -> case model.route of 
-      ${bars(page)}__State pageModel -> 
-        case let page = ${bars(page)}.page in page.update pageMsg model.state pageModel of 
-          (model_, pageModel_, pageCmd ) -> 
-            ({ model | state = model_, route = ${bars(page)}__State pageModel_ }, Cmd.map ${bars(page)}__Msg pageCmd)
+    ${bars(page)}__Msg pageMsg -> 
+      case model.route of 
+        ${bars(page)}__State pageModel -> 
+          case 
+            let 
+              page = ${bars(page)}.page 
+            in 
+            page.update pageMsg model.state pageModel 
+          of 
+            (model_, pageModel_, pageCmd ) -> 
+              (Model { model | state = model_, route = ${bars(page)}__State pageModel_ }, Cmd.map ${bars(page)}__Msg pageCmd)
         
-      ${1 < pages.length ? "_ -> (model, Cmd.none)" : ""}
+        ${1 < pages.length ? "_ -> (Model model, Cmd.none)" : ""}
       
   `).join("\n")}
 
@@ -96,7 +112,7 @@ documentMap : (msg -> Msg) -> Document msg -> Document Msg
 documentMap f { title, body } = { title = title, body = List.map (Html.map f) body }
 
 view : Model -> Document Msg
-view model = case model.route of 
+view (Model model) = case model.route of 
 ${pages.map(page => `  ${bars(page)}__State m -> documentMap ${bars(page)}__Msg (let page = ${bars(page)}.page in page.view model.state m)`).join("\n")}
 
 
@@ -128,10 +144,11 @@ init flags location key =
 ${pages.map(page => `
             ${bars(page)} routeValue -> case let page = ${bars(page)}.page in page.init location routeValue rootInitialModel of
                 (initialModel, initialCmd) -> 
-                    ( { route = ${bars(page)}__State initialModel
-                      , state = rootInitialModel
-                      , key = key
-                      }
+                    ( Model 
+                        { route = ${bars(page)}__State initialModel
+                        , state = rootInitialModel
+                        , key = key
+                        }
                     , Cmd.batch 
                       [ Cmd.map Root__Msg rootInitialCmd
                       , Cmd.map ${bars(page)}__Msg initialCmd
@@ -140,13 +157,13 @@ ${pages.map(page => `
   `).join("\n")}   
 
 subscriptions : Model -> Sub Msg
-subscriptions model = 
+subscriptions (Model model) = 
     Sub.batch
         (Sub.map Root__Msg Root.subscriptions :: [  ${pages.map(page => `Sub.map ${bars(page)}__Msg (let page = ${bars(page)}.page in page.subscriptions model.state)`).join("\n        , ")}
         ])
 
 
-program : Program () Model Msg
+program : Program Root.Flags Model Msg
 program =
     application
         { init = init
