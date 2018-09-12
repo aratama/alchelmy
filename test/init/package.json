@@ -10,7 +10,7 @@
     "clean": "rimraf src/TestProject elm-stuff tests/elm-stuff",
     "test-clean": "rimraf src/TestProject",
     "test-init": "npx elm-alchemy init TestProject && npx elm-alchemy update ",
-    "test-test": "npm run test-clean && npm run test-init && elm make src/Main.elm",
+    "test-test": "npm run test-clean && npm run test-init && elm make src/Main.elm --output=/dev/null",
     "test": "npm run test-test"
   },
   "author": "",

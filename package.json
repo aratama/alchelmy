@@ -8,7 +8,6 @@
   },
   "scripts": {
     "lint": "eslint --fix src/**/*.mjs",
-    "build": "babel ./src/**/*.mjs -d dist",
     "test-example": "cd example && npm install && npm run test",
     "test-test-init": "cd test/init && npm install && npm test",
     "test": "npm run test-example && npm run test-test-init",
@@ -24,8 +23,6 @@
     "minimist": "^1.2.0"
   },
   "devDependencies": {
-    "eslint": "^5.2.0",
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.7.0"
+    "eslint": "^5.2.0"
   }
 }
