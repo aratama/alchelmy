@@ -1,0 +1,11 @@
+{
+  "main.css": "/static/css/main.dffbf888.chunk.css",
+  "main.js": "/static/js/main.3e6ecd27.chunk.js",
+  "main.css.map": "/static/css/main.dffbf888.chunk.css.map",
+  "main.js.map": "/static/js/main.3e6ecd27.chunk.js.map",
+  "vendors~main.js": "/static/js/vendors~main.f8b4eb45.chunk.js",
+  "vendors~main.js.map": "/static/js/vendors~main.f8b4eb45.chunk.js.map",
+  "runtime~main.js": "/static/js/runtime~main.004f827c.js",
+  "runtime~main.js.map": "/static/js/runtime~main.004f827c.js.map",
+  "index.html": "/index.html"
+}
