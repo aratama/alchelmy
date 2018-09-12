@@ -12,12 +12,12 @@ However, you need write a lot of boring boilerplates when you want to add a new 
 
 This project is highly experimental, so your comments or suggestions are welcome.
 
-## Install
+## Installation
 
 elm-alchemy isn't in NPM yet. You can use `npm i aratama/elm-alchemy` to install elm-alchemy and `npx` to execute elm-alchemy from CLI.
 You also need to install `elm/browser` and `elm/url` in your project dependencies in advance.
 
-## Commands
+## Command Line Interfaces
 
 elm-alchemy has a command line interface:
 
