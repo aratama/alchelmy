@@ -1,3 +1,5 @@
+#! /usr/bin/env node
+
 const { spawn } = require('child_process');
 const p = spawn('node', ['--experimental-modules', 'src/elm-alchemy.mjs']);
 p.stdout.on('data', (data) => {
