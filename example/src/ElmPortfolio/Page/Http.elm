@@ -84,7 +84,7 @@ link url label =
 
 view : Root.Model -> Model -> Document Msg
 view state model =
-    { title = ""
+    { title = "Http - ElmPortfolio"
     , body =
         [ Root.view link state <|
             div [ class "page-http container" ]

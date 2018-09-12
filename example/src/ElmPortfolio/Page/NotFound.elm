@@ -51,7 +51,7 @@ link url label =
 
 view : Root.Model -> Model -> Document Msg
 view state model =
-    { title = ""
+    { title = "NotFound - ElmPortfolio"
     , body =
         [ div [ class "page-not-found" ]
             [ h1 [] [ text "404 Not Found" ]

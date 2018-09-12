@@ -75,7 +75,7 @@ link url label =
 
 view : Root.Model -> Model -> Document Msg
 view rootModel model =
-    { title = ""
+    { title = "Counter - ElmPortfolio"
     , body =
         [ Root.view link rootModel <|
             div [ class "page-counter container" ]

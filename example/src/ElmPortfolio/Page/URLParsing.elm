@@ -50,7 +50,7 @@ link url label =
 
 view : Root.Model -> Model -> Document Msg
 view state model =
-    { title = ""
+    { title = "URLParsing - ElmPortfolio"
     , body =
         [ Root.view link state <|
             div [ class "page-url-parser container" ]

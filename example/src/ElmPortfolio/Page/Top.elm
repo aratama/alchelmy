@@ -56,7 +56,7 @@ link url label =
 
 view : Root.Model -> Model -> Document Msg
 view state model =
-    { title = ""
+    { title = "Top - ElmPortfolio"
     , body =
         [ Root.view link state <|
             div [ class "page-top" ]
