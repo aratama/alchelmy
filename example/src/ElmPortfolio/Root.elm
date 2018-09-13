@@ -1,4 +1,4 @@
-module ElmPortfolio.Root exposing (Flags, Model, Msg(..), Page, init, subscriptions, update, view)
+module ElmPortfolio.Root exposing (Flags, Model, Msg(..), Page, init, relative, subscriptions, update, view)
 
 -- Application global state type.
 
@@ -11,7 +11,8 @@ import Html.Events exposing (custom, onClick)
 import Json.Decode exposing (Decoder, andThen, bool, fail, field, map4, succeed)
 import Maybe exposing (withDefault)
 import Url exposing (Url)
-import Url.Parser as UrlParser exposing ((</>), Parser, map, parse, s)
+import Url.Builder as Url
+import Url.Parser as UrlParser exposing ((</>), Parser, map, parse, s, top)
 
 
 type alias Flags =
@@ -56,17 +57,17 @@ view : (String -> String -> Html msg) -> Model -> Html msg -> Html msg
 view link model content =
     div [ class "root" ]
         [ header []
-            [ h1 [] [ link "/" "Elm Examples" ]
+            [ h1 [] [ link "#" "Elm Examples" ]
             , text <| "Theme: " ++ model.theme
             ]
         , div [ class "page" ]
             [ div [ class "index" ]
-                [ p [] [ link "/counter" "Counter" ]
-                , p [] [ link "/http" "Http" ]
-                , p [] [ link "/time" "Time" ]
-                , p [] [ link "/url-parsing/42" "URL Parsing" ]
-                , p [] [ link "/preferences" "Preferences" ]
-                , p [] [ link "/broken-url" "404" ]
+                [ p [] [ link "counter" "Counter" ]
+                , p [] [ link "http" "Http" ]
+                , p [] [ link "time" "Time" ]
+                , p [] [ link "url-parsing/42" "URL Parsing" ]
+                , p [] [ link "preferences" "Preferences" ]
+                , p [] [ link "broken-url" "404" ]
                 ]
             , div []
                 [ content
@@ -75,28 +76,6 @@ view link model content =
         ]
 
 
-
-{-
-   navigate : (String -> msg) -> String -> List (Html msg) -> Html msg
-   navigate msg url contents =
-       let
-           decoder : Decoder msg
-           decoder =
-               andThen
-                   identity
-                   (map4
-                       (\ctrl shift alt meta ->
-                           if shift || ctrl || alt || meta then
-                               fail ""
-
-                           else
-                               succeed (msg url)
-                       )
-                       (field "ctrlKey" bool)
-                       (field "shiftKey" bool)
-                       (field "altKey" bool)
-                       (field "metaKey" bool)
-                   )
-       in
-       a [ href url, custom "click" decoder ] contents
--}
+relative : String -> String
+relative path =
+    Url.absolute [ "elm-alchemy", path ] []

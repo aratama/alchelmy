@@ -70,14 +70,14 @@ subscriptions model =
 
 link : String -> String -> Html Msg
 link url label =
-    a [ href url ] [ text label ]
+    a [ href (Root.relative url) ] [ text label ]
 
 
 view : Root.Model -> Model -> Document Msg
-view rootModel model =
+view root model =
     { title = "Counter - ElmPortfolio"
     , body =
-        [ Root.view link rootModel <|
+        [ Root.view link root <|
             div [ class "page-counter container" ]
                 [ h1 [] [ text "Counter" ]
                 , p [] [ button [ onClick Decrement ] [ text "-" ] ]
