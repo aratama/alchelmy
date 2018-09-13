@@ -79,7 +79,7 @@ subscriptions model =
 
 link : String -> String -> Html Msg
 link url label =
-    a [ href (Root.relative url) ] [ text label ]
+    a [ href url ] [ text label ]
 
 
 view : Root.Model -> Model -> Document Msg
