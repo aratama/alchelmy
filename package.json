@@ -14,7 +14,7 @@
     "clean-example": "cd example && npm run clean",
     "clean-test-init": "cd test/init && npm run clean",
     "clean": "npm run clean-example && npm run clean-test-init",
-    "build": "purs compile src/**/*.purs bower_components/*/src/**/*.purs",
+    "build": "purs compile src/**/*.purs bower_components/*/src/**/*.purs && purs bundle --main Main --output lib/elm-alchemy.js output/**/*.js",
     "main": "node main.js new Foo"
   },
   "author": "cubbit2@twitter/aratama@github",
