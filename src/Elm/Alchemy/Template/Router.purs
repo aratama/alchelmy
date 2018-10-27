@@ -19,7 +19,7 @@ import Html as Html exposing (Html, text)
 import Maybe as Maybe
 import Url exposing (Url)
 import Url.Parser as UrlParser exposing (s, oneOf, Parser, parse, (</>))
-import ${application}.Root as Root
+import """ <> application <> """.Root as Root
 """ <> joinWith "\n" (map (\page -> "import " <> application <> ".Page." <> page <> " as " <> page) pages) <> """
 
 type Model = Model 
@@ -29,25 +29,25 @@ type Model = Model
   }
 
 type Route 
-  = """ <> joinWith "\n  | " (map (\page -> page <> " " <> page <> ".Route") pages) <> """
+  = """ <> joinWith "\n  | " (map (\page -> "Route__" <> page <> " " <> page <> ".Route") pages) <> """
 
 type RouteState 
-  = """ <> joinWith "\n  | " (map (\page -> page <> "__State " <> page <> ".Model") pages) <> """
+  = """ <> joinWith "\n  | " (map (\page -> "State__" <> page <> " " <> page <> ".Model") pages) <> """
   
 type Msg
   = UrlRequest UrlRequest
   | Navigate Url
-  | Root__Msg Root.Msg
-""" <> joinWith "\n" (map (\page -> "  | " <> page <> "__Msg " <> page <> ".Msg") pages) <> """
+  | Msg__Root Root.Msg
+""" <> joinWith "\n" (map (\page -> "  | Msg__" <> page <> " " <> page <> ".Msg") pages) <> """
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg (Model model) = 
   case msg of 
 
-    Root__Msg rootMsg -> case Root.update rootMsg model.state of
+    Msg__Root rootMsg -> case Root.update rootMsg model.state of
       (rootModel_, rootCmd) -> 
-          (Model { model | state = rootModel_ }, Cmd.map Root__Msg rootCmd)
+          (Model { model | state = rootModel_ }, Cmd.map Msg__Root rootCmd)
 
     UrlRequest urlRequest ->
       case urlRequest of
@@ -68,24 +68,24 @@ update msg (Model model) =
       in 
       case route of 
 
-""" <> joinWith "\n" (map (\page -> "        " <> page <> """routeValue -> 
+""" <> joinWith "\n" (map (\page -> "        Route__" <> page <> """ routeValue -> 
           case 
             let 
               page = """ <> page <> """.page
             in page.init location routeValue model.state 
           of 
             (initialModel, initialCmd) -> 
-                ( Model { model | route = """ <> page <> """__State initialModel }
-                , Cmd.map """ <> page <> """__Msg initialCmd
+                ( Model { model | route = State__""" <> page <> """ initialModel }
+                , Cmd.map Msg__""" <> page <> """ initialCmd
                 )
         """
       ) pages) <> """
 
 
 """ <> joinWith "\n" (map (\page -> """
-    """ <> page <> """__Msg pageMsg -> 
+    Msg__""" <> page <> """ pageMsg -> 
       case model.route of 
-        """ <> page <> """__State pageModel -> 
+        State__""" <> page <> """ pageModel -> 
           case 
             let 
               page = """ <> page <> """.page 
@@ -93,7 +93,7 @@ update msg (Model model) =
             page.update pageMsg model.state pageModel 
           of 
             (model_, pageModel_, pageCmd ) -> 
-              (Model { model | state = model_, route = """ <> page <> """__State pageModel_ }, Cmd.map """ <> page <> """__Msg pageCmd)
+              (Model { model | state = model_, route = State__""" <> page <> """ pageModel_ }, Cmd.map Msg__""" <> page <> """ pageCmd)
         
         """ <> if 1 < length pages then "_ -> (Model model, Cmd.none)" else ""
 ) pages) <> """
@@ -105,13 +105,13 @@ view : Model -> Document Msg
 view (Model model) = case model.route of 
 
 """ <> joinWith "\n" (map (\page -> 
-        "  " <> page <> "__State m -> documentMap " <> page <> "__Msg (let page = " <> page <> ".page in page.view model.state m)"        
+        "  State__" <> page <> " m -> documentMap Msg__" <> page <> " (let page = " <> page <> ".page in page.view model.state m)"        
 ) pages) <> """
 
 matchers : Parser (Route -> a) a
 matchers =
     oneOf
-        [ """ <> joinWith "\n        , " (map (\page -> "UrlParser.map " <> page <> " (let page = " <> page <> ".page in page.route)") pages) <> """
+        [ """ <> joinWith "\n        , " (map (\page -> "UrlParser.map Route__" <> page <> " (let page = " <> page <> ".page in page.route)") pages) <> """
         ]   
 
 parseLocation : Url -> Route
@@ -121,7 +121,7 @@ parseLocation location =
             route
 
         Nothing ->
-            NotFound ()
+            Route__NotFound ()
 
 navigate : Url -> Msg 
 navigate = Navigate
@@ -135,16 +135,16 @@ init flags location key =
 
 """ <> joinWith "\n" (map (\page -> 
 
-"          " <> page <> "routeValue -> case let page = " <> page <> """.page in page.init location routeValue rootInitialModel of
+"          Route__" <> page <> " routeValue -> case let page = " <> page <> """.page in page.init location routeValue rootInitialModel of
                 (initialModel, initialCmd) -> 
                     ( Model 
-                        { route = """ <> page <> """__State initialModel
+                        { route = State__""" <> page <> """ initialModel
                         , state = rootInitialModel
                         , key = key
                         }
                     , Cmd.batch 
-                      [ Cmd.map Root__Msg rootInitialCmd
-                      , Cmd.map """ <> page <> """__Msg initialCmd
+                      [ Cmd.map Msg__Root rootInitialCmd
+                      , Cmd.map Msg__""" <> page <> """ initialCmd
                       ]
                     )
                 """) pages) <> """
@@ -152,8 +152,8 @@ init flags location key =
 subscriptions : Model -> Sub Msg
 subscriptions (Model model) = 
     Sub.batch
-        (Sub.map Root__Msg Root.subscriptions :: [ """ <> 
-        joinWith "\n        , " (map (\page -> "Sub.map " <> page <> "__Msg (let page = " <> page <> ".page in page.subscriptions model.state)") pages) <> """  
+        (Sub.map Msg__Root Root.subscriptions :: [ """ <> 
+        joinWith "\n        , " (map (\page -> "Sub.map Msg__" <> page <> " (let page = " <> page <> ".page in page.subscriptions model.state)") pages) <> """  
         ])
 
 

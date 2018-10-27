@@ -15,7 +15,7 @@ import Browser.Navigation exposing (Key)
 import Html exposing (text, h1)
 import Url exposing (Url)
 import Url.Parser exposing (s, Parser, map)
-import ${application}.Root as Root
+import """ <> application <> """.Root as Root
 
 type Msg
   = NoOp
@@ -51,7 +51,7 @@ subscriptions model
 
 view : Root.Model -> Model -> Document Msg
 view state model = 
-  { title = "${pageName} - """ <> application <> """
+  { title = """ <> bracket (pageName <> " - " <> application) <> """
   , body = [ h1 [] [text """ <> bracket pageName <> """] ]
   }
 
@@ -64,8 +64,5 @@ page =
   , update = update
   , subscriptions = subscriptions
   }
-
-  `;
-}
 
 """
