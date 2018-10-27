@@ -126,10 +126,32 @@ main = do
         ["update"] -> launchAff_ do 
             generateRouter args
 
+        [] -> log usage 
+        
+        ["--help"] -> log usage
+
+        ["-h"] -> log usage
+
         command -> do 
             Console.error $ "[ERROR] Unknown command: " <> joinWith " " command  
             exit 1 
 
+usage :: String
+usage = """
+Usage: 
+
+  elm-alchemy init <application>
+
+    Create new application. 
+
+  elm-alchemy update    
+
+    (Re)Generate Alchemy.elm, alchemy.js
+
+  elm-alchemy new <name>      
+
+    Create new page named <name>. <name> must be an valid module name.
+"""
 
 validatePageName :: String -> Boolean 
 validatePageName pageName = case flip test pageName <$> regex "[A-Z][a-zA-Z0-9_]*" noFlags of  
