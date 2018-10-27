@@ -34,6 +34,16 @@ type alias Page a route model msg =
     , view : Model -> model -> Document msg
     }
 
+{-
+page : route -> Page a route model msg
+page =
+    { route = map route (s "///INVALID ROUTE///")
+    , init = \_ _ _ -> ( {}, Cmd.none )
+    , view = \_ _ -> { title = "Minimum - ElmPortfolio", body = [ h1 [] [ text "Minimum" ] ] }
+    , update = \msg root model -> ( root, model, Cmd.none )
+    , subscriptions = \_ -> Sub.none
+    }
+-}
 
 init : Flags -> Url -> Key -> ( Model, Cmd Msg )
 init _ _ key =
