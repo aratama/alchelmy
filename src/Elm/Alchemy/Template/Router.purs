@@ -1,5 +1,9 @@
 module Elm.Alchemy.Template.Router where 
 
+import Data.Array (length)
+import Data.String (joinWith)
+import Prelude (map, (<>), (<))
+
 renderRouter :: String -> Array String -> String
 renderRouter application pages = """
 --------------------------
@@ -7,7 +11,7 @@ renderRouter application pages = """
 -- Do not edit this     -- 
 --------------------------
 
-module ${application}.Alchemy exposing (Model, Msg, program)
+module """ <> application <> """.Alchemy exposing (Model, Msg, program)
 
 import Browser exposing (Document, UrlRequest(..), application)
 import Browser.Navigation exposing (Key, load, pushUrl)
@@ -16,11 +20,7 @@ import Maybe as Maybe
 import Url exposing (Url)
 import Url.Parser as UrlParser exposing (s, oneOf, Parser, parse, (</>))
 import ${application}.Root as Root
-${pages.map(page => `
-import ${application}.Page.${dots(page)} as ${bars(page)}
-`.trim()
-).join("\n")}
-
+""" <> joinWith "\n" (map (\page -> "import " <> application <> ".Page." <> page <> " as " <> page) pages) <> """
 
 type Model = Model 
   { route : RouteState
@@ -28,20 +28,17 @@ type Model = Model
   , key : Key
   }
 
-type Route = 
-  ${pages.map(page => `${bars(page)} ${bars(page)}.Route`).join("\n  | ")}
+type Route 
+  = """ <> joinWith "\n  | " (map (\page -> page <> " " <> page <> ".Route") pages) <> """
 
-type RouteState = 
-  ${pages
-    .map(page => `${bars(page)}__State ${bars(page)}.Model`)
-    .join("\n  | ")}
+type RouteState 
+  = """ <> joinWith "\n  | " (map (\page -> page <> "__State " <> page <> ".Model") pages) <> """
   
 type Msg
   = UrlRequest UrlRequest
   | Navigate Url
   | Root__Msg Root.Msg
-${pages.map(page => `  | ${bars(page)}__Msg ${bars(page)}.Msg`).join("\n")}
-
+""" <> joinWith "\n" (map (\page -> "  | " <> page <> "__Msg " <> page <> ".Msg") pages) <> """
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -69,66 +66,52 @@ update msg (Model model) =
           route = 
             parseLocation location 
       in 
-      case route of ${pages
-      .map(
-        page => `
-        ${bars(page)} routeValue -> 
-          case 
-            let 
-              page = ${bars(page)}.page 
-            in page.init location routeValue model.state 
-          of
-              (initialModel, initialCmd) -> 
-                ( Model { model | route = ${bars(page)}__State initialModel }
-                , Cmd.map ${bars(page)}__Msg initialCmd
-                )
-    `
-      )
-      .join("\n")}
+      case route of 
 
-${pages
-    .map(
-      page => `
-    ${bars(page)}__Msg pageMsg -> 
-      case model.route of 
-        ${bars(page)}__State pageModel -> 
+""" <> joinWith "\n" (map (\page -> "        " <> page <> """routeValue -> 
           case 
             let 
-              page = ${bars(page)}.page 
+              page = """ <> page <> """.page
+            in page.init location routeValue model.state 
+          of 
+            (initialModel, initialCmd) -> 
+                ( Model { model | route = """ <> page <> """__State initialModel }
+                , Cmd.map """ <> page <> """__Msg initialCmd
+                )
+        """
+      ) pages) <> """
+
+
+""" <> joinWith "\n" (map (\page -> """
+    """ <> page <> """__Msg pageMsg -> 
+      case model.route of 
+        """ <> page <> """__State pageModel -> 
+          case 
+            let 
+              page = """ <> page <> """.page 
             in 
             page.update pageMsg model.state pageModel 
           of 
             (model_, pageModel_, pageCmd ) -> 
-              (Model { model | state = model_, route = ${bars(page)}__State pageModel_ }, Cmd.map ${bars(page)}__Msg pageCmd)
+              (Model { model | state = model_, route = """ <> page <> """__State pageModel_ }, Cmd.map """ <> page <> """__Msg pageCmd)
         
-        ${1 < pages.length ? "_ -> (Model model, Cmd.none)" : ""}
-      
-  `
-    )
-    .join("\n")}
+        """ <> if 1 < length pages then "_ -> (Model model, Cmd.none)" else ""
+) pages) <> """
 
 documentMap : (msg -> Msg) -> Document msg -> Document Msg
 documentMap f { title, body } = { title = title, body = List.map (Html.map f) body }
 
 view : Model -> Document Msg
 view (Model model) = case model.route of 
-${pages
-    .map(
-      page =>
-        `  ${bars(page)}__State m -> documentMap ${bars(page)}__Msg (let page = ${bars(
-          page
-        )}.page in page.view model.state m)`
-    )
-    .join("\n")}
 
+""" <> joinWith "\n" (map (\page -> 
+        "  " <> page <> "__State m -> documentMap " <> page <> "__Msg (let page = " <> page <> ".page in page.view model.state m)"        
+) pages) <> """
 
 matchers : Parser (Route -> a) a
 matchers =
     oneOf
-        [
-${pages
-    .map(page => `        UrlParser.map ${bars(page)} (let page = ${bars(page)}.page in page.route)`)
-    .join(",\n")}
+        [ """ <> joinWith "\n        , " (map (\page -> "UrlParser.map " <> page <> " (let page = " <> page <> ".page in page.route)") pages) <> """
         ]   
 
 parseLocation : Url -> Route
@@ -149,38 +132,28 @@ init flags location key =
     case Root.init flags location key of 
       (rootInitialModel, rootInitialCmd) -> 
         case route of
-${pages
-    .map(
-      page => `
-            ${bars(page)} routeValue -> case let page = ${bars(
-        page
-      )}.page in page.init location routeValue rootInitialModel of
+
+""" <> joinWith "\n" (map (\page -> 
+
+"          " <> page <> "routeValue -> case let page = " <> page <> """.page in page.init location routeValue rootInitialModel of
                 (initialModel, initialCmd) -> 
                     ( Model 
-                        { route = ${bars(page)}__State initialModel
+                        { route = """ <> page <> """__State initialModel
                         , state = rootInitialModel
                         , key = key
                         }
                     , Cmd.batch 
                       [ Cmd.map Root__Msg rootInitialCmd
-                      , Cmd.map ${bars(page)}__Msg initialCmd
+                      , Cmd.map """ <> page <> """__Msg initialCmd
                       ]
                     )
-  `
-    )
-    .join("\n")}   
+                """) pages) <> """
 
 subscriptions : Model -> Sub Msg
 subscriptions (Model model) = 
     Sub.batch
-        (Sub.map Root__Msg Root.subscriptions :: [  ${pages
-          .map(
-            page =>
-              `Sub.map ${bars(page)}__Msg (let page = ${bars(
-                page
-              )}.page in page.subscriptions model.state)`
-          )
-          .join("\n        , ")}
+        (Sub.map Root__Msg Root.subscriptions :: [ """ <> 
+        joinWith "\n        , " (map (\page -> "Sub.map " <> page <> "__Msg (let page = " <> page <> ".page in page.subscriptions model.state)") pages) <> """  
         ])
 
 

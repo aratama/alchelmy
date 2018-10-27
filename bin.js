@@ -1,4 +1,9 @@
 #! /usr/bin/env node
+
+const Main = require("./output/Main/");
+Main.main()
+
+/*
 const path = require("path");
 const { spawn } = require('child_process');
 const p = spawn('node', ['--experimental-modules', path.resolve(__dirname, 'src/elm-alchemy.mjs')].concat(process.argv.slice(2)));
@@ -11,3 +16,4 @@ p.stderr.on('data', (data) => {
 p.on('close', (code) => {
   process.exit(code);
 });
+*/
