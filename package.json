@@ -2,7 +2,7 @@
   "name": "elm-alchemy",
   "version": "0.1.0",
   "description": "",
-  "bin": "./bin.js",
+  "bin": "./lib/elm-alchemy.js",
   "directories": {
     "test": "tests"
   },

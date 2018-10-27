@@ -9,8 +9,8 @@
   "scripts": {
     "test": "",
     "inspect": "node --experimental-modules --inspect-brk ../src/elm-alchemy.mjs update",
-    "build": "node ../bin.js update",
-    "new": "node ../bin.js new Minimum",
+    "build": "node ../lib/elm-alchemy.js update",
+    "new": "node ../lib/elm-alchemy.js new Minimum",
     "clean": "rimraf src/Alchemy.elm src/alchemy.js elm-stuff tests/elm-stuff",
     "main": "elm-app start"
   },
