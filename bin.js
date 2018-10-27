@@ -1,7 +1,6 @@
 #! /usr/bin/env node
 
-const Main = require("./output/Main/");
-Main.main()
+require("./lib/elm-alchemy.js");
 
 /*
 const path = require("path");
