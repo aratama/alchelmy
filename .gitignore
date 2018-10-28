@@ -20,3 +20,5 @@ tests-generated/index.js
 
 output
 bower_components
+
+.psc-ide-port

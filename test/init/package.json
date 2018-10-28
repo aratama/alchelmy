@@ -9,7 +9,7 @@
   "scripts": {
     "clean": "rimraf src/TestProject elm-stuff tests/elm-stuff",
     "test-clean": "rimraf src/TestProject",
-    "test-init": "node ../../lib/alchelmy.js init TestProject && node ../../lib/alchelmy.js update ",
+    "test-init": "node ../../bin/alchelmy.js init TestProject && node ../../bin/alchelmy.js update ",
     "test-test": "npm run test-clean && npm run test-init && elm make src/Main.elm --output=/dev/null",
     "test": "npm run test-test"
   },

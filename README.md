@@ -27,6 +27,15 @@ alchelmy has a command line interface:
 
 Please see [example](example) for more information.
 
+
+## Building Project
+
+```sh
+$ npm i 
+$ bower update
+$ npm run build
+```
+
 ## Known Limitations
 
 - You can't specify order of precedence of routes.
