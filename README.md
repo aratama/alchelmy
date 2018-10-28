@@ -28,7 +28,7 @@ alchelmy has a command line interface:
 Please see [example](example) for more information.
 
 
-## Building Project
+## Building Alchelmy Itself
 
 ```sh
 $ npm i 
