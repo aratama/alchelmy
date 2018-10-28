@@ -140,15 +140,15 @@ usage :: String
 usage = """
 Usage: 
 
-  elm-alchemy init <application>
+  alchelmy init <application>
 
     Create new application. 
 
-  elm-alchemy update    
+  alchelmy update    
 
     (Re)Generate Alchemy.elm, alchemy.js
 
-  elm-alchemy new <name>      
+  alchelmy new <name>      
 
     Create new page named <name>. <name> must be an valid module name.
 """
