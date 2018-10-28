@@ -2,7 +2,7 @@
   "name": "alchelmy",
   "version": "0.1.0",
   "description": "",
-  "bin": "./bin/alchelmy.js",
+  "bin": "./bin/index.js",
   "directories": {
     "test": "tests"
   },
