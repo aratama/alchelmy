@@ -1,4 +1,4 @@
-module Elm.Alchemy.Template.Root where 
+module Alchelmy.Template.Root where 
 
 import Data.Semigroup ((<>))
 

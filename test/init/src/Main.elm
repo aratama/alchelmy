@@ -1,8 +1,8 @@
 module Main exposing (..)
 
-import TestProject.Alchemy as Alchemy exposing (Model, Msg)
+import TestProject.Alchelmy as Alchelmy exposing (Model, Msg)
 
 
 main : Program () Model Msg
 main =
-    Alchemy.program
+    Alchelmy.program

@@ -3,7 +3,7 @@ module Main where
 import Prelude (Unit) 
 import Effect (Effect)
 
-import Elm.Alchemy as Alchemy
+import Alchelmy as Alchelmy
 
 main :: Effect Unit
-main = Alchemy.main
+main = Alchelmy.main

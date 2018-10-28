@@ -1,4 +1,4 @@
-module Elm.Alchemy.Template.Router where 
+module Alchelmy.Template.Router where 
 
 import Data.Array (length)
 import Data.String (joinWith)
@@ -11,7 +11,7 @@ renderRouter application pages = """
 -- Do not edit this     -- 
 --------------------------
 
-module """ <> application <> """.Alchemy exposing (Model, Msg, program)
+module """ <> application <> """.Alchelmy exposing (Model, Msg, program)
 
 import Browser exposing (Document, UrlRequest(..), application)
 import Browser.Navigation exposing (Key, load, pushUrl)

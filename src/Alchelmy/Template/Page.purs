@@ -1,4 +1,4 @@
-module Elm.Alchemy.Template.Page where 
+module Alchelmy.Template.Page where 
 
 import Data.Semigroup ((<>))
 import Data.String.Common (toLower)

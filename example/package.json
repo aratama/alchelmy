@@ -11,7 +11,7 @@
     "inspect": "node --experimental-modules --inspect-brk ../src/alchelmy.mjs update",
     "build": "node ../bin/alchelmy.js update",
     "new": "node ../bin/alchelmy.js new Minimum",
-    "clean": "rimraf src/Alchemy.elm src/alchemy.js elm-stuff tests/elm-stuff",
+    "clean": "rimraf src/ElmPortfolio/Alchelmy.elm src/ElmPortfolio/alchelmy.js elm-stuff tests/elm-stuff",
     "main": "elm-app start"
   },
   "author": "",

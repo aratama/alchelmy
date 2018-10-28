@@ -1,6 +1,6 @@
 module Main exposing (..)
 
-import ElmPortfolio.Alchemy as Alchemy exposing (Model, Msg, program)
+import ElmPortfolio.Alchelmy as Alchelmy exposing (Model, Msg, program)
 
 
 main : Program () Model Msg

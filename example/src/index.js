@@ -1,7 +1,7 @@
 import "./main.css";
 import { Elm } from "./Main.elm";
 import { register, unregister } from "./registerServiceWorker";
-import "./ElmPortfolio/alchemy.js";
+import "./ElmPortfolio/alchelmy.js";
 
 
 

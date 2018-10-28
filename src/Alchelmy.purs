@@ -1,4 +1,4 @@
-module Elm.Alchemy where 
+module Alchelmy where 
 
 import Control.Monad.Error.Class (throwError)
 import Data.Array (catMaybes, drop, null)
@@ -14,10 +14,10 @@ import Effect.Class (liftEffect)
 import Effect.Class.Console (log)
 import Effect.Console (error) as Console
 import Effect.Exception (Error, throw)
-import Elm.Alchemy.Template.Page (renderBlankPage)
-import Elm.Alchemy.Template.Root (renderRoot)
-import Elm.Alchemy.Template.Router (renderRouter)
-import Elm.Alchemy.Template.Style (renderStyle)
+import Alchelmy.Template.Page (renderBlankPage)
+import Alchelmy.Template.Root (renderRoot)
+import Alchelmy.Template.Router (renderRouter)
+import Alchelmy.Template.Style (renderStyle)
 import Node.Buffer (fromString)
 import Node.Encoding (Encoding(..))
 import Node.FS.Aff (exists, mkdir, readdir, stat, writeFile)
@@ -70,19 +70,17 @@ generateRouter argv = do
     when (null pages) do
         liftEffect $ throw "Pege not found."
 
-    -- generate <application>.Alchemy.elm
-    log $ "Generating ./src/" <> application <> "/Alchemy.elm for "<> joinWith ", " pages <> "..."
-    
-    let source = renderRouter application pages
-    sourceBuffer <- liftEffect $ fromString source UTF8
-    writeFile ("./src/" <> application <> "/Alchemy.elm") sourceBuffer
+    -- generate <application>.Alchelmy.elm
+    log $ "Generating ./src/" <> application <> "/Alchelmy.elm for "<> joinWith ", " pages <> "..."
+    sourceBuffer <- liftEffect $ fromString (renderRouter application pages) UTF8
+    writeFile ("./src/" <> application <> "/Alchelmy.elm") sourceBuffer
 
-    -- generate alchemy.js
-    log $ "Generating ./src/" <> application <> "/alchemy.js..."
-    let indexSource = renderStyle application pages
-    
-    path <- liftEffect $ resolve ["./src/", application] "alchemy.js"
-    buffer <- liftEffect $ fromString indexSource UTF8
+    -- generate alchelmy.js
+    log $ "Generating ./src/" <> application <> "/alchelmy.js..."    
+    stylePath <- liftEffect $ resolve ["./src/", application] "alchelmy.js"
+    styleRendered <- renderStyle application pages
+    styleBuffer <- liftEffect $ fromString styleRendered UTF8
+    writeFile stylePath styleBuffer
 
     log "Done."
 
