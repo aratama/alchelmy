@@ -1,6 +1,10 @@
 module Alchelmy where 
 
-import Control.Monad.Error.Class (throwError)
+import Alchelmy.Template.Page (renderBlankPage, Routing(..))
+import Alchelmy.Template.Root (renderRoot)
+import Alchelmy.Template.Router (renderRouter)
+import Alchelmy.Template.Style (renderStyle)
+import Control.Monad.Error.Class (throwError, try)
 import Data.Array (catMaybes, drop, null)
 import Data.Either (Either(..))
 import Data.Maybe (Maybe(..))
@@ -14,17 +18,13 @@ import Effect.Class (liftEffect)
 import Effect.Class.Console (log)
 import Effect.Console (error) as Console
 import Effect.Exception (Error, throw)
-import Alchelmy.Template.Page (renderBlankPage)
-import Alchelmy.Template.Root (renderRoot)
-import Alchelmy.Template.Router (renderRouter)
-import Alchelmy.Template.Style (renderStyle)
 import Node.Buffer (fromString)
 import Node.Encoding (Encoding(..))
 import Node.FS.Aff (exists, mkdir, readdir, stat, writeFile)
 import Node.FS.Stats (isDirectory)
 import Node.Path (FilePath, basenameWithoutExt, resolve)
 import Node.Process (argv, exit)
-import Prelude (Unit, bind, flip, pure, ($), (<$>), (<>), discard, when, not, map)
+import Prelude (Unit, bind, discard, flip, map, not, pure, void, when, ($), (<$>), (<>))
 
 foreign import globEffect :: (Error -> Effect Unit) -> (Array FilePath -> Effect Unit) -> String -> Effect (Array FilePath) 
 
@@ -42,8 +42,11 @@ createApplication application = do
             throwError (error $ "Directory " <> application <> " already exists.")
         else case flip test application <$> regex "[A-Z][a-zA-Z0-9_]*" noFlags of  
             Left err -> throwError (error $ "Invalid Regexp")
-            Right true -> mkdir dir 
+            Right true -> ensureDir dir 
             Right false -> throwError (error $ application <> " is not a valid package name.")
+
+ensureDir :: FilePath -> Aff Unit
+ensureDir dir = void (try (mkdir dir))
 
 generateRouter :: Array String -> Aff Unit
 generateRouter argv = do 
@@ -59,10 +62,15 @@ generateRouter argv = do
         rootBuffer <- liftEffect $ fromString (renderRoot application) UTF8
         writeFile path rootBuffer
         
-    -- generate NoutFound
+    -- generate NoutFound page
     notFoundExists <- pageExists "NotFound"
     when (not notFoundExists) do
-        generateNewPage "NotFound"
+        generateNewPage "NotFound" RouteToNothing
+
+    -- generate top page
+    topExists <- pageExists "Top"
+    when (not notFoundExists) do
+        generateNewPage "Top" RouteToTop
 
     -- get page names
     pageFiles <- glob $ "./src/" <> application <> "/Page/*.elm"
@@ -114,8 +122,8 @@ main = do
         ["new", pageName] -> do 
             if validatePageName pageName
                 then launchAff_ do  
-                    generateNewPage pageName
-                    generateRouter args
+                    generateNewPage pageName RouteToPageName
+                    generateRouter args 
 
                 else do  
                     Console.error $ "Invalid page name: " <> pageName <> ". An page name must be an valid Elm module name."
@@ -166,8 +174,8 @@ pageExists pageName = do
         else         
             throwError $ error $ "Invalid page name: " <> pageName <> ". An page name must be an valid Elm module name."
 
-generateNewPage :: String -> Aff Unit
-generateNewPage pageName = do 
+generateNewPage :: String -> Routing -> Aff Unit
+generateNewPage pageName routing = do 
 
   if validatePageName pageName 
     then do 
@@ -181,12 +189,12 @@ generateNewPage pageName = do
                 exit 1
             else do 
                 dir <- liftEffect $ resolve ["./src/", application] "Page"
-                mkdir dir
+                ensureDir dir
                 cssPath <- liftEffect $ resolve [dir] (pageName <> ".css")
                 cssBuffer <- liftEffect $ fromString "" UTF8
                 writeFile cssPath cssBuffer
                 elmPath <- liftEffect $ resolve [dir] (pageName <> ".elm")
-                elmBuffer <- liftEffect $ fromString (renderBlankPage application pageName) UTF8
+                elmBuffer <- liftEffect $ fromString (renderBlankPage application pageName routing) UTF8
                 writeFile elmPath elmBuffer
                 
     else do

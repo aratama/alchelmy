@@ -3658,14 +3658,62 @@ var PS = {};
     "use strict";
   var Data_Semigroup = PS["Data.Semigroup"];
   var Data_String_Common = PS["Data.String.Common"];                 
+  var RouteToPageName = (function () {
+      function RouteToPageName() {
+
+      };
+      RouteToPageName.value = new RouteToPageName();
+      return RouteToPageName;
+  })();
+  var RouteToTop = (function () {
+      function RouteToTop() {
+
+      };
+      RouteToTop.value = new RouteToTop();
+      return RouteToTop;
+  })();
+  var RouteToNothing = (function () {
+      function RouteToNothing() {
+
+      };
+      RouteToNothing.value = new RouteToNothing();
+      return RouteToNothing;
+  })();
   var bracket = function (str) {
       return "\"" + (str + "\"");
   };
   var renderBlankPage = function (application) {
       return function (pageName) {
-          return "\x0amodule " + (application + (".Page." + (pageName + (" exposing (Route, Model, Msg, route, page)\x0a\x0aimport Browser exposing (Document)\x0aimport Browser.Navigation exposing (Key)\x0aimport Html exposing (text, h1)\x0aimport Url exposing (Url)\x0aimport Url.Parser exposing (s, Parser, map)\x0aimport " + (application + (".Root as Root\x0a\x0atype Msg\x0a  = NoOp\x0a\x0a\x0atype alias Model \x0a  = {}\x0a\x0a\x0atype alias Route \x0a  = ()\x0a\x0a\x0aroute : Parser (Route -> a) a\x0aroute =\x0a  map () (s " + (bracket(Data_String_Common.toLower(pageName)) + (")\x0a\x0a\x0ainit : Url -> Route -> Root.Model -> ( Model, Cmd Msg )\x0ainit _ _ _ \x0a  = ( {}, Cmd.none )\x0a\x0a\x0aupdate : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg )\x0aupdate msg root model \x0a  = ( root, model, Cmd.none )\x0a\x0a\x0asubscriptions : Root.Model -> Sub Msg\x0asubscriptions model \x0a  = Sub.none\x0a\x0a\x0aview : Root.Model -> Model -> Document Msg\x0aview state model = \x0a  { title = " + (bracket(pageName + (" - " + application)) + ("\x0a  , body = [ h1 [] [text " + (bracket(pageName) + "] ]\x0a  }\x0a\x0a\x0apage : Root.Page a Route Model Msg\x0apage = \x0a  { route = route\x0a  , init = init\x0a  , view = view\x0a  , update = update\x0a  , subscriptions = subscriptions\x0a  }\x0a\x0a")))))))))));
+          return function (routing) {
+              return "\x0amodule " + (application + (".Page." + (pageName + (" exposing (Route, Model, Msg, route, page)\x0a\x0aimport Browser exposing (Document)\x0aimport Browser.Navigation exposing (Key)\x0aimport Html exposing (text, h1)\x0aimport Url exposing (Url)\x0aimport Url.Parser exposing (Parser, map, " + ((function () {
+                  if (routing instanceof RouteToPageName) {
+                      return "s ";
+                  };
+                  if (routing instanceof RouteToTop) {
+                      return "top";
+                  };
+                  if (routing instanceof RouteToNothing) {
+                      return "custom";
+                  };
+                  throw new Error("Failed pattern match at Alchelmy.Template.Page line 19, column 50 - line 25, column 13: " + [ routing.constructor.name ]);
+              })() + (")\x0aimport " + (application + (".Root as Root\x0a\x0atype Msg\x0a  = NoOp\x0a\x0a\x0atype alias Model \x0a  = {}\x0a\x0a\x0atype alias Route \x0a  = ()\x0a\x0a\x0aroute : Parser (Route -> a) a\x0aroute =\x0a  " + ((function () {
+                  if (routing instanceof RouteToPageName) {
+                      return "map () (s " + (bracket(Data_String_Common.toLower(pageName)) + ")");
+                  };
+                  if (routing instanceof RouteToTop) {
+                      return "map () top";
+                  };
+                  if (routing instanceof RouteToNothing) {
+                      return "custom \"NOTHING\" (\\_ -> Nothing)";
+                  };
+                  throw new Error("Failed pattern match at Alchelmy.Template.Page line 42, column 11 - line 48, column 52: " + [ routing.constructor.name ]);
+              })() + ("\x0a\x0a\x0ainit : Url -> Route -> Root.Model -> ( Model, Cmd Msg )\x0ainit _ _ _ \x0a  = ( {}, Cmd.none )\x0a\x0a\x0aupdate : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg )\x0aupdate msg root model \x0a  = ( root, model, Cmd.none )\x0a\x0a\x0asubscriptions : Root.Model -> Sub Msg\x0asubscriptions model \x0a  = Sub.none\x0a\x0a\x0aview : Root.Model -> Model -> Document Msg\x0aview state model = \x0a  { title = " + (bracket(pageName + (" - " + application)) + ("\x0a  , body = [ h1 [] [text " + (bracket(pageName) + "] ]\x0a  }\x0a\x0a\x0apage : Root.Page a Route Model Msg\x0apage = \x0a  { route = route\x0a  , init = init\x0a  , view = view\x0a  , update = update\x0a  , subscriptions = subscriptions\x0a  }\x0a\x0a")))))))))))));
+          };
       };
   };
+  exports["RouteToPageName"] = RouteToPageName;
+  exports["RouteToTop"] = RouteToTop;
+  exports["RouteToNothing"] = RouteToNothing;
   exports["bracket"] = bracket;
   exports["renderBlankPage"] = renderBlankPage;
 })(PS["Alchelmy.Template.Page"] = PS["Alchelmy.Template.Page"] || {});
@@ -27062,7 +27110,7 @@ var PS = {};
       if (v instanceof Data_Either.Right) {
           return v.value0;
       };
-      throw new Error("Failed pattern match at Alchelmy line 155, column 29 - line 157, column 27: " + [ v.constructor.name ]);
+      throw new Error("Failed pattern match at Alchelmy line 163, column 29 - line 165, column 27: " + [ v.constructor.name ]);
   };
   var usage = "\x0aUsage: \x0a\x0a  alchelmy init <application>\x0a\x0a    Create new application. \x0a\x0a  alchelmy update    \x0a\x0a    (Re)Generate Alchemy.elm, alchemy.js\x0a\x0a  alchelmy new <name>      \x0a\x0a    Create new page named <name>. <name> must be an valid module name.\x0a";
   var glob = function (pattern) {
@@ -27082,8 +27130,8 @@ var PS = {};
           return Control_Bind.bind(Effect_Aff.bindAff)(Effect_Class.liftEffect(Effect_Aff.monadEffectAff)(Node_Path.resolve([ "./src/" ])(file)))(function (v1) {
               return Control_Bind.bind(Effect_Aff.bindAff)(Node_FS_Aff.stat(v1))(function (v2) {
                   return Control_Applicative.pure(Effect_Aff.applicativeAff)((function () {
-                      var $38 = Node_FS_Stats.isDirectory(v2);
-                      if ($38) {
+                      var $39 = Node_FS_Stats.isDirectory(v2);
+                      if ($39) {
                           return new Data_Maybe.Just(file);
                       };
                       return Data_Maybe.Nothing.value;
@@ -27099,8 +27147,8 @@ var PS = {};
       });
   });
   var pageExists = function (pageName) {
-      var $42 = validatePageName(pageName);
-      if ($42) {
+      var $43 = validatePageName(pageName);
+      if ($43) {
           return Control_Bind.bind(Effect_Aff.bindAff)(getApplicationName)(function (v) {
               return Control_Bind.bind(Effect_Aff.bindAff)(Effect_Class.liftEffect(Effect_Aff.monadEffectAff)(Node_Path.resolve([ "./src/", v, "Page" ])(pageName + ".elm")))(function (v1) {
                   return Node_FS_Aff.exists(v1);
@@ -27109,27 +27157,32 @@ var PS = {};
       };
       return Control_Monad_Error_Class.throwError(Effect_Aff.monadThrowAff)(Effect_Exception.error("Invalid page name: " + (pageName + ". An page name must be an valid Elm module name.")));
   };
+  var ensureDir = function (dir) {
+      return Data_Functor["void"](Effect_Aff.functorAff)(Control_Monad_Error_Class["try"](Effect_Aff.monadErrorAff)(Node_FS_Aff.mkdir(dir)));
+  };
   var generateNewPage = function (pageName) {
-      var $45 = validatePageName(pageName);
-      if ($45) {
-          return Control_Bind.discard(Control_Bind.discardUnit)(Effect_Aff.bindAff)(Effect_Class_Console.log(Effect_Aff.monadEffectAff)("Generating new page: " + pageName))(function () {
-              return Control_Bind.bind(Effect_Aff.bindAff)(getApplicationName)(function (v) {
-                  return Control_Bind.discard(Control_Bind.discardUnit)(Effect_Aff.bindAff)(Effect_Class_Console.log(Effect_Aff.monadEffectAff)("Application found: " + v))(function () {
-                      return Control_Bind.bind(Effect_Aff.bindAff)(pageExists(pageName))(function (v1) {
-                          if (v1) {
-                              return Effect_Class.liftEffect(Effect_Aff.monadEffectAff)(function __do() {
-                                  Effect_Console.error("[Error] Directory '" + (pageName + "' already exists."))();
-                                  return Node_Process.exit(1)();
-                              });
-                          };
-                          return Control_Bind.bind(Effect_Aff.bindAff)(Effect_Class.liftEffect(Effect_Aff.monadEffectAff)(Node_Path.resolve([ "./src/", v ])("Page")))(function (v2) {
-                              return Control_Bind.discard(Control_Bind.discardUnit)(Effect_Aff.bindAff)(Node_FS_Aff.mkdir(v2))(function () {
-                                  return Control_Bind.bind(Effect_Aff.bindAff)(Effect_Class.liftEffect(Effect_Aff.monadEffectAff)(Node_Path.resolve([ v2 ])(pageName + ".css")))(function (v3) {
-                                      return Control_Bind.bind(Effect_Aff.bindAff)(Effect_Class.liftEffect(Effect_Aff.monadEffectAff)(Node_Buffer.fromString("")(Node_Encoding.UTF8.value)))(function (v4) {
-                                          return Control_Bind.discard(Control_Bind.discardUnit)(Effect_Aff.bindAff)(Node_FS_Aff.writeFile(v3)(v4))(function () {
-                                              return Control_Bind.bind(Effect_Aff.bindAff)(Effect_Class.liftEffect(Effect_Aff.monadEffectAff)(Node_Path.resolve([ v2 ])(pageName + ".elm")))(function (v5) {
-                                                  return Control_Bind.bind(Effect_Aff.bindAff)(Effect_Class.liftEffect(Effect_Aff.monadEffectAff)(Node_Buffer.fromString(Alchelmy_Template_Page.renderBlankPage(v)(pageName))(Node_Encoding.UTF8.value)))(function (v6) {
-                                                      return Node_FS_Aff.writeFile(v5)(v6);
+      return function (routing) {
+          var $46 = validatePageName(pageName);
+          if ($46) {
+              return Control_Bind.discard(Control_Bind.discardUnit)(Effect_Aff.bindAff)(Effect_Class_Console.log(Effect_Aff.monadEffectAff)("Generating new page: " + pageName))(function () {
+                  return Control_Bind.bind(Effect_Aff.bindAff)(getApplicationName)(function (v) {
+                      return Control_Bind.discard(Control_Bind.discardUnit)(Effect_Aff.bindAff)(Effect_Class_Console.log(Effect_Aff.monadEffectAff)("Application found: " + v))(function () {
+                          return Control_Bind.bind(Effect_Aff.bindAff)(pageExists(pageName))(function (v1) {
+                              if (v1) {
+                                  return Effect_Class.liftEffect(Effect_Aff.monadEffectAff)(function __do() {
+                                      Effect_Console.error("[Error] Directory '" + (pageName + "' already exists."))();
+                                      return Node_Process.exit(1)();
+                                  });
+                              };
+                              return Control_Bind.bind(Effect_Aff.bindAff)(Effect_Class.liftEffect(Effect_Aff.monadEffectAff)(Node_Path.resolve([ "./src/", v ])("Page")))(function (v2) {
+                                  return Control_Bind.discard(Control_Bind.discardUnit)(Effect_Aff.bindAff)(ensureDir(v2))(function () {
+                                      return Control_Bind.bind(Effect_Aff.bindAff)(Effect_Class.liftEffect(Effect_Aff.monadEffectAff)(Node_Path.resolve([ v2 ])(pageName + ".css")))(function (v3) {
+                                          return Control_Bind.bind(Effect_Aff.bindAff)(Effect_Class.liftEffect(Effect_Aff.monadEffectAff)(Node_Buffer.fromString("")(Node_Encoding.UTF8.value)))(function (v4) {
+                                              return Control_Bind.discard(Control_Bind.discardUnit)(Effect_Aff.bindAff)(Node_FS_Aff.writeFile(v3)(v4))(function () {
+                                                  return Control_Bind.bind(Effect_Aff.bindAff)(Effect_Class.liftEffect(Effect_Aff.monadEffectAff)(Node_Path.resolve([ v2 ])(pageName + ".elm")))(function (v5) {
+                                                      return Control_Bind.bind(Effect_Aff.bindAff)(Effect_Class.liftEffect(Effect_Aff.monadEffectAff)(Node_Buffer.fromString(Alchelmy_Template_Page.renderBlankPage(v)(pageName)(routing))(Node_Encoding.UTF8.value)))(function (v6) {
+                                                          return Node_FS_Aff.writeFile(v5)(v6);
+                                                      });
                                                   });
                                               });
                                           });
@@ -27140,9 +27193,9 @@ var PS = {};
                       });
                   });
               });
-          });
+          };
+          return Control_Monad_Error_Class.throwError(Effect_Aff.monadThrowAff)(Effect_Exception.error("Invalid page name: " + (pageName + ". An page name must be an valid Elm module name.")));
       };
-      return Control_Monad_Error_Class.throwError(Effect_Aff.monadThrowAff)(Effect_Exception.error("Invalid page name: " + (pageName + ". An page name must be an valid Elm module name.")));
   };
   var generateRouter = function (argv) {
       return Control_Bind.bind(Effect_Aff.bindAff)(getApplicationName)(function (v) {
@@ -27156,21 +27209,25 @@ var PS = {};
                       });
                   })))(function () {
                       return Control_Bind.bind(Effect_Aff.bindAff)(pageExists("NotFound"))(function (v3) {
-                          return Control_Bind.discard(Control_Bind.discardUnit)(Effect_Aff.bindAff)(Control_Applicative.when(Effect_Aff.applicativeAff)(!v3)(generateNewPage("NotFound")))(function () {
-                              return Control_Bind.bind(Effect_Aff.bindAff)(glob("./src/" + (v + "/Page/*.elm")))(function (v4) {
-                                  var pages = Data_Functor.map(Data_Functor.functorArray)(function (p) {
-                                      return Node_Path.basenameWithoutExt(p)(".elm");
-                                  })(v4);
-                                  return Control_Bind.discard(Control_Bind.discardUnit)(Effect_Aff.bindAff)(Control_Applicative.when(Effect_Aff.applicativeAff)(Data_Array["null"](pages))(Effect_Class.liftEffect(Effect_Aff.monadEffectAff)(Effect_Exception["throw"]("Pege not found."))))(function () {
-                                      return Control_Bind.discard(Control_Bind.discardUnit)(Effect_Aff.bindAff)(Effect_Class_Console.log(Effect_Aff.monadEffectAff)("Generating ./src/" + (v + ("/Alchelmy.elm for " + (Data_String_Common.joinWith(", ")(pages) + "...")))))(function () {
-                                          return Control_Bind.bind(Effect_Aff.bindAff)(Effect_Class.liftEffect(Effect_Aff.monadEffectAff)(Node_Buffer.fromString(Alchelmy_Template_Router.renderRouter(v)(pages))(Node_Encoding.UTF8.value)))(function (v5) {
-                                              return Control_Bind.discard(Control_Bind.discardUnit)(Effect_Aff.bindAff)(Node_FS_Aff.writeFile("./src/" + (v + "/Alchelmy.elm"))(v5))(function () {
-                                                  return Control_Bind.discard(Control_Bind.discardUnit)(Effect_Aff.bindAff)(Effect_Class_Console.log(Effect_Aff.monadEffectAff)("Generating ./src/" + (v + "/alchelmy.js...")))(function () {
-                                                      return Control_Bind.bind(Effect_Aff.bindAff)(Effect_Class.liftEffect(Effect_Aff.monadEffectAff)(Node_Path.resolve([ "./src/", v ])("alchelmy.js")))(function (v6) {
-                                                          return Control_Bind.bind(Effect_Aff.bindAff)(Alchelmy_Template_Style.renderStyle(v)(pages))(function (v7) {
-                                                              return Control_Bind.bind(Effect_Aff.bindAff)(Effect_Class.liftEffect(Effect_Aff.monadEffectAff)(Node_Buffer.fromString(v7)(Node_Encoding.UTF8.value)))(function (v8) {
-                                                                  return Control_Bind.discard(Control_Bind.discardUnit)(Effect_Aff.bindAff)(Node_FS_Aff.writeFile(v6)(v8))(function () {
-                                                                      return Effect_Class_Console.log(Effect_Aff.monadEffectAff)("Done.");
+                          return Control_Bind.discard(Control_Bind.discardUnit)(Effect_Aff.bindAff)(Control_Applicative.when(Effect_Aff.applicativeAff)(!v3)(generateNewPage("NotFound")(Alchelmy_Template_Page.RouteToNothing.value)))(function () {
+                              return Control_Bind.bind(Effect_Aff.bindAff)(pageExists("Top"))(function (v4) {
+                                  return Control_Bind.discard(Control_Bind.discardUnit)(Effect_Aff.bindAff)(Control_Applicative.when(Effect_Aff.applicativeAff)(!v3)(generateNewPage("Top")(Alchelmy_Template_Page.RouteToTop.value)))(function () {
+                                      return Control_Bind.bind(Effect_Aff.bindAff)(glob("./src/" + (v + "/Page/*.elm")))(function (v5) {
+                                          var pages = Data_Functor.map(Data_Functor.functorArray)(function (p) {
+                                              return Node_Path.basenameWithoutExt(p)(".elm");
+                                          })(v5);
+                                          return Control_Bind.discard(Control_Bind.discardUnit)(Effect_Aff.bindAff)(Control_Applicative.when(Effect_Aff.applicativeAff)(Data_Array["null"](pages))(Effect_Class.liftEffect(Effect_Aff.monadEffectAff)(Effect_Exception["throw"]("Pege not found."))))(function () {
+                                              return Control_Bind.discard(Control_Bind.discardUnit)(Effect_Aff.bindAff)(Effect_Class_Console.log(Effect_Aff.monadEffectAff)("Generating ./src/" + (v + ("/Alchelmy.elm for " + (Data_String_Common.joinWith(", ")(pages) + "...")))))(function () {
+                                                  return Control_Bind.bind(Effect_Aff.bindAff)(Effect_Class.liftEffect(Effect_Aff.monadEffectAff)(Node_Buffer.fromString(Alchelmy_Template_Router.renderRouter(v)(pages))(Node_Encoding.UTF8.value)))(function (v6) {
+                                                      return Control_Bind.discard(Control_Bind.discardUnit)(Effect_Aff.bindAff)(Node_FS_Aff.writeFile("./src/" + (v + "/Alchelmy.elm"))(v6))(function () {
+                                                          return Control_Bind.discard(Control_Bind.discardUnit)(Effect_Aff.bindAff)(Effect_Class_Console.log(Effect_Aff.monadEffectAff)("Generating ./src/" + (v + "/alchelmy.js...")))(function () {
+                                                              return Control_Bind.bind(Effect_Aff.bindAff)(Effect_Class.liftEffect(Effect_Aff.monadEffectAff)(Node_Path.resolve([ "./src/", v ])("alchelmy.js")))(function (v7) {
+                                                                  return Control_Bind.bind(Effect_Aff.bindAff)(Alchelmy_Template_Style.renderStyle(v)(pages))(function (v8) {
+                                                                      return Control_Bind.bind(Effect_Aff.bindAff)(Effect_Class.liftEffect(Effect_Aff.monadEffectAff)(Node_Buffer.fromString(v8)(Node_Encoding.UTF8.value)))(function (v9) {
+                                                                          return Control_Bind.discard(Control_Bind.discardUnit)(Effect_Aff.bindAff)(Node_FS_Aff.writeFile(v7)(v9))(function () {
+                                                                              return Effect_Class_Console.log(Effect_Aff.monadEffectAff)("Done.");
+                                                                          });
+                                                                      });
                                                                   });
                                                               });
                                                           });
@@ -27199,7 +27256,7 @@ var PS = {};
                   return Control_Monad_Error_Class.throwError(Effect_Aff.monadThrowAff)(Effect_Exception.error("Invalid Regexp"));
               };
               if (v2 instanceof Data_Either.Right && v2.value0) {
-                  return Node_FS_Aff.mkdir(v);
+                  return ensureDir(v);
               };
               if (v2 instanceof Data_Either.Right && !v2.value0) {
                   return Control_Monad_Error_Class.throwError(Effect_Aff.monadThrowAff)(Effect_Exception.error(application + " is not a valid package name."));
@@ -27217,9 +27274,9 @@ var PS = {};
           }))();
       };
       if (v1.length === 2 && v1[0] === "new") {
-          var $76 = validatePageName(v1[1]);
-          if ($76) {
-              return Effect_Aff.launchAff_(Control_Bind.discard(Control_Bind.discardUnit)(Effect_Aff.bindAff)(generateNewPage(v1[1]))(function () {
+          var $78 = validatePageName(v1[1]);
+          if ($78) {
+              return Effect_Aff.launchAff_(Control_Bind.discard(Control_Bind.discardUnit)(Effect_Aff.bindAff)(generateNewPage(v1[1])(Alchelmy_Template_Page.RouteToPageName.value))(function () {
                   return generateRouter(v);
               }))();
           };
@@ -27243,6 +27300,7 @@ var PS = {};
   };
   exports["glob"] = glob;
   exports["createApplication"] = createApplication;
+  exports["ensureDir"] = ensureDir;
   exports["generateRouter"] = generateRouter;
   exports["getApplicationName"] = getApplicationName;
   exports["main"] = main;

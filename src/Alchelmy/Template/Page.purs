@@ -3,18 +3,26 @@ module Alchelmy.Template.Page where
 import Data.Semigroup ((<>))
 import Data.String.Common (toLower)
 
+data Routing = RouteToPageName | RouteToTop | RouteToNothing
+
 bracket :: String -> String 
 bracket str = "\"" <> str <> "\""
 
-renderBlankPage :: String -> String -> String
-renderBlankPage application pageName = """
+renderBlankPage :: String -> String -> Routing -> String
+renderBlankPage application pageName routing = """
 module """ <> application <> """.Page.""" <> pageName <> """ exposing (Route, Model, Msg, route, page)
 
 import Browser exposing (Document)
 import Browser.Navigation exposing (Key)
 import Html exposing (text, h1)
 import Url exposing (Url)
-import Url.Parser exposing (s, Parser, map)
+import Url.Parser exposing (Parser, map, """ <> (case routing of 
+  RouteToPageName ->
+    "s "            
+  RouteToTop ->
+    "top"
+  RouteToNothing -> 
+    "custom") <> """)
 import """ <> application <> """.Root as Root
 
 type Msg
@@ -31,7 +39,13 @@ type alias Route
 
 route : Parser (Route -> a) a
 route =
-  map () (s """ <> bracket (toLower pageName) <> """)
+  """ <> (case routing of 
+            RouteToPageName ->
+              "map () (s " <> bracket (toLower pageName) <> ")"           
+            RouteToTop ->
+              "map () top"
+            RouteToNothing -> 
+              "custom \"NOTHING\" (\\_ -> Nothing)") <> """
 
 
 init : Url -> Route -> Root.Model -> ( Model, Cmd Msg )
