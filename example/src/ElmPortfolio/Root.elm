@@ -1,7 +1,5 @@
 module ElmPortfolio.Root exposing (Flags, Model, Msg(..), Page, init, subscriptions, update, view)
 
--- Application global state type.
-
 import Browser exposing (Document)
 import Browser.Navigation exposing (Key, pushUrl)
 import ElmPortfolio.Ports exposing (receiveThemeFromLocalStorage, requestThemeFromLocalStorage)
@@ -33,17 +31,6 @@ type alias Page a route model msg =
     , subscriptions : Model -> Sub msg
     , view : Model -> model -> Document msg
     }
-
-{-
-page : route -> Page a route model msg
-page =
-    { route = map route (s "///INVALID ROUTE///")
-    , init = \_ _ _ -> ( {}, Cmd.none )
-    , view = \_ _ -> { title = "Minimum - ElmPortfolio", body = [ h1 [] [ text "Minimum" ] ] }
-    , update = \msg root model -> ( root, model, Cmd.none )
-    , subscriptions = \_ -> Sub.none
-    }
--}
 
 init : Flags -> Url -> Key -> ( Model, Cmd Msg )
 init _ _ key =
@@ -83,30 +70,3 @@ view link model content =
                 ]
             ]
         ]
-
-
-
-{-
-   navigate : (String -> msg) -> String -> List (Html msg) -> Html msg
-   navigate msg url contents =
-       let
-           decoder : Decoder msg
-           decoder =
-               andThen
-                   identity
-                   (map4
-                       (\ctrl shift alt meta ->
-                           if shift || ctrl || alt || meta then
-                               fail ""
-
-                           else
-                               succeed (msg url)
-                       )
-                       (field "ctrlKey" bool)
-                       (field "shiftKey" bool)
-                       (field "altKey" bool)
-                       (field "metaKey" bool)
-                   )
-       in
-       a [ href url, custom "click" decoder ] contents
--}
