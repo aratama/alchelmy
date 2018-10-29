@@ -154,7 +154,6 @@ update msg (Model model) =
           case Counter.page.update pageMsg model.state pageModel of 
             (model_, pageModel_, pageCmd ) -> 
               (Model { model | state = model_, route = State__Counter pageModel_ }, Cmd.map Msg__Counter pageCmd)
-        
         _ -> (Model model, Cmd.none)
 
     Msg__Http pageMsg -> 
@@ -163,7 +162,6 @@ update msg (Model model) =
           case Http.page.update pageMsg model.state pageModel of 
             (model_, pageModel_, pageCmd ) -> 
               (Model { model | state = model_, route = State__Http pageModel_ }, Cmd.map Msg__Http pageCmd)
-        
         _ -> (Model model, Cmd.none)
 
     Msg__Minimum pageMsg -> 
@@ -172,7 +170,6 @@ update msg (Model model) =
           case Minimum.page.update pageMsg model.state pageModel of 
             (model_, pageModel_, pageCmd ) -> 
               (Model { model | state = model_, route = State__Minimum pageModel_ }, Cmd.map Msg__Minimum pageCmd)
-        
         _ -> (Model model, Cmd.none)
 
     Msg__NotFound pageMsg -> 
@@ -181,7 +178,6 @@ update msg (Model model) =
           case NotFound.page.update pageMsg model.state pageModel of 
             (model_, pageModel_, pageCmd ) -> 
               (Model { model | state = model_, route = State__NotFound pageModel_ }, Cmd.map Msg__NotFound pageCmd)
-        
         _ -> (Model model, Cmd.none)
 
     Msg__Preferences pageMsg -> 
@@ -190,7 +186,6 @@ update msg (Model model) =
           case Preferences.page.update pageMsg model.state pageModel of 
             (model_, pageModel_, pageCmd ) -> 
               (Model { model | state = model_, route = State__Preferences pageModel_ }, Cmd.map Msg__Preferences pageCmd)
-        
         _ -> (Model model, Cmd.none)
 
     Msg__Time pageMsg -> 
@@ -199,7 +194,6 @@ update msg (Model model) =
           case Time.page.update pageMsg model.state pageModel of 
             (model_, pageModel_, pageCmd ) -> 
               (Model { model | state = model_, route = State__Time pageModel_ }, Cmd.map Msg__Time pageCmd)
-        
         _ -> (Model model, Cmd.none)
 
     Msg__Top pageMsg -> 
@@ -208,7 +202,6 @@ update msg (Model model) =
           case Top.page.update pageMsg model.state pageModel of 
             (model_, pageModel_, pageCmd ) -> 
               (Model { model | state = model_, route = State__Top pageModel_ }, Cmd.map Msg__Top pageCmd)
-        
         _ -> (Model model, Cmd.none)
 
     Msg__URLParsing pageMsg -> 
@@ -217,7 +210,6 @@ update msg (Model model) =
           case URLParsing.page.update pageMsg model.state pageModel of 
             (model_, pageModel_, pageCmd ) -> 
               (Model { model | state = model_, route = State__URLParsing pageModel_ }, Cmd.map Msg__URLParsing pageCmd)
-        
         _ -> (Model model, Cmd.none)
 
 documentMap : (msg -> Msg) -> Document msg -> Document Msg
