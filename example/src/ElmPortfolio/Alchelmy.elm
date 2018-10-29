@@ -90,92 +90,60 @@ update msg (Model model) =
       case route of 
 
         Route__Counter routeValue -> 
-          case 
-            let 
-              page = Counter.page
-            in page.init location routeValue model.state 
-          of 
+          case Counter.page.init location routeValue model.state of 
             (initialModel, initialCmd) -> 
-                ( Model { model | route = State__Counter initialModel }
-                , Cmd.map Msg__Counter initialCmd
-                )
+              ( Model { model | route = State__Counter initialModel }
+              , Cmd.map Msg__Counter initialCmd
+              )
         
         Route__Http routeValue -> 
-          case 
-            let 
-              page = Http.page
-            in page.init location routeValue model.state 
-          of 
+          case Http.page.init location routeValue model.state of 
             (initialModel, initialCmd) -> 
-                ( Model { model | route = State__Http initialModel }
-                , Cmd.map Msg__Http initialCmd
-                )
+              ( Model { model | route = State__Http initialModel }
+              , Cmd.map Msg__Http initialCmd
+              )
         
         Route__Minimum routeValue -> 
-          case 
-            let 
-              page = Minimum.page
-            in page.init location routeValue model.state 
-          of 
+          case Minimum.page.init location routeValue model.state of 
             (initialModel, initialCmd) -> 
-                ( Model { model | route = State__Minimum initialModel }
-                , Cmd.map Msg__Minimum initialCmd
-                )
+              ( Model { model | route = State__Minimum initialModel }
+              , Cmd.map Msg__Minimum initialCmd
+              )
         
         Route__NotFound routeValue -> 
-          case 
-            let 
-              page = NotFound.page
-            in page.init location routeValue model.state 
-          of 
+          case NotFound.page.init location routeValue model.state of 
             (initialModel, initialCmd) -> 
-                ( Model { model | route = State__NotFound initialModel }
-                , Cmd.map Msg__NotFound initialCmd
-                )
+              ( Model { model | route = State__NotFound initialModel }
+              , Cmd.map Msg__NotFound initialCmd
+              )
         
         Route__Preferences routeValue -> 
-          case 
-            let 
-              page = Preferences.page
-            in page.init location routeValue model.state 
-          of 
+          case Preferences.page.init location routeValue model.state of 
             (initialModel, initialCmd) -> 
-                ( Model { model | route = State__Preferences initialModel }
-                , Cmd.map Msg__Preferences initialCmd
-                )
+              ( Model { model | route = State__Preferences initialModel }
+              , Cmd.map Msg__Preferences initialCmd
+              )
         
         Route__Time routeValue -> 
-          case 
-            let 
-              page = Time.page
-            in page.init location routeValue model.state 
-          of 
+          case Time.page.init location routeValue model.state of 
             (initialModel, initialCmd) -> 
-                ( Model { model | route = State__Time initialModel }
-                , Cmd.map Msg__Time initialCmd
-                )
+              ( Model { model | route = State__Time initialModel }
+              , Cmd.map Msg__Time initialCmd
+              )
         
         Route__Top routeValue -> 
-          case 
-            let 
-              page = Top.page
-            in page.init location routeValue model.state 
-          of 
+          case Top.page.init location routeValue model.state of 
             (initialModel, initialCmd) -> 
-                ( Model { model | route = State__Top initialModel }
-                , Cmd.map Msg__Top initialCmd
-                )
+              ( Model { model | route = State__Top initialModel }
+              , Cmd.map Msg__Top initialCmd
+              )
         
         Route__URLParsing routeValue -> 
-          case 
-            let 
-              page = URLParsing.page
-            in page.init location routeValue model.state 
-          of 
+          case URLParsing.page.init location routeValue model.state of 
             (initialModel, initialCmd) -> 
-                ( Model { model | route = State__URLParsing initialModel }
-                , Cmd.map Msg__URLParsing initialCmd
-                )
+              ( Model { model | route = State__URLParsing initialModel }
+              , Cmd.map Msg__URLParsing initialCmd
+              )
         
 
 
@@ -183,12 +151,7 @@ update msg (Model model) =
     Msg__Counter pageMsg -> 
       case model.route of 
         State__Counter pageModel -> 
-          case 
-            let 
-              page = Counter.page 
-            in 
-            page.update pageMsg model.state pageModel 
-          of 
+          case Counter.page.update pageMsg model.state pageModel of 
             (model_, pageModel_, pageCmd ) -> 
               (Model { model | state = model_, route = State__Counter pageModel_ }, Cmd.map Msg__Counter pageCmd)
         
@@ -197,12 +160,7 @@ update msg (Model model) =
     Msg__Http pageMsg -> 
       case model.route of 
         State__Http pageModel -> 
-          case 
-            let 
-              page = Http.page 
-            in 
-            page.update pageMsg model.state pageModel 
-          of 
+          case Http.page.update pageMsg model.state pageModel of 
             (model_, pageModel_, pageCmd ) -> 
               (Model { model | state = model_, route = State__Http pageModel_ }, Cmd.map Msg__Http pageCmd)
         
@@ -211,12 +169,7 @@ update msg (Model model) =
     Msg__Minimum pageMsg -> 
       case model.route of 
         State__Minimum pageModel -> 
-          case 
-            let 
-              page = Minimum.page 
-            in 
-            page.update pageMsg model.state pageModel 
-          of 
+          case Minimum.page.update pageMsg model.state pageModel of 
             (model_, pageModel_, pageCmd ) -> 
               (Model { model | state = model_, route = State__Minimum pageModel_ }, Cmd.map Msg__Minimum pageCmd)
         
@@ -225,12 +178,7 @@ update msg (Model model) =
     Msg__NotFound pageMsg -> 
       case model.route of 
         State__NotFound pageModel -> 
-          case 
-            let 
-              page = NotFound.page 
-            in 
-            page.update pageMsg model.state pageModel 
-          of 
+          case NotFound.page.update pageMsg model.state pageModel of 
             (model_, pageModel_, pageCmd ) -> 
               (Model { model | state = model_, route = State__NotFound pageModel_ }, Cmd.map Msg__NotFound pageCmd)
         
@@ -239,12 +187,7 @@ update msg (Model model) =
     Msg__Preferences pageMsg -> 
       case model.route of 
         State__Preferences pageModel -> 
-          case 
-            let 
-              page = Preferences.page 
-            in 
-            page.update pageMsg model.state pageModel 
-          of 
+          case Preferences.page.update pageMsg model.state pageModel of 
             (model_, pageModel_, pageCmd ) -> 
               (Model { model | state = model_, route = State__Preferences pageModel_ }, Cmd.map Msg__Preferences pageCmd)
         
@@ -253,12 +196,7 @@ update msg (Model model) =
     Msg__Time pageMsg -> 
       case model.route of 
         State__Time pageModel -> 
-          case 
-            let 
-              page = Time.page 
-            in 
-            page.update pageMsg model.state pageModel 
-          of 
+          case Time.page.update pageMsg model.state pageModel of 
             (model_, pageModel_, pageCmd ) -> 
               (Model { model | state = model_, route = State__Time pageModel_ }, Cmd.map Msg__Time pageCmd)
         
@@ -267,12 +205,7 @@ update msg (Model model) =
     Msg__Top pageMsg -> 
       case model.route of 
         State__Top pageModel -> 
-          case 
-            let 
-              page = Top.page 
-            in 
-            page.update pageMsg model.state pageModel 
-          of 
+          case Top.page.update pageMsg model.state pageModel of 
             (model_, pageModel_, pageCmd ) -> 
               (Model { model | state = model_, route = State__Top pageModel_ }, Cmd.map Msg__Top pageCmd)
         
@@ -281,12 +214,7 @@ update msg (Model model) =
     Msg__URLParsing pageMsg -> 
       case model.route of 
         State__URLParsing pageModel -> 
-          case 
-            let 
-              page = URLParsing.page 
-            in 
-            page.update pageMsg model.state pageModel 
-          of 
+          case URLParsing.page.update pageMsg model.state pageModel of 
             (model_, pageModel_, pageCmd ) -> 
               (Model { model | state = model_, route = State__URLParsing pageModel_ }, Cmd.map Msg__URLParsing pageCmd)
         

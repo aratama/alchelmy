@@ -69,15 +69,11 @@ update msg (Model model) =
       case route of 
 
 """ <> joinWith "\n" (map (\page -> "        Route__" <> page <> """ routeValue -> 
-          case 
-            let 
-              page = """ <> page <> """.page
-            in page.init location routeValue model.state 
-          of 
+          case """ <> page <> """.page.init location routeValue model.state of 
             (initialModel, initialCmd) -> 
-                ( Model { model | route = State__""" <> page <> """ initialModel }
-                , Cmd.map Msg__""" <> page <> """ initialCmd
-                )
+              ( Model { model | route = State__""" <> page <> """ initialModel }
+              , Cmd.map Msg__""" <> page <> """ initialCmd
+              )
         """
       ) pages) <> """
 
@@ -86,15 +82,9 @@ update msg (Model model) =
     Msg__""" <> page <> """ pageMsg -> 
       case model.route of 
         State__""" <> page <> """ pageModel -> 
-          case 
-            let 
-              page = """ <> page <> """.page 
-            in 
-            page.update pageMsg model.state pageModel 
-          of 
+          case """ <> page <> """.page.update pageMsg model.state pageModel of 
             (model_, pageModel_, pageCmd ) -> 
               (Model { model | state = model_, route = State__""" <> page <> """ pageModel_ }, Cmd.map Msg__""" <> page <> """ pageCmd)
-        
         """ <> if 1 < length pages then "_ -> (Model model, Cmd.none)" else ""
 ) pages) <> """
 
