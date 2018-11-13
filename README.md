@@ -1,11 +1,13 @@
+![Alchemist Sendivogius](docs/Alchemik_Sedziwoj_Matejko.JPG)
+
 # alchelmy
 
 [![CircleCI](https://circleci.com/gh/aratama/alchelmy.svg?style=svg)](https://circleci.com/gh/aratama/alchelmy)
 [![Build status](https://ci.appveyor.com/api/projects/status/8yvgjo92gk8jkw1j?svg=true)](https://ci.appveyor.com/project/aratama/alchelmy)
 
-An experimental project for an massive Single Page Application with multiple pages.
+An experimental code generator for an massive Single Page Application with multiple pages in Elm.
 
-## Motivation: Say good-bye to boilerplates!
+## Motivation
 
 [The Elm Architecture](https://guide.elm-lang.org/architecture/) is simple and readable architecture that suitable for use with simgle page application.
 However, you need write a lot of boring boilerplates when you want to add a new page in your application: For example, in your Main module, You need to add import declarations, add data constructor to hold `Msg` from child in parent `Msg`, add routes in routing and so on. alchelmy try to auto-generate those boilerplates. In essence, alchelmy generates only one source files: **`Alchemly.elm`**. This is an Elm source code that orchestrates Web pages written in Elm.
@@ -39,3 +41,8 @@ $ npm run build
 ## Known Limitations
 
 - You can't specify order of precedence of routes.
+
+
+----
+
+* [Jan Matejko, "Alchemist Sendivogius"](https://commons.wikimedia.org/wiki/File:Alchemik_Sedziwoj_Matejko.JPG)
