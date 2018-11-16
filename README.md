@@ -12,7 +12,7 @@ An experimental code generator for an massive Single Page Application with multi
 [The Elm Architecture](https://guide.elm-lang.org/architecture/) is simple and readable architecture that suitable for use with simgle page application.
 However, you need write a lot of boring boilerplates when you want to add a new page in your application: For example, in your Main module, You need to add import declarations, add data constructor to hold `Msg` from child in parent `Msg`, add routes in routing and so on. alchelmy try to auto-generate those boilerplates. 
 
-In PHP, to add a new page, all you need is adding a single `Foo.php` in your project. In a like manner, in Alchelmy, all you need is adding only `src/<ProjectName>/Page/Foo.elm` and write some codes in it. You don't need to modify your huge `case-of` branches any more.
+In PHP, to add a new page, all you need is adding a single `Foo.php` in your project. In a like manner, in Alchelmy, all you need is adding only `src/<ProjectName>/Page/Foo.elm` and writing few codes in it. You don't need to modify your multiple huge `case-of` branches any more.
 
 This project is highly experimental, so your comments or suggestions are welcome.
 
@@ -39,12 +39,11 @@ type Session =
 
 Of cource you can refere the `session` property like with `model.session.topic`. You can also modify `session` in each `update` function like `{ model | session = { session | topic = "cat" } }`. Point is, if you move pages, this `session` property is kept between `Model`. This behavior will be configured automatically, so you don't need to write any codes to manage page transition. 
 
-Please see [example](example) for more information.
+Please see [example](example) and the automatically generated [Alchelmy.elm](https://github.com/aratama/alchelmy/blob/master/example/src/ElmPortfolio/Alchelmy.elm) for more information.
 
 ## Installation
 
-alchelmy isn't in NPM yet. You can use `npm i aratama/alchelmy` to install alchelmy and `npx` to execute alchelmy from CLI.
-You also need to install `elm/browser` and `elm/url` in your project dependencies in advance.
+alchelmy isn't in NPM yet. You can use `npm i aratama/alchelmy` to install alchelmy locally and `npx alchelmy` to execute alchelmy from CLI. You also need to install `elm/browser` and `elm/url` in your project dependencies in advance.
 
 ## Command Line Interfaces
 
