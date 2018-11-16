@@ -1,4 +1,4 @@
-module Alchelmy.Template.Root where 
+module Alchelmy.Template.Root where
 
 import Data.Semigroup ((<>))
 
@@ -11,15 +11,15 @@ import Browser.Navigation exposing (Key)
 import Url exposing (Url)
 import Url.Parser exposing (Parser)
 
-type alias Flags 
+type alias Flags
   = ()
 
 -- Application global state type.
 
 
-type alias Model 
+type alias Session
   = { key : Key }
-  
+
 
 type Msg
   = NoOp
@@ -27,24 +27,24 @@ type Msg
 
 type alias Page a route model msg =
   { route : Parser ( route -> a ) a
-  , init : Url -> route -> Model -> ( model, Cmd msg )
-  , update : msg -> Model -> model -> ( Model, model, Cmd msg )
-  , subscriptions : Model -> Sub msg
-  , view : Model -> model -> Document msg
+  , init : Url -> route -> Session -> ( model, Cmd msg )
+  , update : msg -> model -> ( model, Cmd msg )
+  , subscriptions : Session -> Sub msg
+  , view : model -> Document msg
   }
 
-init : Flags -> Url -> Key -> ( Model, Cmd Msg )
-init _ _ key 
+init : Flags -> Url -> Key -> ( Session, Cmd Msg )
+init _ _ key
   = ( { key = key }, Cmd.none )
 
 
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model 
+update : Msg -> Session -> ( Session, Cmd Msg )
+update msg model
   = (model, Cmd.none)
 
 
 subscriptions : Sub Msg
-subscriptions 
+subscriptions
   = Sub.none
 
 """

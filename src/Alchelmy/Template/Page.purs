@@ -1,11 +1,11 @@
-module Alchelmy.Template.Page where 
+module Alchelmy.Template.Page where
 
 import Data.Semigroup ((<>))
 import Data.String.Common (toLower)
 
 data Routing = RouteToPageName | RouteToTop | RouteToNothing
 
-bracket :: String -> String 
+bracket :: String -> String
 bracket str = "\"" <> str <> "\""
 
 renderBlankPage :: String -> String -> Routing -> String
@@ -16,62 +16,62 @@ import Browser exposing (Document)
 import Browser.Navigation exposing (Key)
 import Html exposing (text, h1)
 import Url exposing (Url)
-import Url.Parser exposing (Parser, map, """ <> (case routing of 
+import Url.Parser exposing (Parser, map, """ <> (case routing of
   RouteToPageName ->
-    "s "            
+    "s "
   RouteToTop ->
     "top"
-  RouteToNothing -> 
+  RouteToNothing ->
     "custom") <> """)
-import """ <> application <> """.Root as Root
+import """ <> application <> """.Root as Root exposing (Session)
 
 type Msg
   = NoOp
 
 
-type alias Model 
-  = {}
+type alias Model
+  = { session : Session }
 
 
-type alias Route 
+type alias Route
   = ()
 
 
 route : Parser (Route -> a) a
 route =
-  """ <> (case routing of 
+  """ <> (case routing of
             RouteToPageName ->
-              "map () (s " <> bracket (toLower pageName) <> ")"           
+              "map () (s " <> bracket (toLower pageName) <> ")"
             RouteToTop ->
               "map () top"
-            RouteToNothing -> 
+            RouteToNothing ->
               "custom \"NOTHING\" (\\_ -> Nothing)") <> """
 
 
-init : Url -> Route -> Root.Model -> ( Model, Cmd Msg )
-init _ _ _ 
-  = ( {}, Cmd.none )
+init : Url -> Route -> Session -> ( Model, Cmd Msg )
+init _ _ session
+  = ( { session = session }, Cmd.none )
 
 
-update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg )
-update msg root model 
-  = ( root, model, Cmd.none )
+update : Msg -> Model -> ( Model, Cmd Msg )
+update msg model
+  = ( model, Cmd.none )
 
 
-subscriptions : Root.Model -> Sub Msg
-subscriptions model 
+subscriptions : Session -> Sub Msg
+subscriptions _
   = Sub.none
 
 
-view : Root.Model -> Model -> Document Msg
-view state model = 
+view : Model -> Document Msg
+view model =
   { title = """ <> bracket (pageName <> " - " <> application) <> """
   , body = [ h1 [] [text """ <> bracket pageName <> """] ]
   }
 
 
 page : Root.Page a Route Model Msg
-page = 
+page =
   { route = route
   , init = init
   , view = view
