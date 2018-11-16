@@ -7,10 +7,12 @@ An experimental code generator for an massive Single Page Application with multi
 
 ![Alchemist Sendivogius](docs/Alchemik_Sedziwoj_Matejko.JPG)
 
-## Motivation
+<div style="text-align: right"> <a href="https://commons.wikimedia.org/wiki/File:Alchemik_Sedziwoj_Matejko.JPG">Jan Matejko, "Alchemist Sendivogius"</a></div>
+
+## Abstract/Motivation
 
 [The Elm Architecture](https://guide.elm-lang.org/architecture/) is simple and readable architecture that suitable for use with simgle page application.
-However, you need write a lot of boring boilerplates when you want to add a new page in your application: For example, in your Main module, You need to add import declarations, add data constructor to hold `Msg` from child in parent `Msg`, add routes in routing and so on. alchelmy try to auto-generate those boilerplates. 
+However, you need write a lot of boring boilerplates when you want to add a new page in your application: For example, in your Main module, You need to add import declarations, add data constructor to hold `Msg` from child in parent `Msg`, add routes in routing and so on. alchelmy try to automatically generate those boilerplates. 
 
 In PHP, to add a new page, all you need is adding a single `Foo.php` in your project. In a like manner, in Alchelmy, all you need is adding only `src/<ProjectName>/Page/Foo.elm` and writing few codes in it. You don't need to modify your multiple huge `case-of` branches any more.
 
@@ -18,7 +20,7 @@ This project is highly experimental, so your comments or suggestions are welcome
 
 ## Principle
 
-In essence, alchelmy generates only one source files: **`Alchemly.elm`**. This is an Elm source code that orchestrates Web pages written in Elm.
+In essence, alchelmy generates only one source file named **`Alchemly.elm`**. This is an Elm source code that orchestrates Web pages written in Elm.
 
 In Alchelmy, an web page is represented by a single source files in `src/<ProjectName>/Page/*.elm` directory. Each page modules are usual Elm modules that have its `Model`, `view` and `update`. However, in Alchelmy, `Model` must have a `session` property as follows.
 
@@ -66,9 +68,5 @@ $ npm run build
 
 ## Known Limitations
 
-- You can't specify order of precedence of routes.
-
-
-----
-
-* [Jan Matejko, "Alchemist Sendivogius"](https://commons.wikimedia.org/wiki/File:Alchemik_Sedziwoj_Matejko.JPG)
+- You can't specify order of precedence of routes. You should take care not to overwrap routings.
+- You can't call the parent command from the child command. It's on purpose. Both `Root` modules and the page module aren't component and it's not in parent-child relationships.
