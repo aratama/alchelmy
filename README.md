@@ -39,6 +39,8 @@ type Session =
 
 Of cource you can refere the `session` property like with `model.session.topic`. You can also modify `session` in each `update` function like `{ model | session = { session | topic = "cat" } }`. Point is, if you move pages, this `session` property is kept between `Model`. This behavior will be configured automatically, so you don't need to write any codes to manage page transition. 
 
+Notice that all page modules have its `route : Parser (Route -> a) a`. This `Parser` values are page-by-page URL parsers. `Route` is a object contains parameters extracted from the URL. It is passed to the `init` function of the page module. So you also need to define the `Route` type.
+
 Please see [example](example) and the automatically generated [Alchelmy.elm](https://github.com/aratama/alchelmy/blob/master/example/src/ElmPortfolio/Alchelmy.elm) for more information.
 
 ## Installation
