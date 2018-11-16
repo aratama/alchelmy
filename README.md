@@ -20,7 +20,7 @@ This project is highly experimental, so your comments or suggestions are welcome
 
 ## Principle
 
-In essence, alchelmy generates only one source file named **`Alchemly.elm`**. This is an Elm source code that orchestrates Web pages written in Elm.
+In essence, alchelmy generates only one source file named **`Alchemly.elm`**. This is the Elm codes that orchestrates Web pages written in Elm.
 
 In Alchelmy, an web page is represented by a single source files in `src/<ProjectName>/Page/*.elm` directory. Each page modules are usual Elm modules that have its `Model`, `view` and `update`. However, in Alchelmy, `Model` must have a `session` property as follows.
 
@@ -68,5 +68,5 @@ $ npm run build
 
 ## Known Limitations
 
-- You can't specify order of precedence of routes. You should take care not to overwrap routings.
+- You can't specify order of precedence of routes. You should take care not to overlap other routings.
 - You can't call the parent command from the child command. It's on purpose. Both `Root` modules and the page module aren't component and it's not in parent-child relationships.
