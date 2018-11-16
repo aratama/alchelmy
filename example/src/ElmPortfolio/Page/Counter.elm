@@ -1,7 +1,7 @@
 module ElmPortfolio.Page.Counter exposing (Model, Msg, Route, page, route)
 
 import Browser exposing (Document)
-import ElmPortfolio.Root as Root
+import ElmPortfolio.Root as Root exposing (Session)
 import Html exposing (Html, a, button, div, h1, p, text)
 import Html.Attributes exposing (class, href, src)
 import Html.Events exposing (custom, onClick)
@@ -32,7 +32,9 @@ type Msg
 
 
 type alias Model =
-    Int
+    { session : Session
+    , count : Int
+    }
 
 
 
@@ -48,23 +50,23 @@ route =
 -- an `init` function initializes the local state of the page with `Url`, `Route` and the global state.
 
 
-init : Url -> Route -> Root.Model -> ( Model, Cmd Msg )
-init _ _ _ =
-    ( 0, Cmd.none )
+init : Url -> Route -> Session -> ( Model, Cmd Msg )
+init _ _ session =
+    ( { session = session, count = 0 }, Cmd.none )
 
 
-update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg )
-update msg rootModel model =
+update : Msg -> Model -> ( Model, Cmd Msg )
+update msg model =
     case msg of
         Increment ->
-            ( rootModel, model + 1, Cmd.none )
+            ( { model | count = model.count + 1 }, Cmd.none )
 
         Decrement ->
-            ( rootModel, model - 1, Cmd.none )
+            ( { model | count = model.count - 1 }, Cmd.none )
 
 
-subscriptions : Root.Model -> Sub Msg
-subscriptions model =
+subscriptions : Session -> Sub Msg
+subscriptions _ =
     Sub.none
 
 
@@ -73,15 +75,15 @@ link url label =
     a [ href url ] [ text label ]
 
 
-view : Root.Model -> Model -> Document Msg
-view rootModel model =
+view : Model -> Document Msg
+view model =
     { title = "Counter - ElmPortfolio"
     , body =
-        [ Root.view link rootModel <|
+        [ Root.view link model.session <|
             div [ class "page-counter container" ]
                 [ h1 [] [ text "Counter" ]
                 , p [] [ button [ onClick Decrement ] [ text "-" ] ]
-                , p [] [ div [] [ text (String.fromInt model) ] ]
+                , p [] [ div [] [ text (String.fromInt model.count) ] ]
                 , p [] [ button [ onClick Increment ] [ text "+" ] ]
                 ]
         ]

@@ -3,7 +3,7 @@ module ElmPortfolio.Page.Preferences exposing (Model, Msg, Route, page, route)
 import Browser exposing (Document)
 import Browser.Navigation exposing (pushUrl)
 import ElmPortfolio.Ports exposing (saveThemeToLocalStorage)
-import ElmPortfolio.Root as Root
+import ElmPortfolio.Root as Root exposing (Session)
 import Html exposing (Html, a, button, div, h1, img, input, p, text)
 import Html.Attributes exposing (class, href, src, type_, value)
 import Html.Events exposing (custom, onClick, onInput)
@@ -12,14 +12,14 @@ import Url.Parser as UrlParser exposing ((</>), Parser, map, s)
 
 
 type Msg
-    = Navigate String
-    | InputUserName String
+    = InputUserName String
     | SaveUserName
-    | Initialize
 
 
 type alias Model =
-    { value : String }
+    { value : String
+    , session : Session
+    }
 
 
 type alias Route =
@@ -31,29 +31,29 @@ route =
     map {} (s "preferences")
 
 
-init : Url -> Route -> Root.Model -> ( Model, Cmd Msg )
-init location _ rootModel =
-    ( { value = rootModel.theme }, Cmd.none )
+init : Url -> Route -> Session -> ( Model, Cmd Msg )
+init location _ session =
+    ( { session = session, value = session.theme }, Cmd.none )
 
 
-update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg )
-update msg rootModel model =
+update : Msg -> Model -> ( Model, Cmd Msg )
+update msg model =
     case msg of
-        Navigate url ->
-            ( rootModel, model, pushUrl rootModel.key url )
-
         InputUserName str ->
-            ( rootModel, { model | value = str }, Cmd.none )
+            ( { model | value = str }, Cmd.none )
 
         SaveUserName ->
-            ( { rootModel | theme = model.value }, model, saveThemeToLocalStorage model.value )
+            let
+                session =
+                    model.session
+            in
+            ( { model | session = { session | theme = model.value } }
+            , saveThemeToLocalStorage model.value
+            )
 
-        Initialize ->
-            ( rootModel, { model | value = rootModel.theme }, Cmd.none )
 
-
-subscriptions : Root.Model -> Sub Msg
-subscriptions model =
+subscriptions : Session -> Sub Msg
+subscriptions _ =
     Sub.none
 
 
@@ -62,11 +62,11 @@ link url label =
     a [ href url ] [ text label ]
 
 
-view : Root.Model -> Model -> Document Msg
-view state model =
+view : Model -> Document Msg
+view model =
     { title = "Preference - ElmPortfolio"
     , body =
-        [ Root.view link state <|
+        [ Root.view link model.session <|
             div [ class "page-preferences container" ]
                 [ h1 [] [ text "Preferences" ]
                 , p [] [ text "Theme: ", input [ type_ "text", onInput InputUserName, value model.value ] [] ]

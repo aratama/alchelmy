@@ -16,6 +16,6 @@ app.ports.saveThemeToLocalStorage.subscribe(function (theme) {
     localStorage.setItem("theme", theme)
 });
 
-app.ports.requestThemeFromLocalStorage.subscribe(function (theme) {
+app.ports.requestThemeFromLocalStorage.subscribe(function () {
     app.ports.receiveThemeFromLocalStorage.send(localStorage.getItem("theme"))
 });

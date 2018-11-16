@@ -2,7 +2,7 @@ module ElmPortfolio.Page.Http exposing (Model, Msg, Route, page, route)
 
 import Browser exposing (Document)
 import Browser.Navigation exposing (pushUrl)
-import ElmPortfolio.Root as Root
+import ElmPortfolio.Root as Root exposing (Session)
 import Html exposing (Html, a, br, button, div, h1, h2, img, p, text)
 import Html.Attributes exposing (class, href, src)
 import Html.Events exposing (custom, onClick)
@@ -19,7 +19,8 @@ type Msg
 
 
 type alias Model =
-    { topic : String
+    { session : Session
+    , topic : String
     , gifUrl : String
     }
 
@@ -33,29 +34,29 @@ route =
     map () (s "http")
 
 
-init : Url -> Route -> Root.Model -> ( Model, Cmd Msg )
-init location _ rootModel =
+init : Url -> Route -> Session -> ( Model, Cmd Msg )
+init location _ session =
     let
         topic =
-            rootModel.theme
+            session.theme
     in
-    ( Model topic "waiting.gif", getRandomGif topic )
+    ( Model session topic "waiting.gif", getRandomGif topic )
 
 
-update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg )
-update msg rootModel model =
+update : Msg -> Model -> ( Model, Cmd Msg )
+update msg model =
     case msg of
         Navigate url ->
-            ( rootModel, model, pushUrl rootModel.key url )
+            ( model, pushUrl model.session.key url )
 
         MorePlease ->
-            ( rootModel, { model | gifUrl = "waiting.gif" }, getRandomGif model.topic )
+            ( { model | gifUrl = "waiting.gif" }, getRandomGif model.topic )
 
         NewGif (Ok newUrl) ->
-            ( rootModel, Model model.topic newUrl, Cmd.none )
+            ( { model | topic = model.topic, gifUrl = newUrl }, Cmd.none )
 
         NewGif (Err _) ->
-            ( rootModel, model, Cmd.none )
+            ( model, Cmd.none )
 
 
 getRandomGif : String -> Cmd Msg
@@ -72,8 +73,8 @@ decodeGifUrl =
     Decode.at [ "data", "image_url" ] Decode.string
 
 
-subscriptions : Root.Model -> Sub Msg
-subscriptions model =
+subscriptions : Session -> Sub Msg
+subscriptions _ =
     Sub.none
 
 
@@ -82,11 +83,11 @@ link url label =
     a [ href url ] [ text label ]
 
 
-view : Root.Model -> Model -> Document Msg
-view state model =
+view : Model -> Document Msg
+view model =
     { title = "Http - ElmPortfolio"
     , body =
-        [ Root.view link state <|
+        [ Root.view link model.session <|
             div [ class "page-http container" ]
                 [ h1 [] [ text "Http" ]
                 , h2 [] [ text <| "Theme: " ++ model.topic ]

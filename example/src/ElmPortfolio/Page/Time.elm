@@ -2,7 +2,7 @@ module ElmPortfolio.Page.Time exposing (Model, Msg, Route, page, route)
 
 import Browser exposing (Document)
 import Browser.Navigation exposing (pushUrl)
-import ElmPortfolio.Root as Root
+import ElmPortfolio.Root as Root exposing (Session)
 import Html exposing (Html, a, br, button, div, h1, h2, img, p, text)
 import Html.Attributes exposing (class, href, src)
 import Svg exposing (circle, line, svg)
@@ -18,7 +18,9 @@ type Msg
 
 
 type alias Model =
-    Posix
+    { session : Session
+    , posix : Posix
+    }
 
 
 type alias Route =
@@ -30,23 +32,23 @@ route =
     map {} (s "time")
 
 
-init : Url -> Route -> Root.Model -> ( Model, Cmd Msg )
-init location _ rootModel =
-    ( millisToPosix 0, Cmd.none )
+init : Url -> Route -> Session -> ( Model, Cmd Msg )
+init location _ session =
+    ( { session = session, posix = millisToPosix 0 }, Cmd.none )
 
 
-update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg )
-update msg rootModel model =
+update : Msg -> Model -> ( Model, Cmd Msg )
+update msg model =
     case msg of
         Navigate url ->
-            ( rootModel, model, pushUrl rootModel.key url )
+            ( model, pushUrl model.session.key url )
 
         Tick newTime ->
-            ( rootModel, newTime, Cmd.none )
+            ( { model | posix = newTime }, Cmd.none )
 
 
-subscriptions : Root.Model -> Sub Msg
-subscriptions model =
+subscriptions : Session -> Sub Msg
+subscriptions _ =
     Time.every 1000 Tick
 
 
@@ -55,16 +57,16 @@ link url label =
     a [ href url ] [ text label ]
 
 
-view : Root.Model -> Model -> Document Msg
-view state model =
+view : Model -> Document Msg
+view model =
     { title = "Time - ElmPortfolio"
     , body =
-        [ Root.view link state <|
+        [ Root.view link model.session <|
             div [ class "page-a container" ]
                 [ h1 [] [ text "Time" ]
                 , let
                     angle =
-                        turns (toFloat (toSecond utc model) / 60)
+                        turns (toFloat (toSecond utc model.posix) / 60)
 
                     handX =
                         String.fromFloat (50 + 40 * cos angle)

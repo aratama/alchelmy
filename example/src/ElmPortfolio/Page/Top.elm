@@ -2,7 +2,7 @@ module ElmPortfolio.Page.Top exposing (Model, Msg, Route, page, route)
 
 import Browser exposing (Document)
 import Browser.Navigation exposing (pushUrl)
-import ElmPortfolio.Root as Root
+import ElmPortfolio.Root as Root exposing (Session)
 import Html exposing (Html, a, div, h1, img, p, text)
 import Html.Attributes exposing (class, href, src)
 import Url exposing (Url)
@@ -14,38 +14,38 @@ type Msg
 
 
 type alias Model =
-    {}
+    { session : Session }
 
 
 type alias Route =
-    {}
+    ()
 
 
 route : Parser (Route -> a) a
 route =
-    map Model top
+    map () top
 
 
-init : Url -> Route -> Root.Model -> ( Model, Cmd msg )
-init location _ rootModel =
-    ( {}
+init : Url -> Route -> Session -> ( Model, Cmd msg )
+init location _ session =
+    ( { session = session }
     , if (location.path ++ Maybe.withDefault "" location.fragment) == "/" then
         Cmd.none
 
       else
-        pushUrl rootModel.key "/"
+        pushUrl session.key "/"
     )
 
 
-update : Msg -> Root.Model -> Model -> ( Root.Model, Model, Cmd Msg )
-update msg rootModel model =
+update : Msg -> Model -> ( Model, Cmd Msg )
+update msg model =
     case msg of
         Navigate url ->
-            ( rootModel, model, pushUrl rootModel.key url )
+            ( model, pushUrl model.session.key url )
 
 
-subscriptions : Root.Model -> Sub Msg
-subscriptions model =
+subscriptions : Session -> Sub Msg
+subscriptions _ =
     Sub.none
 
 
@@ -54,11 +54,11 @@ link url label =
     a [ href url ] [ text label ]
 
 
-view : Root.Model -> Model -> Document Msg
-view state model =
+view : Model -> Document Msg
+view model =
     { title = "Top - ElmPortfolio"
     , body =
-        [ Root.view link state <|
+        [ Root.view link model.session <|
             div [ class "page-top" ]
                 [ h1 [] [ text "Top" ]
                 ]

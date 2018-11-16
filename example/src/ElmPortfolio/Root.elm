@@ -1,4 +1,4 @@
-module ElmPortfolio.Root exposing (Flags, Model, Msg(..), Page, init, subscriptions, update, view)
+module ElmPortfolio.Root exposing (Flags, Msg(..), Page, Session, init, subscriptions, update, view)
 
 import Browser exposing (Document)
 import Browser.Navigation exposing (Key, pushUrl)
@@ -16,28 +16,35 @@ type alias Flags =
     ()
 
 
-type alias Model =
-    { theme : String, key : Key }
+type alias Session =
+    { theme : String
+    , key : Key
+    }
+
+
+type alias Page a route model msg =
+    { route : Parser (route -> a) a
+    , init : Url -> route -> Session -> ( model, Cmd msg )
+    , update : msg -> model -> ( model, Cmd msg )
+    , subscriptions : Session -> Sub msg
+    , view : model -> Document msg
+    }
 
 
 type Msg
     = ReceiveThemeFromLocalStorage (Maybe String)
 
 
-type alias Page a route model msg =
-    { route : Parser (route -> a) a
-    , init : Url -> route -> Model -> ( model, Cmd msg )
-    , update : msg -> Model -> model -> ( Model, model, Cmd msg )
-    , subscriptions : Model -> Sub msg
-    , view : Model -> model -> Document msg
-    }
-
-init : Flags -> Url -> Key -> ( Model, Cmd Msg )
+init : Flags -> Url -> Key -> ( Session, Cmd Msg )
 init _ _ key =
-    ( { theme = "goat", key = key }, requestThemeFromLocalStorage () )
+    ( { theme = "goat"
+      , key = key
+      }
+    , requestThemeFromLocalStorage ()
+    )
 
 
-update : Msg -> Model -> ( Model, Cmd Msg )
+update : Msg -> Session -> ( Session, Cmd Msg )
 update msg model =
     case msg of
         ReceiveThemeFromLocalStorage themeMaybe ->
@@ -49,7 +56,7 @@ subscriptions =
     receiveThemeFromLocalStorage ReceiveThemeFromLocalStorage
 
 
-view : (String -> String -> Html msg) -> Model -> Html msg -> Html msg
+view : (String -> String -> Html msg) -> Session -> Html msg -> Html msg
 view link model content =
     div [ class "root" ]
         [ header []
