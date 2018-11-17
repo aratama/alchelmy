@@ -3,7 +3,7 @@ module ElmPortfolio.Page.Preferences exposing (Model, Msg, Route, page, route)
 import Browser exposing (Document)
 import Browser.Navigation exposing (pushUrl)
 import ElmPortfolio.Ports exposing (receiveThemeFromLocalStorage, requestThemeFromLocalStorage, saveThemeToLocalStorage)
-import ElmPortfolio.Root as Root exposing (Session, initial, updateTopic)
+import ElmPortfolio.Root as Root exposing (Session, initial, link, updateTopic)
 import Html exposing (Html, a, button, div, h1, img, input, p, text)
 import Html.Attributes exposing (class, href, src, type_, value)
 import Html.Events exposing (custom, onClick, onInput)
@@ -70,16 +70,11 @@ subscriptions _ =
     receiveThemeFromLocalStorage ReceiveThemeFromLocalStorage
 
 
-link : String -> String -> Html Msg
-link url label =
-    a [ href url ] [ text label ]
-
-
 view : Model -> Document Msg
 view model =
     { title = "Preference - ElmPortfolio"
     , body =
-        [ Root.view link model.session <|
+        [ Root.view model.session <|
             div [ class "page-preferences container" ]
                 [ h1 [] [ text "Preferences" ]
                 , p [] [ text "Theme: ", input [ type_ "text", onInput InputUserName, value model.value ] [] ]

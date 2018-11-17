@@ -2,7 +2,7 @@ module ElmPortfolio.Page.Http exposing (Model, Msg, Route, page, route)
 
 import Browser exposing (Document)
 import ElmPortfolio.Ports exposing (receiveThemeFromLocalStorage, requestThemeFromLocalStorage)
-import ElmPortfolio.Root as Root exposing (Session, initial, updateTopic)
+import ElmPortfolio.Root as Root exposing (Session, initial, link, updateTopic)
 import Html exposing (Html, a, br, button, div, h1, h2, img, p, text)
 import Html.Attributes exposing (class, href, src)
 import Html.Events exposing (custom, onClick)
@@ -82,16 +82,11 @@ subscriptions _ =
     receiveThemeFromLocalStorage ReceiveThemeFromLocalStorage
 
 
-link : String -> String -> Html Msg
-link url label =
-    a [ href url ] [ text label ]
-
-
 view : Model -> Document Msg
 view model =
     { title = "Http - ElmPortfolio"
     , body =
-        [ Root.view link model.session <|
+        [ Root.view model.session <|
             div [ class "page-http container" ]
                 [ h1 [] [ text "Http" ]
                 , h2 [] [ text <| "Topic: " ++ model.session.topic ]

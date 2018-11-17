@@ -3,7 +3,7 @@ module ElmPortfolio.Page.Time exposing (Model, Msg, Route, page, route)
 import Browser exposing (Document)
 import Browser.Navigation exposing (pushUrl)
 import ElmPortfolio.Ports exposing (receiveThemeFromLocalStorage, requestThemeFromLocalStorage)
-import ElmPortfolio.Root as Root exposing (Session, initial, updateTopic)
+import ElmPortfolio.Root as Root exposing (Session, initial, link, updateTopic)
 import Html exposing (Html, a, br, button, div, h1, h2, img, p, text)
 import Html.Attributes exposing (class, href, src)
 import Svg exposing (circle, line, svg)
@@ -61,16 +61,11 @@ subscriptions _ =
         ]
 
 
-link : String -> String -> Html Msg
-link url label =
-    a [ href url ] [ text label ]
-
-
 view : Model -> Document Msg
 view model =
     { title = "Time - ElmPortfolio"
     , body =
-        [ Root.view link model.session <|
+        [ Root.view model.session <|
             div [ class "page-a container" ]
                 [ h1 [] [ text "Time" ]
                 , let

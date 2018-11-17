@@ -80,16 +80,11 @@ subscriptions _ =
     receiveThemeFromLocalStorage ReceiveThemeFromLocalStorage
 
 
-link : String -> String -> Html Msg
-link url label =
-    a [ href url ] [ text label ]
-
-
 view : Model -> Document Msg
 view model =
     { title = "Counter - ElmPortfolio"
     , body =
-        [ Root.view link model.session <|
+        [ Root.view model.session <|
             div [ class "page-counter container" ]
                 [ h1 [] [ text "Counter" ]
                 , p [] [ button [ onClick Decrement ] [ text "-" ] ]

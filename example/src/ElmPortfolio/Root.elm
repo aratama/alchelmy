@@ -1,4 +1,4 @@
-module ElmPortfolio.Root exposing (Flags, Page, Session, initial, updateTopic, view)
+module ElmPortfolio.Root exposing (Flags, Page, Session, initial, link, updateTopic, view)
 
 import Browser exposing (Document)
 import Browser.Navigation exposing (Key, pushUrl)
@@ -36,8 +36,13 @@ initial =
     { topic = "goat" }
 
 
-view : (String -> String -> Html msg) -> Session -> Html msg -> Html msg
-view link model content =
+link : String -> String -> Html msg
+link url label =
+    a [ href url ] [ text label ]
+
+
+view : Session -> Html msg -> Html msg
+view model content =
     div [ class "root" ]
         [ header []
             [ h1 [] [ link "/" "Elm Examples" ]
@@ -51,6 +56,7 @@ view link model content =
                 , p [] [ link "/url-parsing/42" "URL Parsing" ]
                 , p [] [ link "/preferences" "Preferences" ]
                 , p [] [ link "/broken-url" "404" ]
+                , p [] [ link "/minimum" "Minimum" ]
                 ]
             , div []
                 [ content

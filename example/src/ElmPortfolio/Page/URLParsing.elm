@@ -2,7 +2,7 @@ module ElmPortfolio.Page.URLParsing exposing (Model, Msg, Route, page, route)
 
 import Browser exposing (Document)
 import ElmPortfolio.Ports exposing (receiveThemeFromLocalStorage, requestThemeFromLocalStorage)
-import ElmPortfolio.Root as Root exposing (Session, initial, updateTopic)
+import ElmPortfolio.Root as Root exposing (Session, initial, link, updateTopic)
 import Html exposing (Html, a, div, h1, img, p, text)
 import Html.Attributes exposing (class, href, src)
 import Url exposing (Url)
@@ -51,16 +51,11 @@ subscriptions _ =
     receiveThemeFromLocalStorage ReceiveThemeFromLocalStorage
 
 
-link : String -> String -> Html Msg
-link url label =
-    a [ href url ] [ text label ]
-
-
 view : Model -> Document Msg
 view model =
     { title = "URLParsing - ElmPortfolio"
     , body =
-        [ Root.view link model.session <|
+        [ Root.view model.session <|
             div [ class "page-url-parser container" ]
                 [ h1 [] [ text "URL Parsing" ]
                 , p []
