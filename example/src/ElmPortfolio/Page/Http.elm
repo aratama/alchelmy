@@ -103,7 +103,7 @@ view model =
     }
 
 
-page : Root.Page a Route Model Msg
+page : Root.Page Model Msg Route a
 page =
     { route = route
     , init = init

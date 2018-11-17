@@ -20,7 +20,7 @@ type alias Route =
     ()
 
 
-page : Root.Page a Route Model Msg
+page : Root.Page Model Msg Route a
 page =
     { route = map () (s "minimum")
     , init = \_ _ _ -> ( { session = initial }, Cmd.none )

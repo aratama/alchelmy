@@ -1,15 +1,12 @@
 module ElmPortfolio.Root exposing (Flags, Page, Session, initial, link, updateTopic, view)
 
 import Browser exposing (Document)
-import Browser.Navigation exposing (Key, pushUrl)
-import ElmPortfolio.Ports exposing (receiveThemeFromLocalStorage, requestThemeFromLocalStorage)
+import Browser.Navigation exposing (Key)
 import Html exposing (Html, a, div, h1, header, p, text)
 import Html.Attributes exposing (class, href)
-import Html.Events exposing (custom, onClick)
-import Json.Decode exposing (Decoder, andThen, bool, fail, field, map4, succeed)
 import Maybe exposing (withDefault)
 import Url exposing (Url)
-import Url.Parser as UrlParser exposing ((</>), Parser, map, parse, s)
+import Url.Parser as UrlParser exposing (Parser)
 
 
 type alias Flags =
@@ -21,13 +18,13 @@ type alias Session =
     }
 
 
-type alias Page a route model msg =
-    { init : Flags -> Url -> route -> ( model, Cmd msg )
-    , view : model -> Document msg
-    , update : msg -> model -> ( model, Cmd msg )
-    , subscriptions : model -> Sub msg
+type alias Page model msg route a =
+    { init : Flags -> Url -> route -> ( { model | session : Session }, Cmd msg )
+    , view : { model | session : Session } -> Document msg
+    , update : msg -> { model | session : Session } -> ( { model | session : Session }, Cmd msg )
+    , subscriptions : { model | session : Session } -> Sub msg
     , route : Parser (route -> a) a
-    , navigated : Url -> route -> Session -> ( model, Cmd msg )
+    , navigated : Url -> route -> Session -> ( { model | session : Session }, Cmd msg )
     }
 
 
