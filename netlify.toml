@@ -1,3 +1,7 @@
+[build]
+  publish = "example/build"
+  command = "npm -g i create-elm-app && npm i && cd example && npm i && npm run build"
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
