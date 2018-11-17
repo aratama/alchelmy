@@ -118,7 +118,6 @@ main = do
             createApplication applicationName 
             generateRouter args
 
-
         ["new", pageName] -> do 
             if validatePageName pageName
                 then launchAff_ do  
@@ -129,17 +128,23 @@ main = do
                     Console.error $ "Invalid page name: " <> pageName <> ". An page name must be an valid Elm module name."
                     exit 1 
 
+
+
         ["update"] -> launchAff_ do 
             generateRouter args
 
         [] -> log usage 
-        
+
+        ["init"] -> log usage     
+
+        ["new"] -> log usage     
+
         ["--help"] -> log usage
 
         ["-h"] -> log usage
 
         command -> do 
-            Console.error $ "[ERROR] Unknown command: " <> joinWith " " command  
+            Console.error $ "[ERROR] Unknown sub command: " <> joinWith " " command  
             exit 1 
 
 usage :: String
