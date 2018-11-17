@@ -1,7 +1,7 @@
 # alchelmy
 
 [![CircleCI](https://circleci.com/gh/aratama/alchelmy.svg?style=svg)](https://circleci.com/gh/aratama/alchelmy)
-[![Build status](https://ci.appveyor.com/api/projects/status/8yvgjo92gk8jkw1j?svg=true)](https://ci.appveyor.com/project/aratama/alchelmy)
+[![Build status](https://ci.appveyor.com/api/projects/status/8yvgjo92gk8jkw1j?svg=true)](https://ci.appveyor.com/project/aratama/elm-alchemy)
 
 An experimental code generator for an massive Single Page Application with multiple pages in Elm.
 
