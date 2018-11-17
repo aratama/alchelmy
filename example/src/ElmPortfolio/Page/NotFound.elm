@@ -45,7 +45,7 @@ update msg model =
             ( updateTopic model topic, Cmd.none )
 
 
-subscriptions : Session -> Sub Msg
+subscriptions : Model -> Sub Msg
 subscriptions _ =
     receiveThemeFromLocalStorage ReceiveThemeFromLocalStorage
 

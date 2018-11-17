@@ -53,11 +53,11 @@ update msg model =
             ( { model | posix = newTime }, Cmd.none )
 
 
-subscriptions : Session -> Sub Msg
+subscriptions : Model -> Sub Msg
 subscriptions _ =
     Sub.batch
-        [ receiveThemeFromLocalStorage ReceiveThemeFromLocalStorage
-        , Time.every 1000 Tick
+        [ Time.every 1000 Tick
+        , receiveThemeFromLocalStorage ReceiveThemeFromLocalStorage
         ]
 
 

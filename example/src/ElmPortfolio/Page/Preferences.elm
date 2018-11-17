@@ -65,7 +65,7 @@ update msg model =
             )
 
 
-subscriptions : Session -> Sub Msg
+subscriptions : Model -> Sub Msg
 subscriptions _ =
     receiveThemeFromLocalStorage ReceiveThemeFromLocalStorage
 

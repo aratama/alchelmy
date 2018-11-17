@@ -77,7 +77,7 @@ decodeGifUrl =
     Decode.at [ "data", "image_url" ] Decode.string
 
 
-subscriptions : Session -> Sub Msg
+subscriptions : Model -> Sub Msg
 subscriptions _ =
     receiveThemeFromLocalStorage ReceiveThemeFromLocalStorage
 

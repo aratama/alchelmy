@@ -26,12 +26,12 @@ initial = {}
 
 
 type alias Page a route model msg =
-  { route : Parser ( route -> a ) a
-  , init : Flags -> Url -> route -> ( model, Cmd msg )
-  , navigated : Url -> route -> Session -> ( model, Cmd msg )
-  , update : msg -> model -> ( model, Cmd msg )
-  , subscriptions : Session -> Sub msg
+  { init : Flags -> Url -> route -> ( model, Cmd msg )
   , view : model -> Document msg
+  , update : msg -> model -> ( model, Cmd msg )
+  , subscriptions : model -> Sub msg
+  , route : Parser ( route -> a ) a
+  , navigated : Url -> route -> Session -> ( model, Cmd msg )
   }
 
 """

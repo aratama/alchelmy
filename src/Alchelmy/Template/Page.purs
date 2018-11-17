@@ -61,7 +61,7 @@ update msg model
   = ( model, Cmd.none )
 
 
-subscriptions : Session -> Sub Msg
+subscriptions : Model -> Sub Msg
 subscriptions _
   = Sub.none
 

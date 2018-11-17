@@ -79,7 +79,7 @@ update msg model =
             ( { model | count = model.count - 1 }, Cmd.none )
 
 
-subscriptions : Session -> Sub Msg
+subscriptions : Model -> Sub Msg
 subscriptions _ =
     receiveThemeFromLocalStorage ReceiveThemeFromLocalStorage
 

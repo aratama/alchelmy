@@ -27,5 +27,5 @@ page =
     , navigated = \_ _ session -> ( { session = session }, Cmd.none )
     , view = \_ -> { title = "Minimum - ElmPortfolio", body = [ h1 [] [ text "Minimum" ] ] }
     , update = \msg model -> ( model, Cmd.none )
-    , subscriptions = \_ -> Sub.none
+    , subscriptions = always Sub.none
     }

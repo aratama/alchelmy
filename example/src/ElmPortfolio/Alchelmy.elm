@@ -251,7 +251,7 @@ init flags location key =
 
         case parseLocation location of
 
-          Route__Counter routeValue -> case let page = Counter.page in page.init flags location routeValue of
+          Route__Counter routeValue -> case Counter.page.init flags location routeValue of
                 (initialModel, initialCmd) ->
                     ( Model
                         { route = State__Counter initialModel
@@ -261,7 +261,7 @@ init flags location key =
                     , Cmd.map Msg__Counter initialCmd
                     )
                 
-          Route__Http routeValue -> case let page = Http.page in page.init flags location routeValue of
+          Route__Http routeValue -> case Http.page.init flags location routeValue of
                 (initialModel, initialCmd) ->
                     ( Model
                         { route = State__Http initialModel
@@ -271,7 +271,7 @@ init flags location key =
                     , Cmd.map Msg__Http initialCmd
                     )
                 
-          Route__Minimum routeValue -> case let page = Minimum.page in page.init flags location routeValue of
+          Route__Minimum routeValue -> case Minimum.page.init flags location routeValue of
                 (initialModel, initialCmd) ->
                     ( Model
                         { route = State__Minimum initialModel
@@ -281,7 +281,7 @@ init flags location key =
                     , Cmd.map Msg__Minimum initialCmd
                     )
                 
-          Route__NotFound routeValue -> case let page = NotFound.page in page.init flags location routeValue of
+          Route__NotFound routeValue -> case NotFound.page.init flags location routeValue of
                 (initialModel, initialCmd) ->
                     ( Model
                         { route = State__NotFound initialModel
@@ -291,7 +291,7 @@ init flags location key =
                     , Cmd.map Msg__NotFound initialCmd
                     )
                 
-          Route__Preferences routeValue -> case let page = Preferences.page in page.init flags location routeValue of
+          Route__Preferences routeValue -> case Preferences.page.init flags location routeValue of
                 (initialModel, initialCmd) ->
                     ( Model
                         { route = State__Preferences initialModel
@@ -301,7 +301,7 @@ init flags location key =
                     , Cmd.map Msg__Preferences initialCmd
                     )
                 
-          Route__Time routeValue -> case let page = Time.page in page.init flags location routeValue of
+          Route__Time routeValue -> case Time.page.init flags location routeValue of
                 (initialModel, initialCmd) ->
                     ( Model
                         { route = State__Time initialModel
@@ -311,7 +311,7 @@ init flags location key =
                     , Cmd.map Msg__Time initialCmd
                     )
                 
-          Route__Top routeValue -> case let page = Top.page in page.init flags location routeValue of
+          Route__Top routeValue -> case Top.page.init flags location routeValue of
                 (initialModel, initialCmd) ->
                     ( Model
                         { route = State__Top initialModel
@@ -321,7 +321,7 @@ init flags location key =
                     , Cmd.map Msg__Top initialCmd
                     )
                 
-          Route__URLParsing routeValue -> case let page = URLParsing.page in page.init flags location routeValue of
+          Route__URLParsing routeValue -> case URLParsing.page.init flags location routeValue of
                 (initialModel, initialCmd) ->
                     ( Model
                         { route = State__URLParsing initialModel
@@ -334,17 +334,15 @@ init flags location key =
 
 subscriptions : Model -> Sub Msg
 subscriptions (Model model) =
-    Sub.batch
-        ([ Sub.map Msg__Counter (let page = Counter.page in page.subscriptions model.session)
-        , Sub.map Msg__Http (let page = Http.page in page.subscriptions model.session)
-        , Sub.map Msg__Minimum (let page = Minimum.page in page.subscriptions model.session)
-        , Sub.map Msg__NotFound (let page = NotFound.page in page.subscriptions model.session)
-        , Sub.map Msg__Preferences (let page = Preferences.page in page.subscriptions model.session)
-        , Sub.map Msg__Time (let page = Time.page in page.subscriptions model.session)
-        , Sub.map Msg__Top (let page = Top.page in page.subscriptions model.session)
-        , Sub.map Msg__URLParsing (let page = URLParsing.page in page.subscriptions model.session)
-        ])
-
+    case model.route of
+        State__Counter routeValue -> Sub.map Msg__Counter (Counter.page.subscriptions routeValue)
+        State__Http routeValue -> Sub.map Msg__Http (Http.page.subscriptions routeValue)
+        State__Minimum routeValue -> Sub.map Msg__Minimum (Minimum.page.subscriptions routeValue)
+        State__NotFound routeValue -> Sub.map Msg__NotFound (NotFound.page.subscriptions routeValue)
+        State__Preferences routeValue -> Sub.map Msg__Preferences (Preferences.page.subscriptions routeValue)
+        State__Time routeValue -> Sub.map Msg__Time (Time.page.subscriptions routeValue)
+        State__Top routeValue -> Sub.map Msg__Top (Top.page.subscriptions routeValue)
+        State__URLParsing routeValue -> Sub.map Msg__URLParsing (URLParsing.page.subscriptions routeValue)
 
 program : Program Root.Flags Model Msg
 program =

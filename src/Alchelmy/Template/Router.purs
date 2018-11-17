@@ -117,7 +117,7 @@ init flags location key =
 
 """ <> joinWith "\n" (map (\page ->
 
-"          Route__" <> page <> " routeValue -> case let page = " <> page <> """.page in page.init flags location routeValue of
+"          Route__" <> page <> " routeValue -> case " <> page <> """.page.init flags location routeValue of
                 (initialModel, initialCmd) ->
                     ( Model
                         { route = State__""" <> page <> """ initialModel
@@ -130,11 +130,11 @@ init flags location key =
 
 subscriptions : Model -> Sub Msg
 subscriptions (Model model) =
-    Sub.batch
-        ([ """ <>
-        joinWith "\n        , " (map (\page -> "Sub.map Msg__" <> page <> " (let page = " <> page <> ".page in page.subscriptions model.session)") pages) <> """
-        ])
-
+    case model.route of
+""" <> joinWith "\n" (map (\page ->
+        "        State__" <> page <> " routeValue -> Sub.map Msg__" <> page <> " (" <> page <> ".page.subscriptions routeValue)"
+        ) pages)
+    <> """
 
 program : Program Root.Flags Model Msg
 program =

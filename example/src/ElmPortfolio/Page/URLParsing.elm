@@ -5,7 +5,7 @@ import ElmPortfolio.Ports exposing (receiveThemeFromLocalStorage, requestThemeFr
 import ElmPortfolio.Root as Root exposing (Flags, Session, initial, link, updateTopic)
 import Html exposing (Html, a, div, h1, img, p, text)
 import Html.Attributes exposing (class, href, src)
-import Url exposing (Url)
+import Url as Url exposing (Protocol(..), Url)
 import Url.Parser as UrlParser exposing ((</>), Parser, int, map, s)
 
 
@@ -46,7 +46,7 @@ update msg model =
             ( updateTopic model topic, Cmd.none )
 
 
-subscriptions : Session -> Sub Msg
+subscriptions : Model -> Sub Msg
 subscriptions _ =
     receiveThemeFromLocalStorage ReceiveThemeFromLocalStorage
 
@@ -58,13 +58,7 @@ view model =
         [ Root.view model.session <|
             div [ class "page-url-parser container" ]
                 [ h1 [] [ text "URL Parsing" ]
-                , p []
-                    [ text <|
-                        model.location.host
-                            ++ model.location.path
-                            ++ Maybe.withDefault "" model.location.query
-                            ++ Maybe.withDefault "" model.location.fragment
-                    ]
+                , p [] [ text <| "URL: " ++ Url.toString model.location ]
                 , p [] [ text <| "Parameter: " ++ String.fromInt model.id ]
                 ]
         ]
