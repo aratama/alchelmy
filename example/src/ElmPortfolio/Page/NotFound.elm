@@ -3,7 +3,7 @@ module ElmPortfolio.Page.NotFound exposing (Model, Msg, Route, page, route)
 import Browser exposing (Document)
 import Browser.Navigation exposing (pushUrl)
 import ElmPortfolio.Ports exposing (receiveThemeFromLocalStorage, requestThemeFromLocalStorage)
-import ElmPortfolio.Root as Root exposing (Session, initial, link, updateTopic)
+import ElmPortfolio.Root as Root exposing (Flags, Session, initial, link, updateTopic)
 import Html exposing (Html, a, div, h1, img, p, text)
 import Html.Attributes exposing (class, href, src)
 import Json.Decode as Decode
@@ -28,8 +28,8 @@ route =
     map () (s "not-found")
 
 
-init : Url -> Route -> ( Model, Cmd Msg )
-init url _ =
+init : Flags -> Url -> Route -> ( Model, Cmd Msg )
+init _ _ _ =
     ( { session = initial }, requestThemeFromLocalStorage () )
 
 

@@ -23,7 +23,7 @@ import Url.Parser exposing (Parser, map, """ <> (case routing of
     "top"
   RouteToNothing ->
     "custom") <> """)
-import """ <> application <> """.Root as Root exposing (Session)
+import """ <> application <> """.Root as Root exposing (Flags, Session)
 
 type Msg
   = NoOp
@@ -48,8 +48,8 @@ route =
               "custom \"NOTHING\" (\\_ -> Nothing)") <> """
 
 
-init : Url -> Route -> ( Model, Cmd Msg )
-init _ _
+init : Flags -> Url -> Route -> ( Model, Cmd Msg )
+init _ _ _
   = ( { session = Root.initial }, Cmd.none )
 
 navigated : Url -> Route -> Session -> ( Model, Cmd Msg )

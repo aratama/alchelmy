@@ -23,7 +23,7 @@ type alias Session =
 
 type alias Page a route model msg =
     { route : Parser (route -> a) a
-    , init : Url -> route -> ( model, Cmd msg )
+    , init : Flags -> Url -> route -> ( model, Cmd msg )
     , navigated : Url -> route -> Session -> ( model, Cmd msg )
     , update : msg -> model -> ( model, Cmd msg )
     , subscriptions : Session -> Sub msg

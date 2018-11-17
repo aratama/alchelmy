@@ -2,7 +2,7 @@ module ElmPortfolio.Page.Counter exposing (Model, Msg, Route, page, route)
 
 import Browser exposing (Document)
 import ElmPortfolio.Ports exposing (receiveThemeFromLocalStorage, requestThemeFromLocalStorage)
-import ElmPortfolio.Root as Root exposing (Session, initial, updateTopic)
+import ElmPortfolio.Root as Root exposing (Flags, Session, initial, updateTopic)
 import Html exposing (Html, a, button, div, h1, p, text)
 import Html.Attributes exposing (class, href, src)
 import Html.Events exposing (custom, onClick)
@@ -52,9 +52,13 @@ route =
 -- an `init` function initializes the local state of the page with `Url`, `Route` and the global state.
 
 
-init : Url -> Route -> ( Model, Cmd Msg )
-init _ _ =
+init : Flags -> Url -> Route -> ( Model, Cmd Msg )
+init _ _ _ =
     ( { session = initial, count = 0 }, requestThemeFromLocalStorage () )
+
+
+
+-- an `navigated` function is called when the browser moved to the page.
 
 
 navigated : Url -> Route -> Session -> ( Model, Cmd Msg )

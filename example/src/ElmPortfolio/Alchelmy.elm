@@ -251,7 +251,7 @@ init flags location key =
 
         case parseLocation location of
 
-          Route__Counter routeValue -> case let page = Counter.page in page.init location routeValue of
+          Route__Counter routeValue -> case let page = Counter.page in page.init flags location routeValue of
                 (initialModel, initialCmd) ->
                     ( Model
                         { route = State__Counter initialModel
@@ -261,7 +261,7 @@ init flags location key =
                     , Cmd.map Msg__Counter initialCmd
                     )
                 
-          Route__Http routeValue -> case let page = Http.page in page.init location routeValue of
+          Route__Http routeValue -> case let page = Http.page in page.init flags location routeValue of
                 (initialModel, initialCmd) ->
                     ( Model
                         { route = State__Http initialModel
@@ -271,7 +271,7 @@ init flags location key =
                     , Cmd.map Msg__Http initialCmd
                     )
                 
-          Route__Minimum routeValue -> case let page = Minimum.page in page.init location routeValue of
+          Route__Minimum routeValue -> case let page = Minimum.page in page.init flags location routeValue of
                 (initialModel, initialCmd) ->
                     ( Model
                         { route = State__Minimum initialModel
@@ -281,7 +281,7 @@ init flags location key =
                     , Cmd.map Msg__Minimum initialCmd
                     )
                 
-          Route__NotFound routeValue -> case let page = NotFound.page in page.init location routeValue of
+          Route__NotFound routeValue -> case let page = NotFound.page in page.init flags location routeValue of
                 (initialModel, initialCmd) ->
                     ( Model
                         { route = State__NotFound initialModel
@@ -291,7 +291,7 @@ init flags location key =
                     , Cmd.map Msg__NotFound initialCmd
                     )
                 
-          Route__Preferences routeValue -> case let page = Preferences.page in page.init location routeValue of
+          Route__Preferences routeValue -> case let page = Preferences.page in page.init flags location routeValue of
                 (initialModel, initialCmd) ->
                     ( Model
                         { route = State__Preferences initialModel
@@ -301,7 +301,7 @@ init flags location key =
                     , Cmd.map Msg__Preferences initialCmd
                     )
                 
-          Route__Time routeValue -> case let page = Time.page in page.init location routeValue of
+          Route__Time routeValue -> case let page = Time.page in page.init flags location routeValue of
                 (initialModel, initialCmd) ->
                     ( Model
                         { route = State__Time initialModel
@@ -311,7 +311,7 @@ init flags location key =
                     , Cmd.map Msg__Time initialCmd
                     )
                 
-          Route__Top routeValue -> case let page = Top.page in page.init location routeValue of
+          Route__Top routeValue -> case let page = Top.page in page.init flags location routeValue of
                 (initialModel, initialCmd) ->
                     ( Model
                         { route = State__Top initialModel
@@ -321,7 +321,7 @@ init flags location key =
                     , Cmd.map Msg__Top initialCmd
                     )
                 
-          Route__URLParsing routeValue -> case let page = URLParsing.page in page.init location routeValue of
+          Route__URLParsing routeValue -> case let page = URLParsing.page in page.init flags location routeValue of
                 (initialModel, initialCmd) ->
                     ( Model
                         { route = State__URLParsing initialModel

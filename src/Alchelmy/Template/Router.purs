@@ -117,7 +117,7 @@ init flags location key =
 
 """ <> joinWith "\n" (map (\page ->
 
-"          Route__" <> page <> " routeValue -> case let page = " <> page <> """.page in page.init location routeValue of
+"          Route__" <> page <> " routeValue -> case let page = " <> page <> """.page in page.init flags location routeValue of
                 (initialModel, initialCmd) ->
                     ( Model
                         { route = State__""" <> page <> """ initialModel
