@@ -1,7 +1,6 @@
 module ElmPortfolio.Page.Top exposing (Model, Msg, Route, page, route)
 
 import Browser exposing (Document)
-import Browser.Navigation exposing (pushUrl)
 import ElmPortfolio.Root as Root exposing (Session)
 import Html exposing (Html, a, div, h1, img, p, text)
 import Html.Attributes exposing (class, href, src)
@@ -10,7 +9,7 @@ import Url.Parser as UrlParser exposing ((</>), Parser, map, s, top)
 
 
 type Msg
-    = Navigate String
+    = NoOp
 
 
 type alias Model =
@@ -28,20 +27,12 @@ route =
 
 init : Url -> Route -> Session -> ( Model, Cmd msg )
 init location _ session =
-    ( { session = session }
-    , if (location.path ++ Maybe.withDefault "" location.fragment) == "/" then
-        Cmd.none
-
-      else
-        pushUrl session.key "/"
-    )
+    ( { session = session }, Cmd.none )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    case msg of
-        Navigate url ->
-            ( model, pushUrl model.session.key url )
+    ( model, Cmd.none )
 
 
 subscriptions : Session -> Sub Msg

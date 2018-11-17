@@ -13,8 +13,7 @@ import Url.Parser as UrlParser exposing ((</>), Parser, map, s)
 
 
 type Msg
-    = Navigate String
-    | Tick Posix
+    = Tick Posix
 
 
 type alias Model =
@@ -40,9 +39,6 @@ init location _ session =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        Navigate url ->
-            ( model, pushUrl model.session.key url )
-
         Tick newTime ->
             ( { model | posix = newTime }, Cmd.none )
 

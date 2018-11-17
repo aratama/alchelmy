@@ -11,7 +11,7 @@ import Url.Parser as UrlParser exposing ((</>), Parser, map, s, top)
 
 
 type Msg
-    = Navigate String
+    = NoOp
 
 
 type alias Model =
@@ -34,9 +34,7 @@ init url _ session =
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    case msg of
-        Navigate url ->
-            ( model, pushUrl model.session.key url )
+    ( model, Cmd.none )
 
 
 subscriptions : Session -> Sub Msg

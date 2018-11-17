@@ -2,6 +2,7 @@ module ElmPortfolio.Page.Http exposing (Model, Msg, Route, page, route)
 
 import Browser exposing (Document)
 import Browser.Navigation exposing (pushUrl)
+import ElmPortfolio.Ports exposing (receiveThemeFromLocalStorage, requestThemeFromLocalStorage)
 import ElmPortfolio.Root as Root exposing (Session)
 import Html exposing (Html, a, br, button, div, h1, h2, img, p, text)
 import Html.Attributes exposing (class, href, src)
@@ -13,14 +14,13 @@ import Url.Parser as UrlParser exposing ((</>), Parser, map, s)
 
 
 type Msg
-    = Navigate String
+    = ReceiveThemeFromLocalStorage (Maybe String)
     | MorePlease
     | NewGif (Result Http.Error String)
 
 
 type alias Model =
     { session : Session
-    , topic : String
     , gifUrl : String
     }
 
@@ -36,24 +36,27 @@ route =
 
 init : Url -> Route -> Session -> ( Model, Cmd Msg )
 init location _ session =
-    let
-        topic =
-            session.theme
-    in
-    ( Model session topic "waiting.gif", getRandomGif topic )
+    ( Model session "waiting.gif", requestThemeFromLocalStorage () )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        Navigate url ->
-            ( model, pushUrl model.session.key url )
+        ReceiveThemeFromLocalStorage maybeTopic ->
+            let
+                session =
+                    model.session
+
+                topic =
+                    Maybe.withDefault "goat" maybeTopic
+            in
+            ( { model | session = { session | theme = topic } }, getRandomGif topic )
 
         MorePlease ->
-            ( { model | gifUrl = "waiting.gif" }, getRandomGif model.topic )
+            ( { model | gifUrl = "waiting.gif" }, getRandomGif model.session.theme )
 
         NewGif (Ok newUrl) ->
-            ( { model | topic = model.topic, gifUrl = newUrl }, Cmd.none )
+            ( { model | gifUrl = newUrl }, Cmd.none )
 
         NewGif (Err _) ->
             ( model, Cmd.none )
@@ -75,7 +78,7 @@ decodeGifUrl =
 
 subscriptions : Session -> Sub Msg
 subscriptions _ =
-    Sub.none
+    receiveThemeFromLocalStorage ReceiveThemeFromLocalStorage
 
 
 link : String -> String -> Html Msg
@@ -90,7 +93,7 @@ view model =
         [ Root.view link model.session <|
             div [ class "page-http container" ]
                 [ h1 [] [ text "Http" ]
-                , h2 [] [ text <| "Theme: " ++ model.topic ]
+                , h2 [] [ text <| "Theme: " ++ model.session.theme ]
                 , button [ onClick MorePlease ] [ text "More Please!" ]
                 , br [] []
                 , img [ src model.gifUrl ] []
