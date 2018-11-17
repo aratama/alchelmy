@@ -33,9 +33,14 @@ route =
     map {} (s "time")
 
 
-init : Url -> Route -> Session -> ( Model, Cmd Msg )
-init _ _ session =
-    ( { session = session, posix = millisToPosix 0 }, requestThemeFromLocalStorage () )
+init : Url -> Route -> ( Model, Cmd Msg )
+init _ _ =
+    ( { session = initial, posix = millisToPosix 0 }, requestThemeFromLocalStorage () )
+
+
+navigated : Url -> Route -> Session -> ( Model, Cmd Msg )
+navigated _ _ session =
+    ( { session = session, posix = millisToPosix 0 }, Cmd.none )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -91,6 +96,7 @@ page : Root.Page a Route Model Msg
 page =
     { route = route
     , init = init
+    , navigated = navigated
     , view = view
     , update = update
     , subscriptions = subscriptions

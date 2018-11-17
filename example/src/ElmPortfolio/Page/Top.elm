@@ -26,9 +26,14 @@ route =
     map () top
 
 
-init : Url -> Route -> Session -> ( Model, Cmd msg )
-init _ _ session =
+init : Url -> Route -> ( Model, Cmd msg )
+init _ _ =
     ( { session = initial }, requestThemeFromLocalStorage () )
+
+
+navigated : Url -> Route -> Session -> ( Model, Cmd msg )
+navigated _ _ session =
+    ( { session = initial }, Cmd.none )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -64,6 +69,7 @@ page : Root.Page a Route Model Msg
 page =
     { route = route
     , init = init
+    , navigated = navigated
     , view = view
     , update = update
     , subscriptions = subscriptions

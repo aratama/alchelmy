@@ -48,10 +48,13 @@ route =
               "custom \"NOTHING\" (\\_ -> Nothing)") <> """
 
 
-init : Url -> Route -> Session -> ( Model, Cmd Msg )
-init _ _ session
-  = ( { session = session }, Cmd.none )
+init : Url -> Route -> ( Model, Cmd Msg )
+init _ _
+  = ( { session = Root.initial }, Cmd.none )
 
+navigated : Url -> Route -> Session -> ( Model, Cmd Msg )
+navigated _ _ session
+  = ( { session = session }, Cmd.none )
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model
@@ -74,6 +77,7 @@ page : Root.Page a Route Model Msg
 page =
   { route = route
   , init = init
+  , navigated = navigated
   , view = view
   , update = update
   , subscriptions = subscriptions

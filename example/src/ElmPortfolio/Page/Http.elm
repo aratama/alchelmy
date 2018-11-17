@@ -33,9 +33,14 @@ route =
     map () (s "http")
 
 
-init : Url -> Route -> Session -> ( Model, Cmd Msg )
-init location _ session =
-    ( Model session "waiting.gif", requestThemeFromLocalStorage () )
+init : Url -> Route -> ( Model, Cmd Msg )
+init location _ =
+    ( Model initial "waiting.gif", requestThemeFromLocalStorage () )
+
+
+navigated : Url -> Route -> Session -> ( Model, Cmd Msg )
+navigated location _ session =
+    ( Model session "waiting.gif", Cmd.none )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -107,6 +112,7 @@ page : Root.Page a Route Model Msg
 page =
     { route = route
     , init = init
+    , navigated = navigated
     , view = view
     , update = update
     , subscriptions = subscriptions

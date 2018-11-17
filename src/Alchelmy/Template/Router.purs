@@ -63,7 +63,7 @@ update msg (Model model) =
       case route of
 
 """ <> joinWith "\n" (map (\page -> "        Route__" <> page <> """ routeValue ->
-          case """ <> page <> """.page.init location routeValue model.session of
+          case """ <> page <> """.page.navigated location routeValue model.session of
             (initialModel, initialCmd) ->
               ( Model { model | route = State__""" <> page <> """ initialModel }
               , Cmd.map Msg__""" <> page <> """ initialCmd
@@ -117,7 +117,7 @@ init flags location key =
 
 """ <> joinWith "\n" (map (\page ->
 
-"          Route__" <> page <> " routeValue -> case let page = " <> page <> """.page in page.init location routeValue Root.initial of
+"          Route__" <> page <> " routeValue -> case let page = " <> page <> """.page in page.init location routeValue of
                 (initialModel, initialCmd) ->
                     ( Model
                         { route = State__""" <> page <> """ initialModel

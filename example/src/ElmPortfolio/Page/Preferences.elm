@@ -32,9 +32,14 @@ route =
     map {} (s "preferences")
 
 
-init : Url -> Route -> Session -> ( Model, Cmd Msg )
-init _ _ session =
-    ( { session = session, value = initial.topic }, requestThemeFromLocalStorage () )
+init : Url -> Route -> ( Model, Cmd Msg )
+init _ _ =
+    ( { session = initial, value = initial.topic }, requestThemeFromLocalStorage () )
+
+
+navigated : Url -> Route -> Session -> ( Model, Cmd Msg )
+navigated _ _ session =
+    ( { session = session, value = initial.topic }, Cmd.none )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -88,6 +93,7 @@ page : Root.Page a Route Model Msg
 page =
     { route = route
     , init = init
+    , navigated = navigated
     , view = view
     , update = update
     , subscriptions = subscriptions
