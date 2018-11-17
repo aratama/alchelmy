@@ -40,7 +40,12 @@ init _ _ _ =
 
 navigated : Url -> Route -> Session -> ( Model, Cmd Msg )
 navigated _ _ session =
-    ( { session = session, posix = millisToPosix 0 }, Cmd.none )
+    ( { session = session, posix = millisToPosix 0 }
+      -- Mysterious bug workaround
+      -- Originally, you can put just `Cmd.none`, however in the case the timer will not work.
+      -- If you remove `route` in the routing, it work. Extremely confusing.
+    , requestThemeFromLocalStorage ()
+    )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -56,7 +61,7 @@ update msg model =
 subscriptions : Model -> Sub Msg
 subscriptions _ =
     Sub.batch
-        [ Time.every 1000 Tick
+        [ Time.every 50 Tick
         , receiveThemeFromLocalStorage ReceiveThemeFromLocalStorage
         ]
 

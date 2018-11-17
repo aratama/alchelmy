@@ -212,26 +212,26 @@ documentMap f { title, body } = { title = title, body = List.map (Html.map f) bo
 view : Model -> Document Msg
 view (Model model) = case model.route of
 
-  State__Counter m -> documentMap Msg__Counter (let page = Counter.page in page.view { m | session = model.session })
-  State__Http m -> documentMap Msg__Http (let page = Http.page in page.view { m | session = model.session })
-  State__Minimum m -> documentMap Msg__Minimum (let page = Minimum.page in page.view { m | session = model.session })
-  State__NotFound m -> documentMap Msg__NotFound (let page = NotFound.page in page.view { m | session = model.session })
-  State__Preferences m -> documentMap Msg__Preferences (let page = Preferences.page in page.view { m | session = model.session })
-  State__Time m -> documentMap Msg__Time (let page = Time.page in page.view { m | session = model.session })
-  State__Top m -> documentMap Msg__Top (let page = Top.page in page.view { m | session = model.session })
-  State__URLParsing m -> documentMap Msg__URLParsing (let page = URLParsing.page in page.view { m | session = model.session })
+  State__Counter m -> documentMap Msg__Counter (Counter.page.view { m | session = model.session })
+  State__Http m -> documentMap Msg__Http (Http.page.view { m | session = model.session })
+  State__Minimum m -> documentMap Msg__Minimum (Minimum.page.view { m | session = model.session })
+  State__NotFound m -> documentMap Msg__NotFound (NotFound.page.view { m | session = model.session })
+  State__Preferences m -> documentMap Msg__Preferences (Preferences.page.view { m | session = model.session })
+  State__Time m -> documentMap Msg__Time (Time.page.view { m | session = model.session })
+  State__Top m -> documentMap Msg__Top (Top.page.view { m | session = model.session })
+  State__URLParsing m -> documentMap Msg__URLParsing (URLParsing.page.view { m | session = model.session })
 
 matchers : Parser (Route -> a) a
 matchers =
     oneOf
-        [ UrlParser.map Route__Counter (let page = Counter.page in page.route)
-        , UrlParser.map Route__Http (let page = Http.page in page.route)
-        , UrlParser.map Route__Minimum (let page = Minimum.page in page.route)
-        , UrlParser.map Route__NotFound (let page = NotFound.page in page.route)
-        , UrlParser.map Route__Preferences (let page = Preferences.page in page.route)
-        , UrlParser.map Route__Time (let page = Time.page in page.route)
-        , UrlParser.map Route__Top (let page = Top.page in page.route)
-        , UrlParser.map Route__URLParsing (let page = URLParsing.page in page.route)
+        [ UrlParser.map Route__Counter Counter.page.route
+        , UrlParser.map Route__Http Http.page.route
+        , UrlParser.map Route__Minimum Minimum.page.route
+        , UrlParser.map Route__NotFound NotFound.page.route
+        , UrlParser.map Route__Preferences Preferences.page.route
+        , UrlParser.map Route__Time Time.page.route
+        , UrlParser.map Route__Top Top.page.route
+        , UrlParser.map Route__URLParsing URLParsing.page.route
         ]
 
 parseLocation : Url -> Route

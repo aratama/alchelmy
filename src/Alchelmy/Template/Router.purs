@@ -89,13 +89,13 @@ view : Model -> Document Msg
 view (Model model) = case model.route of
 
 """ <> joinWith "\n" (map (\page ->
-        "  State__" <> page <> " m -> documentMap Msg__" <> page <> " (let page = " <> page <> ".page in page.view { m | session = model.session })"
+        "  State__" <> page <> " m -> documentMap Msg__" <> page <> " (" <> page <> ".page.view { m | session = model.session })"
 ) pages) <> """
 
 matchers : Parser (Route -> a) a
 matchers =
     oneOf
-        [ """ <> joinWith "\n        , " (map (\page -> "UrlParser.map Route__" <> page <> " (let page = " <> page <> ".page in page.route)") pages) <> """
+        [ """ <> joinWith "\n        , " (map (\page -> "UrlParser.map Route__" <> page <> " " <> page <> ".page.route") pages) <> """
         ]
 
 parseLocation : Url -> Route
