@@ -190,7 +190,7 @@ generateNewPage pageName routing = do
         exists <- pageExists pageName
         if exists
             then liftEffect do 
-                Console.error $ "[Error] Directory '" <> pageName <> "' already exists."
+                Console.error $ "[Error] Page module '" <> pageName <> "' already exists."
                 exit 1
             else do 
                 dir <- liftEffect $ resolve ["./src/", application] "Page"

@@ -39,7 +39,7 @@ init _ _ =
 
 navigated : Url -> Route -> Session -> ( Model, Cmd Msg )
 navigated _ _ session =
-    ( { session = session, value = initial.topic }, Cmd.none )
+    ( { session = session, value = session.topic }, Cmd.none )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
