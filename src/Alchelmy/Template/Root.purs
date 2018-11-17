@@ -18,11 +18,11 @@ type alias Flags
 
 
 type alias Session
-  = { key : Key }
+  = {}
 
 
-type Msg
-  = NoOp
+initial : Session
+initial = {}
 
 
 type alias Page a route model msg =
@@ -32,19 +32,5 @@ type alias Page a route model msg =
   , subscriptions : Session -> Sub msg
   , view : model -> Document msg
   }
-
-init : Flags -> Url -> Key -> ( Session, Cmd Msg )
-init _ _ key
-  = ( { key = key }, Cmd.none )
-
-
-update : Msg -> Session -> ( Session, Cmd Msg )
-update msg model
-  = (model, Cmd.none)
-
-
-subscriptions : Sub Msg
-subscriptions
-  = Sub.none
 
 """

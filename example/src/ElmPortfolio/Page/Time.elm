@@ -2,7 +2,8 @@ module ElmPortfolio.Page.Time exposing (Model, Msg, Route, page, route)
 
 import Browser exposing (Document)
 import Browser.Navigation exposing (pushUrl)
-import ElmPortfolio.Root as Root exposing (Session)
+import ElmPortfolio.Ports exposing (receiveThemeFromLocalStorage, requestThemeFromLocalStorage)
+import ElmPortfolio.Root as Root exposing (Session, initial, updateTopic)
 import Html exposing (Html, a, br, button, div, h1, h2, img, p, text)
 import Html.Attributes exposing (class, href, src)
 import Svg exposing (circle, line, svg)
@@ -13,7 +14,8 @@ import Url.Parser as UrlParser exposing ((</>), Parser, map, s)
 
 
 type Msg
-    = Tick Posix
+    = ReceiveThemeFromLocalStorage (Maybe String)
+    | Tick Posix
 
 
 type alias Model =
@@ -32,20 +34,26 @@ route =
 
 
 init : Url -> Route -> Session -> ( Model, Cmd Msg )
-init location _ session =
-    ( { session = session, posix = millisToPosix 0 }, Cmd.none )
+init _ _ session =
+    ( { session = session, posix = millisToPosix 0 }, requestThemeFromLocalStorage () )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+        ReceiveThemeFromLocalStorage topic ->
+            ( updateTopic model topic, Cmd.none )
+
         Tick newTime ->
             ( { model | posix = newTime }, Cmd.none )
 
 
 subscriptions : Session -> Sub Msg
 subscriptions _ =
-    Time.every 1000 Tick
+    Sub.batch
+        [ receiveThemeFromLocalStorage ReceiveThemeFromLocalStorage
+        , Time.every 1000 Tick
+        ]
 
 
 link : String -> String -> Html Msg

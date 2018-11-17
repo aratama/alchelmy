@@ -1,7 +1,8 @@
 module ElmPortfolio.Page.Counter exposing (Model, Msg, Route, page, route)
 
 import Browser exposing (Document)
-import ElmPortfolio.Root as Root exposing (Session)
+import ElmPortfolio.Ports exposing (receiveThemeFromLocalStorage, requestThemeFromLocalStorage)
+import ElmPortfolio.Root as Root exposing (Session, initial, updateTopic)
 import Html exposing (Html, a, button, div, h1, p, text)
 import Html.Attributes exposing (class, href, src)
 import Html.Events exposing (custom, onClick)
@@ -23,7 +24,8 @@ type alias Route =
 
 
 type Msg
-    = Increment
+    = ReceiveThemeFromLocalStorage (Maybe String)
+    | Increment
     | Decrement
 
 
@@ -52,12 +54,15 @@ route =
 
 init : Url -> Route -> Session -> ( Model, Cmd Msg )
 init _ _ session =
-    ( { session = session, count = 0 }, Cmd.none )
+    ( { session = session, count = 0 }, requestThemeFromLocalStorage () )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+        ReceiveThemeFromLocalStorage topic ->
+            ( updateTopic model topic, Cmd.none )
+
         Increment ->
             ( { model | count = model.count + 1 }, Cmd.none )
 
@@ -67,7 +72,7 @@ update msg model =
 
 subscriptions : Session -> Sub Msg
 subscriptions _ =
-    Sub.none
+    receiveThemeFromLocalStorage ReceiveThemeFromLocalStorage
 
 
 link : String -> String -> Html Msg

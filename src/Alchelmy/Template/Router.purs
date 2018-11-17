@@ -37,18 +37,12 @@ type RouteState
 type Msg
   = UrlRequest UrlRequest
   | Navigate Url
-  | Msg__Root Root.Msg
 """ <> joinWith "\n" (map (\page -> "  | Msg__" <> page <> " " <> page <> ".Msg") pages) <> """
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg (Model model) =
   case msg of
-
-    Msg__Root rootMsg -> case Root.update rootMsg model.session of
-      (rootModel_, rootCmd) ->
-          (Model { model | session = rootModel_ }, Cmd.map Msg__Root rootCmd)
-
     UrlRequest urlRequest ->
       case urlRequest of
         Internal url ->
@@ -95,7 +89,7 @@ view : Model -> Document Msg
 view (Model model) = case model.route of
 
 """ <> joinWith "\n" (map (\page ->
-        "  State__" <> page <> " m -> documentMap Msg__" <> page <> " (let page = " <> page <> ".page in page.view { m | session = model.session })"        
+        "  State__" <> page <> " m -> documentMap Msg__" <> page <> " (let page = " <> page <> ".page in page.view { m | session = model.session })"
 ) pages) <> """
 
 matchers : Parser (Route -> a) a
@@ -118,31 +112,26 @@ navigate = Navigate
 
 init : Root.Flags -> Url -> Key -> ( Model, Cmd Msg )
 init flags location key =
-  let route = parseLocation location in
-    case Root.init flags location key of
-      (rootInitialModel, rootInitialCmd) ->
-        case route of
+
+        case parseLocation location of
 
 """ <> joinWith "\n" (map (\page ->
 
-"          Route__" <> page <> " routeValue -> case let page = " <> page <> """.page in page.init location routeValue rootInitialModel of
+"          Route__" <> page <> " routeValue -> case let page = " <> page <> """.page in page.init location routeValue Root.initial of
                 (initialModel, initialCmd) ->
                     ( Model
                         { route = State__""" <> page <> """ initialModel
-                        , session = rootInitialModel
+                        , session = initialModel.session
                         , key = key
                         }
-                    , Cmd.batch
-                      [ Cmd.map Msg__Root rootInitialCmd
-                      , Cmd.map Msg__""" <> page <> """ initialCmd
-                      ]
+                    , Cmd.map Msg__""" <> page <> """ initialCmd
                     )
                 """) pages) <> """
 
 subscriptions : Model -> Sub Msg
 subscriptions (Model model) =
     Sub.batch
-        (Sub.map Msg__Root Root.subscriptions :: [ """ <>
+        ([ """ <>
         joinWith "\n        , " (map (\page -> "Sub.map Msg__" <> page <> " (let page = " <> page <> ".page in page.subscriptions model.session)") pages) <> """
         ])
 

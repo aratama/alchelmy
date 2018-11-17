@@ -2,7 +2,8 @@ module ElmPortfolio.Page.NotFound exposing (Model, Msg, Route, page, route)
 
 import Browser exposing (Document)
 import Browser.Navigation exposing (pushUrl)
-import ElmPortfolio.Root as Root exposing (Session)
+import ElmPortfolio.Ports exposing (receiveThemeFromLocalStorage, requestThemeFromLocalStorage)
+import ElmPortfolio.Root as Root exposing (Session, initial, updateTopic)
 import Html exposing (Html, a, div, h1, img, p, text)
 import Html.Attributes exposing (class, href, src)
 import Json.Decode as Decode
@@ -11,7 +12,7 @@ import Url.Parser as UrlParser exposing ((</>), Parser, map, s, top)
 
 
 type Msg
-    = NoOp
+    = ReceiveThemeFromLocalStorage (Maybe String)
 
 
 type alias Model =
@@ -29,17 +30,19 @@ route =
 
 init : Url -> Route -> Session -> ( Model, Cmd Msg )
 init url _ session =
-    ( { session = session }, Cmd.none )
+    ( { session = session }, requestThemeFromLocalStorage () )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    ( model, Cmd.none )
+    case msg of
+        ReceiveThemeFromLocalStorage topic ->
+            ( updateTopic model topic, Cmd.none )
 
 
 subscriptions : Session -> Sub Msg
 subscriptions _ =
-    Sub.none
+    receiveThemeFromLocalStorage ReceiveThemeFromLocalStorage
 
 
 link : String -> String -> Html Msg

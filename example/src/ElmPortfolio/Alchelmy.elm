@@ -51,7 +51,6 @@ type RouteState
 type Msg
   = UrlRequest UrlRequest
   | Navigate Url
-  | Msg__Root Root.Msg
   | Msg__Counter Counter.Msg
   | Msg__Http Http.Msg
   | Msg__Minimum Minimum.Msg
@@ -65,11 +64,6 @@ type Msg
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg (Model model) =
   case msg of
-
-    Msg__Root rootMsg -> case Root.update rootMsg model.session of
-      (rootModel_, rootCmd) ->
-          (Model { model | session = rootModel_ }, Cmd.map Msg__Root rootCmd)
-
     UrlRequest urlRequest ->
       case urlRequest of
         Internal url ->
@@ -254,120 +248,94 @@ navigate = Navigate
 
 init : Root.Flags -> Url -> Key -> ( Model, Cmd Msg )
 init flags location key =
-  let route = parseLocation location in
-    case Root.init flags location key of
-      (rootInitialModel, rootInitialCmd) ->
-        case route of
 
-          Route__Counter routeValue -> case let page = Counter.page in page.init location routeValue rootInitialModel of
+        case parseLocation location of
+
+          Route__Counter routeValue -> case let page = Counter.page in page.init location routeValue Root.initial of
                 (initialModel, initialCmd) ->
                     ( Model
                         { route = State__Counter initialModel
-                        , session = rootInitialModel
+                        , session = initialModel.session
                         , key = key
                         }
-                    , Cmd.batch
-                      [ Cmd.map Msg__Root rootInitialCmd
-                      , Cmd.map Msg__Counter initialCmd
-                      ]
+                    , Cmd.map Msg__Counter initialCmd
                     )
                 
-          Route__Http routeValue -> case let page = Http.page in page.init location routeValue rootInitialModel of
+          Route__Http routeValue -> case let page = Http.page in page.init location routeValue Root.initial of
                 (initialModel, initialCmd) ->
                     ( Model
                         { route = State__Http initialModel
-                        , session = rootInitialModel
+                        , session = initialModel.session
                         , key = key
                         }
-                    , Cmd.batch
-                      [ Cmd.map Msg__Root rootInitialCmd
-                      , Cmd.map Msg__Http initialCmd
-                      ]
+                    , Cmd.map Msg__Http initialCmd
                     )
                 
-          Route__Minimum routeValue -> case let page = Minimum.page in page.init location routeValue rootInitialModel of
+          Route__Minimum routeValue -> case let page = Minimum.page in page.init location routeValue Root.initial of
                 (initialModel, initialCmd) ->
                     ( Model
                         { route = State__Minimum initialModel
-                        , session = rootInitialModel
+                        , session = initialModel.session
                         , key = key
                         }
-                    , Cmd.batch
-                      [ Cmd.map Msg__Root rootInitialCmd
-                      , Cmd.map Msg__Minimum initialCmd
-                      ]
+                    , Cmd.map Msg__Minimum initialCmd
                     )
                 
-          Route__NotFound routeValue -> case let page = NotFound.page in page.init location routeValue rootInitialModel of
+          Route__NotFound routeValue -> case let page = NotFound.page in page.init location routeValue Root.initial of
                 (initialModel, initialCmd) ->
                     ( Model
                         { route = State__NotFound initialModel
-                        , session = rootInitialModel
+                        , session = initialModel.session
                         , key = key
                         }
-                    , Cmd.batch
-                      [ Cmd.map Msg__Root rootInitialCmd
-                      , Cmd.map Msg__NotFound initialCmd
-                      ]
+                    , Cmd.map Msg__NotFound initialCmd
                     )
                 
-          Route__Preferences routeValue -> case let page = Preferences.page in page.init location routeValue rootInitialModel of
+          Route__Preferences routeValue -> case let page = Preferences.page in page.init location routeValue Root.initial of
                 (initialModel, initialCmd) ->
                     ( Model
                         { route = State__Preferences initialModel
-                        , session = rootInitialModel
+                        , session = initialModel.session
                         , key = key
                         }
-                    , Cmd.batch
-                      [ Cmd.map Msg__Root rootInitialCmd
-                      , Cmd.map Msg__Preferences initialCmd
-                      ]
+                    , Cmd.map Msg__Preferences initialCmd
                     )
                 
-          Route__Time routeValue -> case let page = Time.page in page.init location routeValue rootInitialModel of
+          Route__Time routeValue -> case let page = Time.page in page.init location routeValue Root.initial of
                 (initialModel, initialCmd) ->
                     ( Model
                         { route = State__Time initialModel
-                        , session = rootInitialModel
+                        , session = initialModel.session
                         , key = key
                         }
-                    , Cmd.batch
-                      [ Cmd.map Msg__Root rootInitialCmd
-                      , Cmd.map Msg__Time initialCmd
-                      ]
+                    , Cmd.map Msg__Time initialCmd
                     )
                 
-          Route__Top routeValue -> case let page = Top.page in page.init location routeValue rootInitialModel of
+          Route__Top routeValue -> case let page = Top.page in page.init location routeValue Root.initial of
                 (initialModel, initialCmd) ->
                     ( Model
                         { route = State__Top initialModel
-                        , session = rootInitialModel
+                        , session = initialModel.session
                         , key = key
                         }
-                    , Cmd.batch
-                      [ Cmd.map Msg__Root rootInitialCmd
-                      , Cmd.map Msg__Top initialCmd
-                      ]
+                    , Cmd.map Msg__Top initialCmd
                     )
                 
-          Route__URLParsing routeValue -> case let page = URLParsing.page in page.init location routeValue rootInitialModel of
+          Route__URLParsing routeValue -> case let page = URLParsing.page in page.init location routeValue Root.initial of
                 (initialModel, initialCmd) ->
                     ( Model
                         { route = State__URLParsing initialModel
-                        , session = rootInitialModel
+                        , session = initialModel.session
                         , key = key
                         }
-                    , Cmd.batch
-                      [ Cmd.map Msg__Root rootInitialCmd
-                      , Cmd.map Msg__URLParsing initialCmd
-                      ]
+                    , Cmd.map Msg__URLParsing initialCmd
                     )
                 
 
 subscriptions : Model -> Sub Msg
 subscriptions (Model model) =
     Sub.batch
-        (Sub.map Msg__Root Root.subscriptions :: [ Sub.map Msg__Counter (let page = Counter.page in page.subscriptions model.session)
+        ([ Sub.map Msg__Counter (let page = Counter.page in page.subscriptions model.session)
         , Sub.map Msg__Http (let page = Http.page in page.subscriptions model.session)
         , Sub.map Msg__Minimum (let page = Minimum.page in page.subscriptions model.session)
         , Sub.map Msg__NotFound (let page = NotFound.page in page.subscriptions model.session)

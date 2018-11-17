@@ -1,7 +1,8 @@
 module ElmPortfolio.Page.URLParsing exposing (Model, Msg, Route, page, route)
 
 import Browser exposing (Document)
-import ElmPortfolio.Root as Root exposing (Session)
+import ElmPortfolio.Ports exposing (receiveThemeFromLocalStorage, requestThemeFromLocalStorage)
+import ElmPortfolio.Root as Root exposing (Session, initial, updateTopic)
 import Html exposing (Html, a, div, h1, img, p, text)
 import Html.Attributes exposing (class, href, src)
 import Url exposing (Url)
@@ -9,7 +10,7 @@ import Url.Parser as UrlParser exposing ((</>), Parser, int, map, s)
 
 
 type Msg
-    = NoOp
+    = ReceiveThemeFromLocalStorage (Maybe String)
 
 
 type alias Model =
@@ -30,17 +31,19 @@ route =
 
 init : Url -> Route -> Session -> ( Model, Cmd Msg )
 init location id session =
-    ( { session = session, id = id, location = location }, Cmd.none )
+    ( { session = session, id = id, location = location }, requestThemeFromLocalStorage () )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    ( model, Cmd.none )
+    case msg of
+        ReceiveThemeFromLocalStorage topic ->
+            ( updateTopic model topic, Cmd.none )
 
 
 subscriptions : Session -> Sub Msg
 subscriptions _ =
-    Sub.none
+    receiveThemeFromLocalStorage ReceiveThemeFromLocalStorage
 
 
 link : String -> String -> Html Msg

@@ -2,8 +2,8 @@ module ElmPortfolio.Page.Preferences exposing (Model, Msg, Route, page, route)
 
 import Browser exposing (Document)
 import Browser.Navigation exposing (pushUrl)
-import ElmPortfolio.Ports exposing (saveThemeToLocalStorage)
-import ElmPortfolio.Root as Root exposing (Session)
+import ElmPortfolio.Ports exposing (receiveThemeFromLocalStorage, requestThemeFromLocalStorage, saveThemeToLocalStorage)
+import ElmPortfolio.Root as Root exposing (Session, initial, updateTopic)
 import Html exposing (Html, a, button, div, h1, img, input, p, text)
 import Html.Attributes exposing (class, href, src, type_, value)
 import Html.Events exposing (custom, onClick, onInput)
@@ -12,7 +12,8 @@ import Url.Parser as UrlParser exposing ((</>), Parser, map, s)
 
 
 type Msg
-    = InputUserName String
+    = ReceiveThemeFromLocalStorage (Maybe String)
+    | InputUserName String
     | SaveUserName
 
 
@@ -32,13 +33,20 @@ route =
 
 
 init : Url -> Route -> Session -> ( Model, Cmd Msg )
-init location _ session =
-    ( { session = session, value = session.theme }, Cmd.none )
+init _ _ session =
+    ( { session = session, value = initial.topic }, requestThemeFromLocalStorage () )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+        ReceiveThemeFromLocalStorage topic ->
+            let
+                model_ =
+                    updateTopic model topic
+            in
+            ( { model_ | value = model_.session.topic }, Cmd.none )
+
         InputUserName str ->
             ( { model | value = str }, Cmd.none )
 
@@ -47,14 +55,14 @@ update msg model =
                 session =
                     model.session
             in
-            ( { model | session = { session | theme = model.value } }
+            ( { model | session = { session | topic = model.value } }
             , saveThemeToLocalStorage model.value
             )
 
 
 subscriptions : Session -> Sub Msg
 subscriptions _ =
-    Sub.none
+    receiveThemeFromLocalStorage ReceiveThemeFromLocalStorage
 
 
 link : String -> String -> Html Msg

@@ -1,4 +1,4 @@
-module ElmPortfolio.Root exposing (Flags, Msg(..), Page, Session, init, subscriptions, update, view)
+module ElmPortfolio.Root exposing (Flags, Page, Session, initial, updateTopic, view)
 
 import Browser exposing (Document)
 import Browser.Navigation exposing (Key, pushUrl)
@@ -17,8 +17,7 @@ type alias Flags =
 
 
 type alias Session =
-    { theme : String
-    , key : Key
+    { topic : String
     }
 
 
@@ -31,29 +30,9 @@ type alias Page a route model msg =
     }
 
 
-type Msg
-    = ReceiveThemeFromLocalStorage (Maybe String)
-
-
-init : Flags -> Url -> Key -> ( Session, Cmd Msg )
-init _ _ key =
-    ( { theme = "goat"
-      , key = key
-      }
-    , requestThemeFromLocalStorage ()
-    )
-
-
-update : Msg -> Session -> ( Session, Cmd Msg )
-update msg model =
-    case msg of
-        ReceiveThemeFromLocalStorage themeMaybe ->
-            ( { model | theme = withDefault model.theme themeMaybe }, Cmd.none )
-
-
-subscriptions : Sub Msg
-subscriptions =
-    receiveThemeFromLocalStorage ReceiveThemeFromLocalStorage
+initial : Session
+initial =
+    { topic = "goat" }
 
 
 view : (String -> String -> Html msg) -> Session -> Html msg -> Html msg
@@ -61,7 +40,7 @@ view link model content =
     div [ class "root" ]
         [ header []
             [ h1 [] [ link "/" "Elm Examples" ]
-            , text <| "Theme: " ++ model.theme
+            , text <| "Topic: " ++ model.topic
             ]
         , div [ class "page" ]
             [ div [ class "index" ]
@@ -77,3 +56,15 @@ view link model content =
                 ]
             ]
         ]
+
+
+updateTopic : { a | session : Session } -> Maybe String -> { a | session : Session }
+updateTopic model maybeTopic =
+    let
+        session =
+            model.session
+
+        topic =
+            Maybe.withDefault "goat" maybeTopic
+    in
+    { model | session = { session | topic = topic } }

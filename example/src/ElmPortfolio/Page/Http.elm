@@ -1,9 +1,8 @@
 module ElmPortfolio.Page.Http exposing (Model, Msg, Route, page, route)
 
 import Browser exposing (Document)
-import Browser.Navigation exposing (pushUrl)
 import ElmPortfolio.Ports exposing (receiveThemeFromLocalStorage, requestThemeFromLocalStorage)
-import ElmPortfolio.Root as Root exposing (Session)
+import ElmPortfolio.Root as Root exposing (Session, initial, updateTopic)
 import Html exposing (Html, a, br, button, div, h1, h2, img, p, text)
 import Html.Attributes exposing (class, href, src)
 import Html.Events exposing (custom, onClick)
@@ -42,18 +41,15 @@ init location _ session =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        ReceiveThemeFromLocalStorage maybeTopic ->
+        ReceiveThemeFromLocalStorage topic ->
             let
-                session =
-                    model.session
-
-                topic =
-                    Maybe.withDefault "goat" maybeTopic
+                model_ =
+                    updateTopic model topic
             in
-            ( { model | session = { session | theme = topic } }, getRandomGif topic )
+            ( model_, getRandomGif model_.session.topic )
 
         MorePlease ->
-            ( { model | gifUrl = "waiting.gif" }, getRandomGif model.session.theme )
+            ( { model | gifUrl = "waiting.gif" }, getRandomGif model.session.topic )
 
         NewGif (Ok newUrl) ->
             ( { model | gifUrl = newUrl }, Cmd.none )
@@ -93,14 +89,14 @@ view model =
         [ Root.view link model.session <|
             div [ class "page-http container" ]
                 [ h1 [] [ text "Http" ]
-                , h2 [] [ text <| "Theme: " ++ model.session.theme ]
+                , h2 [] [ text <| "Topic: " ++ model.session.topic ]
                 , button [ onClick MorePlease ] [ text "More Please!" ]
                 , br [] []
                 , img [ src model.gifUrl ] []
                 , p []
                     [ text "Go to "
                     , link "/preferences" "the preferences page"
-                    , text " to change theme."
+                    , text " to change topic."
                     ]
                 ]
         ]
