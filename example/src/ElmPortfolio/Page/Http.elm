@@ -40,7 +40,7 @@ init location _ =
 
 navigated : Url -> Route -> Session -> ( Model, Cmd Msg )
 navigated location _ session =
-    ( Model session "waiting.gif", Cmd.none )
+    ( Model session "waiting.gif", getRandomGif session.topic )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
