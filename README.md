@@ -12,7 +12,7 @@ An experimental code generator for an massive Single Page Application with multi
 ## Abstract/Motivation
 
 [The Elm Architecture](https://guide.elm-lang.org/architecture/) is simple and readable architecture that suitable for use with simgle page application.
-However, you need write a lot of boring boilerplates when you want to add a new page in your application: For example, in your Main module, You need to add import declarations, add data constructor to hold `Msg` from child in parent `Msg`, add routes in routing and so on. alchelmy try to automatically generate those boilerplates. 
+However, you need write a lot of boring boilerplates when you want to add a new page in your application: For example, in your Main module, You need to add import declarations, add data constructor to hold `Msg` from child in parent `Msg`, add routes in routing and so on. alchelmy try to automatically generate those boilerplates.
 
 In PHP, to add a new page, all you need is adding a single `Foo.php` in your project. In a like manner, in Alchelmy, all you need is adding only `src/<ProjectName>/Page/Foo.elm` and writing few codes in it. You don't need to modify your multiple huge `case-of` branches any more.
 
@@ -25,7 +25,7 @@ In essence, alchelmy generates only one source file named **`Alchemly.elm`**. Th
 In Alchelmy, an web page is represented by a single source files in `src/<ProjectName>/Page/*.elm` directory. Each page modules are usual Elm modules that have its `Model`, `view` and `update`. However, in Alchelmy, `Model` must have a `session` property as follows.
 
 ```elm
-type Model = 
+type Model =
     { session : Session
     , count : Int
     }
@@ -34,16 +34,18 @@ type Model =
 That `Session` is defened in `src/<ProjectName>/Root.elm` module. For example, you can define `Session` type that has `topic` property as follows:
 
 ```elm
-type Session = 
+type Session =
     { topic : String
     }
 ```
 
-Of cource you can refere the `session` property like with `model.session.topic`. You can also modify `session` in each `update` function like `{ model | session = { session | topic = "cat" } }`. Point is, if you move pages, this `session` property is kept between `Model`. This behavior will be configured automatically, so you don't need to write any codes to manage page transition. 
+Of cource you can refere the `session` property like with `model.session.topic`. You can also modify `session` in each `update` function like `{ model | session = { session | topic = "cat" } }`. Point is, if you move pages, this `session` property is kept between `Model`. This behavior will be configured automatically, so you don't need to write any codes to manage page transition.
 
 Notice that all page modules have its `route : Parser (Route -> a) a`. This `Parser` values are page-by-page URL parsers. `Route` is a object contains parameters extracted from the URL. It is passed to the `init` function of the page module. So you also need to define the `Route` type.
 
-Please see [example](example) and the automatically generated [Alchelmy.elm](https://github.com/aratama/alchelmy/blob/master/example/src/ElmPortfolio/Alchelmy.elm) for more information.
+Please see [example](example) and the automatically generated [Alchelmy.elm](https://github.com/aratama/alchelmy/blob/master/example/src/ElmPortfolio/Alchelmy.elm) for more information. You can also check out the example app at the following url:
+
+* https://alchelmy.netlify.com/
 
 ## Installation
 
@@ -61,7 +63,7 @@ alchelmy has a command line interface:
 ## Building Alchelmy Itself
 
 ```sh
-$ npm i 
+$ npm i
 $ bower update
 $ npm run build
 ```
