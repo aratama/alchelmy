@@ -8,7 +8,7 @@ jobs:
     docker:
       # specify the version you desire here
       - image: circleci/node:10.5
-      
+
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
       # documented at https://circleci.com/docs/2.0/circleci-images/
@@ -26,15 +26,15 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
-      - run: sudo npm -g install elm@0.18.0-exp5 --unsafe-perm=true --allow-root
-      - run: sudo npm -g install elm-test@0.18.12 --unsafe-perm=true --allow-root
-      - run: sudo npm -g install create-elm-app@1.10.4 --unsafe-perm=true --allow-root            
+      - run: sudo npm -g install elm@0.19.0-bugfix2 --unsafe-perm=true --allow-root
+      - run: sudo npm -g install elm-test@0.19.0-rev3 --unsafe-perm=true --allow-root
+      - run: sudo npm -g install create-elm-app@2.2.3 --unsafe-perm=true --allow-root
       - run: npm install
 
       - save_cache:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
-        
+
       # run tests!
       - run: npm run test
