@@ -28,14 +28,14 @@ route =
     map () (s "not-found")
 
 
-init : Flags -> Url -> Key -> Route -> ( Model, Cmd Msg )
-init _ _ _ _ =
-    ( { session = initial }, requestThemeFromLocalStorage () )
+init : Flags -> Url -> Key -> Route -> Maybe Session -> ( Model, Cmd Msg )
+init _ _ _ _ maybeSession =
+    case maybeSession of
+        Nothing ->
+            ( { session = initial }, requestThemeFromLocalStorage () )
 
-
-navigated : Url -> Route -> Session -> ( Model, Cmd Msg )
-navigated url _ session =
-    ( { session = session }, Cmd.none )
+        Just session ->
+            ( { session = session }, Cmd.none )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -66,7 +66,6 @@ page : Root.Page Model Msg Route a
 page =
     { route = route
     , init = init
-    , navigated = navigated
     , view = view
     , update = update
     , subscriptions = subscriptions

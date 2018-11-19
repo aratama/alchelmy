@@ -9,7 +9,7 @@ module ElmPortfolio.Alchelmy exposing (Model, Msg, program)
 import Browser exposing (Document, UrlRequest(..), application)
 import Browser.Navigation exposing (Key, load, pushUrl)
 import Html as Html exposing (Html, text)
-import Maybe as Maybe
+import Maybe as Maybe exposing (Maybe(..))
 import Url exposing (Url)
 import Url.Parser as UrlParser exposing (s, oneOf, Parser, parse, (</>))
 import ElmPortfolio.Root as Root
@@ -26,6 +26,7 @@ type Model = Model
   { route : RouteState
   , session : Root.Session
   , key : Key
+  , flags : Root.Flags
   }
 
 type Route
@@ -84,56 +85,56 @@ update msg (Model model) =
       case route of
 
         Route__Counter routeValue ->
-          case Counter.page.navigated location routeValue model.session of
+          case Counter.page.init model.flags location model.key routeValue (Just model.session) of
             (initialModel, initialCmd) ->
               ( Model { model | route = State__Counter initialModel }
               , Cmd.map Msg__Counter initialCmd
               )
         
         Route__Http routeValue ->
-          case Http.page.navigated location routeValue model.session of
+          case Http.page.init model.flags location model.key routeValue (Just model.session) of
             (initialModel, initialCmd) ->
               ( Model { model | route = State__Http initialModel }
               , Cmd.map Msg__Http initialCmd
               )
         
         Route__Minimum routeValue ->
-          case Minimum.page.navigated location routeValue model.session of
+          case Minimum.page.init model.flags location model.key routeValue (Just model.session) of
             (initialModel, initialCmd) ->
               ( Model { model | route = State__Minimum initialModel }
               , Cmd.map Msg__Minimum initialCmd
               )
         
         Route__NotFound routeValue ->
-          case NotFound.page.navigated location routeValue model.session of
+          case NotFound.page.init model.flags location model.key routeValue (Just model.session) of
             (initialModel, initialCmd) ->
               ( Model { model | route = State__NotFound initialModel }
               , Cmd.map Msg__NotFound initialCmd
               )
         
         Route__Preferences routeValue ->
-          case Preferences.page.navigated location routeValue model.session of
+          case Preferences.page.init model.flags location model.key routeValue (Just model.session) of
             (initialModel, initialCmd) ->
               ( Model { model | route = State__Preferences initialModel }
               , Cmd.map Msg__Preferences initialCmd
               )
         
         Route__Time routeValue ->
-          case Time.page.navigated location routeValue model.session of
+          case Time.page.init model.flags location model.key routeValue (Just model.session) of
             (initialModel, initialCmd) ->
               ( Model { model | route = State__Time initialModel }
               , Cmd.map Msg__Time initialCmd
               )
         
         Route__Top routeValue ->
-          case Top.page.navigated location routeValue model.session of
+          case Top.page.init model.flags location model.key routeValue (Just model.session) of
             (initialModel, initialCmd) ->
               ( Model { model | route = State__Top initialModel }
               , Cmd.map Msg__Top initialCmd
               )
         
         Route__URLParsing routeValue ->
-          case URLParsing.page.navigated location routeValue model.session of
+          case URLParsing.page.init model.flags location model.key routeValue (Just model.session) of
             (initialModel, initialCmd) ->
               ( Model { model | route = State__URLParsing initialModel }
               , Cmd.map Msg__URLParsing initialCmd
@@ -251,82 +252,90 @@ init flags location key =
 
         case parseLocation location of
 
-          Route__Counter routeValue -> case Counter.page.init flags location key routeValue of
+          Route__Counter routeValue -> case Counter.page.init flags location key routeValue Nothing of
                 (initialModel, initialCmd) ->
                     ( Model
                         { route = State__Counter initialModel
                         , session = initialModel.session
                         , key = key
+                        , flags = flags
                         }
                     , Cmd.map Msg__Counter initialCmd
                     )
                 
-          Route__Http routeValue -> case Http.page.init flags location key routeValue of
+          Route__Http routeValue -> case Http.page.init flags location key routeValue Nothing of
                 (initialModel, initialCmd) ->
                     ( Model
                         { route = State__Http initialModel
                         , session = initialModel.session
                         , key = key
+                        , flags = flags
                         }
                     , Cmd.map Msg__Http initialCmd
                     )
                 
-          Route__Minimum routeValue -> case Minimum.page.init flags location key routeValue of
+          Route__Minimum routeValue -> case Minimum.page.init flags location key routeValue Nothing of
                 (initialModel, initialCmd) ->
                     ( Model
                         { route = State__Minimum initialModel
                         , session = initialModel.session
                         , key = key
+                        , flags = flags
                         }
                     , Cmd.map Msg__Minimum initialCmd
                     )
                 
-          Route__NotFound routeValue -> case NotFound.page.init flags location key routeValue of
+          Route__NotFound routeValue -> case NotFound.page.init flags location key routeValue Nothing of
                 (initialModel, initialCmd) ->
                     ( Model
                         { route = State__NotFound initialModel
                         , session = initialModel.session
                         , key = key
+                        , flags = flags
                         }
                     , Cmd.map Msg__NotFound initialCmd
                     )
                 
-          Route__Preferences routeValue -> case Preferences.page.init flags location key routeValue of
+          Route__Preferences routeValue -> case Preferences.page.init flags location key routeValue Nothing of
                 (initialModel, initialCmd) ->
                     ( Model
                         { route = State__Preferences initialModel
                         , session = initialModel.session
                         , key = key
+                        , flags = flags
                         }
                     , Cmd.map Msg__Preferences initialCmd
                     )
                 
-          Route__Time routeValue -> case Time.page.init flags location key routeValue of
+          Route__Time routeValue -> case Time.page.init flags location key routeValue Nothing of
                 (initialModel, initialCmd) ->
                     ( Model
                         { route = State__Time initialModel
                         , session = initialModel.session
                         , key = key
+                        , flags = flags
                         }
                     , Cmd.map Msg__Time initialCmd
                     )
                 
-          Route__Top routeValue -> case Top.page.init flags location key routeValue of
+          Route__Top routeValue -> case Top.page.init flags location key routeValue Nothing of
                 (initialModel, initialCmd) ->
                     ( Model
                         { route = State__Top initialModel
                         , session = initialModel.session
                         , key = key
+                        , flags = flags
                         }
                     , Cmd.map Msg__Top initialCmd
                     )
                 
-          Route__URLParsing routeValue -> case URLParsing.page.init flags location key routeValue of
+          Route__URLParsing routeValue -> case URLParsing.page.init flags location key routeValue Nothing of
                 (initialModel, initialCmd) ->
                     ( Model
                         { route = State__URLParsing initialModel
                         , session = initialModel.session
                         , key = key
+                        , flags = flags
                         }
                     , Cmd.map Msg__URLParsing initialCmd
                     )

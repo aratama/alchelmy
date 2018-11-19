@@ -30,14 +30,14 @@ route =
     s "url-parsing" </> int
 
 
-init : Flags -> Url -> Key -> Route -> ( Model, Cmd Msg )
-init _ location key id =
-    ( { session = initial, id = id, location = location }, requestThemeFromLocalStorage () )
+init : Flags -> Url -> Key -> Route -> Maybe Session -> ( Model, Cmd Msg )
+init _ location key id maybeSession =
+    case maybeSession of
+        Nothing ->
+            ( { session = initial, id = id, location = location }, requestThemeFromLocalStorage () )
 
-
-navigated : Url -> Route -> Session -> ( Model, Cmd Msg )
-navigated location id session =
-    ( { session = session, id = id, location = location }, Cmd.none )
+        Just session ->
+            ( { session = session, id = id, location = location }, Cmd.none )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -70,7 +70,6 @@ page : Root.Page Model Msg Route a
 page =
     { route = route
     , init = init
-    , navigated = navigated
     , view = view
     , update = update
     , subscriptions = subscriptions

@@ -16,7 +16,7 @@ module """ <> application <> """.Alchelmy exposing (Model, Msg, program)
 import Browser exposing (Document, UrlRequest(..), application)
 import Browser.Navigation exposing (Key, load, pushUrl)
 import Html as Html exposing (Html, text)
-import Maybe as Maybe
+import Maybe as Maybe exposing (Maybe(..))
 import Url exposing (Url)
 import Url.Parser as UrlParser exposing (s, oneOf, Parser, parse, (</>))
 import """ <> application <> """.Root as Root
@@ -26,6 +26,7 @@ type Model = Model
   { route : RouteState
   , session : Root.Session
   , key : Key
+  , flags : Root.Flags
   }
 
 type Route
@@ -63,7 +64,7 @@ update msg (Model model) =
       case route of
 
 """ <> joinWith "\n" (map (\page -> "        Route__" <> page <> """ routeValue ->
-          case """ <> page <> """.page.navigated location routeValue model.session of
+          case """ <> page <> """.page.init model.flags location model.key routeValue (Just model.session) of
             (initialModel, initialCmd) ->
               ( Model { model | route = State__""" <> page <> """ initialModel }
               , Cmd.map Msg__""" <> page <> """ initialCmd
@@ -117,12 +118,13 @@ init flags location key =
 
 """ <> joinWith "\n" (map (\page ->
 
-"          Route__" <> page <> " routeValue -> case " <> page <> """.page.init flags location key routeValue of
+"          Route__" <> page <> " routeValue -> case " <> page <> """.page.init flags location key routeValue Nothing of
                 (initialModel, initialCmd) ->
                     ( Model
                         { route = State__""" <> page <> """ initialModel
                         , session = initialModel.session
                         , key = key
+                        , flags = flags
                         }
                     , Cmd.map Msg__""" <> page <> """ initialCmd
                     )

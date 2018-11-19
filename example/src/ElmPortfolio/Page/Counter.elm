@@ -53,18 +53,14 @@ route =
 -- an `init` function initializes the local state of the page with `Url`, `Route` and the global state.
 
 
-init : Flags -> Url -> Key -> Route -> ( Model, Cmd Msg )
-init _ _ _ _ =
-    ( { session = initial, count = 0 }, requestThemeFromLocalStorage () )
+init : Flags -> Url -> Key -> Route -> Maybe Session -> ( Model, Cmd Msg )
+init _ _ _ _ maybeSession =
+    case maybeSession of
+        Nothing ->
+            ( { session = initial, count = 0 }, requestThemeFromLocalStorage () )
 
-
-
--- an `navigated` function is called when the browser moved to the page.
-
-
-navigated : Url -> Route -> Session -> ( Model, Cmd Msg )
-navigated _ _ session =
-    ( { session = session, count = 0 }, Cmd.none )
+        Just session ->
+            ( { session = session, count = 0 }, Cmd.none )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -104,7 +100,6 @@ page : Root.Page Model Msg Route a
 page =
     { route = route
     , init = init
-    , navigated = navigated
     , view = view
     , update = update
     , subscriptions = subscriptions

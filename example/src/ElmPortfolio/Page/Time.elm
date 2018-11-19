@@ -33,19 +33,19 @@ route =
     map {} (s "time")
 
 
-init : Flags -> Url -> Key -> Route -> ( Model, Cmd Msg )
-init _ _ _ _ =
-    ( { session = initial, posix = millisToPosix 0 }, requestThemeFromLocalStorage () )
+init : Flags -> Url -> Key -> Route -> Maybe Session -> ( Model, Cmd Msg )
+init _ _ _ _ maybeSession =
+    case maybeSession of
+        Nothing ->
+            ( { session = initial, posix = millisToPosix 0 }, requestThemeFromLocalStorage () )
 
-
-navigated : Url -> Route -> Session -> ( Model, Cmd Msg )
-navigated _ _ session =
-    ( { session = session, posix = millisToPosix 0 }
-      -- Mysterious bug workaround
-      -- Originally, you can put just `Cmd.none`, however in the case the timer will not work.
-      -- If you remove `route` in the routing, it work. Extremely confusing.
-    , requestThemeFromLocalStorage ()
-    )
+        Just session ->
+            ( { session = session, posix = millisToPosix 0 }
+              -- Mysterious bug workaround
+              -- Originally, you can put just `Cmd.none`, however in the case the timer will not work.
+              -- If you remove `route` in the routing, it work. Extremely confusing.
+            , requestThemeFromLocalStorage ()
+            )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -96,7 +96,6 @@ page : Root.Page Model Msg Route a
 page =
     { route = route
     , init = init
-    , navigated = navigated
     , view = view
     , update = update
     , subscriptions = subscriptions

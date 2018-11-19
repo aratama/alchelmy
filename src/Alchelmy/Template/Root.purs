@@ -8,6 +8,7 @@ module """ <> application <> """.Root exposing (..)
 
 import Browser exposing (Document)
 import Browser.Navigation exposing (Key)
+import Maybe exposing (Maybe)
 import Url exposing (Url)
 import Url.Parser exposing (Parser)
 
@@ -26,12 +27,11 @@ initial = {}
 
 
 type alias Page a route model msg =
-    { init : Flags -> Url -> Key -> route -> ( { model | session : Session }, Cmd msg )
+    { init : Flags -> Url -> Key -> route -> Maybe Session -> ( { model | session : Session }, Cmd msg )
     , view : { model | session : Session } -> Document msg
     , update : msg -> { model | session : Session } -> ( { model | session : Session }, Cmd msg )
     , subscriptions : { model | session : Session } -> Sub msg
     , route : Parser (route -> a) a
-    , navigated : Url -> route -> Session -> ( { model | session : Session }, Cmd msg )
     }
 
 """

@@ -34,14 +34,14 @@ route =
     map () (s "http")
 
 
-init : Flags -> Url -> Key -> Route -> ( Model, Cmd Msg )
-init _ _ _ _ =
-    ( Model initial "waiting.gif", requestThemeFromLocalStorage () )
+init : Flags -> Url -> Key -> Route -> Maybe Session -> ( Model, Cmd Msg )
+init _ _ _ _ maybeSession =
+    case maybeSession of
+        Nothing ->
+            ( Model initial "waiting.gif", requestThemeFromLocalStorage () )
 
-
-navigated : Url -> Route -> Session -> ( Model, Cmd Msg )
-navigated location _ session =
-    ( Model session "waiting.gif", getRandomGif session.topic )
+        Just session ->
+            ( Model session "waiting.gif", getRandomGif session.topic )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -108,7 +108,6 @@ page : Root.Page Model Msg Route a
 page =
     { route = route
     , init = init
-    , navigated = navigated
     , view = view
     , update = update
     , subscriptions = subscriptions

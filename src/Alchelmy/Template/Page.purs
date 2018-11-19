@@ -15,6 +15,7 @@ module """ <> application <> """.Page.""" <> pageName <> """ exposing (Route, Mo
 import Browser exposing (Document)
 import Browser.Navigation exposing (Key)
 import Html exposing (text, h1)
+import Maybe exposing (Maybe)
 import Url exposing (Url)
 import Url.Parser exposing (Parser, map, """ <> (case routing of
   RouteToPageName ->
@@ -48,13 +49,10 @@ route =
               "custom \"NOTHING\" (\\_ -> Nothing)") <> """
 
 
-init : Flags -> Url -> Key -> Route -> ( Model, Cmd Msg )
-init _ _ _ _
-  = ( { session = Root.initial }, Cmd.none )
+init : Flags -> Url -> Key -> Route -> Maybe Session -> ( Model, Cmd Msg )
+init _ _ _ _ session
+  = ( { session = Maybe.withDefault Root.initial session }, Cmd.none )
 
-navigated : Url -> Route -> Session -> ( Model, Cmd Msg )
-navigated _ _ session
-  = ( { session = session }, Cmd.none )
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model
@@ -77,7 +75,6 @@ page : Root.Page a Route Model Msg
 page =
   { route = route
   , init = init
-  , navigated = navigated
   , view = view
   , update = update
   , subscriptions = subscriptions
