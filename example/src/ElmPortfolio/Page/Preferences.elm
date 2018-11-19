@@ -3,7 +3,7 @@ module ElmPortfolio.Page.Preferences exposing (Model, Msg, Route, page, route)
 import Browser exposing (Document)
 import Browser.Navigation exposing (Key, pushUrl)
 import ElmPortfolio.Ports exposing (receiveThemeFromLocalStorage, requestThemeFromLocalStorage, saveThemeToLocalStorage)
-import ElmPortfolio.Root as Root exposing (Flags, Session, initial, link, updateTopic)
+import ElmPortfolio.Root as Root exposing (Flags, Session, SessionMsg(..), initial, link, sessionOnUrlRequest, sessionUpdate, updateTopic)
 import Html exposing (Html, a, button, div, h1, img, input, p, text)
 import Html.Attributes exposing (class, href, src, type_, value)
 import Html.Events exposing (custom, onClick, onInput)
@@ -11,9 +11,12 @@ import Url exposing (Url)
 import Url.Parser as UrlParser exposing ((</>), Parser, map, s)
 
 
-type Msg
-    = ReceiveThemeFromLocalStorage (Maybe String)
-    | InputUserName String
+type alias Msg =
+    SessionMsg PageMsg
+
+
+type PageMsg
+    = InputUserName String
     | SaveUserName
 
 
@@ -43,26 +46,21 @@ init _ _ _ _ maybeSession =
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
-    case msg of
-        ReceiveThemeFromLocalStorage topic ->
-            let
-                model_ =
-                    updateTopic model topic
-            in
-            ( { model_ | value = model_.session.topic }, Cmd.none )
+update =
+    sessionUpdate <|
+        \msg model ->
+            case msg of
+                InputUserName str ->
+                    ( { model | value = str }, Cmd.none )
 
-        InputUserName str ->
-            ( { model | value = str }, Cmd.none )
-
-        SaveUserName ->
-            let
-                session =
-                    model.session
-            in
-            ( { model | session = { session | topic = model.value } }
-            , saveThemeToLocalStorage model.value
-            )
+                SaveUserName ->
+                    let
+                        session =
+                            model.session
+                    in
+                    ( { model | session = { session | topic = model.value } }
+                    , saveThemeToLocalStorage model.value
+                    )
 
 
 subscriptions : Model -> Sub Msg
@@ -75,11 +73,12 @@ view model =
     { title = "Preference - ElmPortfolio"
     , body =
         [ Root.view model.session <|
-            div [ class "page-preferences container" ]
-                [ h1 [] [ text "Preferences" ]
-                , p [] [ text "Theme: ", input [ type_ "text", onInput InputUserName, value model.value ] [] ]
-                , p [] [ button [ onClick SaveUserName ] [ text "Save" ] ]
-                ]
+            Html.map PageMsg <|
+                div [ class "page-preferences container" ]
+                    [ h1 [] [ text "Preferences" ]
+                    , p [] [ text "Theme: ", input [ type_ "text", onInput InputUserName, value model.value ] [] ]
+                    , p [] [ button [ onClick SaveUserName ] [ text "Save" ] ]
+                    ]
         ]
     }
 
@@ -91,4 +90,5 @@ page =
     , view = view
     , update = update
     , subscriptions = subscriptions
+    , onUrlRequest = sessionOnUrlRequest
     }

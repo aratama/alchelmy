@@ -10,6 +10,7 @@
     "test": "npm run build",
     "inspect": "node --experimental-modules --inspect-brk ../src/alchelmy.mjs update",
     "build": "node ../bin/alchelmy.js update && elm-app build",
+    "rebuild": "cd .. && npm run build && cd example && node ../bin/alchelmy.js update && elm-app build",
     "new": "node ../bin/alchelmy.js new Minimum",
     "clean": "rimraf src/ElmPortfolio/Alchelmy.elm src/ElmPortfolio/alchelmy.js elm-stuff tests/elm-stuff",
     "main": "elm-app start"

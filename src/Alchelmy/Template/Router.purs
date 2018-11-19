@@ -45,32 +45,54 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg (Model model) =
   case msg of
     UrlRequest urlRequest ->
-      case urlRequest of
-        Internal url ->
-          ( Model model
-          , pushUrl model.key (Url.toString url)
-          )
+      let
+        defaultNavigation =
+          case urlRequest of
+            Internal url ->
+              ( Model model
+              , pushUrl model.key (Url.toString url)
+              )
 
-        External url ->
-          ( Model model
-          , load url
-          )
+            External url ->
+              ( Model model
+              , load url
+              )
+        in
+          case model.route of
+""" <> joinWith "\n" (map (\page -> """
+            State__""" <> page <> """ pmodel ->
+              case """ <> page <> """.page.onUrlRequest urlRequest of
+                Nothing -> defaultNavigation
+                Just onUrlRequestMsg ->
+                  case """ <> page <> """.page.update onUrlRequestMsg pmodel of
+                    (pmodel_, pcmd) ->
+                      ( Model { model | session = pmodel_.session, route = State__""" <> page <> """ pmodel_ }
+                      , Cmd.map Msg__""" <> page <> """ pcmd
+                      )
+        """
+) pages) <> """
 
     Navigate location ->
-      let
-          route =
-            parseLocation location
-      in
-      case route of
 
-""" <> joinWith "\n" (map (\page -> "        Route__" <> page <> """ routeValue ->
-          case """ <> page <> """.page.init model.flags location model.key routeValue (Just model.session) of
-            (initialModel, initialCmd) ->
-              ( Model { model | route = State__""" <> page <> """ initialModel }
-              , Cmd.map Msg__""" <> page <> """ initialCmd
-              )
+      let
+        defaultNavigation =
+            case parseLocation location of
+""" <> joinWith "\n" (map (\page_ -> """
+                Route__""" <> page_ <> """ routeValue ->
+                      case """ <> page_ <> """.page.init model.flags location model.key routeValue (Just model.session) of
+                        (initialModel, initialCmd) ->
+                          ( Model { model | session = initialModel.session, route = State__""" <> page_ <> """ initialModel }
+                          , Cmd.map Msg__""" <> page_ <> """ initialCmd
+                          )
+                """
+      ) pages) <>
+"""
+      in
+      case model.route of
+""" <> joinWith "\n" (map (\page -> """
+        State__""" <> page <> """ pmodel -> defaultNavigation
         """
-      ) pages) <> """
+) pages) <> """
 
 
 """ <> joinWith "\n" (map (\page -> """

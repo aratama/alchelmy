@@ -66,79 +66,203 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg (Model model) =
   case msg of
     UrlRequest urlRequest ->
-      case urlRequest of
-        Internal url ->
-          ( Model model
-          , pushUrl model.key (Url.toString url)
-          )
+      let
+        defaultNavigation =
+          case urlRequest of
+            Internal url ->
+              ( Model model
+              , pushUrl model.key (Url.toString url)
+              )
 
-        External url ->
-          ( Model model
-          , load url
-          )
+            External url ->
+              ( Model model
+              , load url
+              )
+        in
+          case model.route of
+
+            State__Counter pmodel ->
+              case Counter.page.onUrlRequest urlRequest of
+                Nothing -> defaultNavigation
+                Just onUrlRequestMsg ->
+                  case Counter.page.update onUrlRequestMsg pmodel of
+                    (pmodel_, pcmd) ->
+                      ( Model { model | session = pmodel_.session, route = State__Counter pmodel_ }
+                      , Cmd.map Msg__Counter pcmd
+                      )
+        
+
+            State__Http pmodel ->
+              case Http.page.onUrlRequest urlRequest of
+                Nothing -> defaultNavigation
+                Just onUrlRequestMsg ->
+                  case Http.page.update onUrlRequestMsg pmodel of
+                    (pmodel_, pcmd) ->
+                      ( Model { model | session = pmodel_.session, route = State__Http pmodel_ }
+                      , Cmd.map Msg__Http pcmd
+                      )
+        
+
+            State__Minimum pmodel ->
+              case Minimum.page.onUrlRequest urlRequest of
+                Nothing -> defaultNavigation
+                Just onUrlRequestMsg ->
+                  case Minimum.page.update onUrlRequestMsg pmodel of
+                    (pmodel_, pcmd) ->
+                      ( Model { model | session = pmodel_.session, route = State__Minimum pmodel_ }
+                      , Cmd.map Msg__Minimum pcmd
+                      )
+        
+
+            State__NotFound pmodel ->
+              case NotFound.page.onUrlRequest urlRequest of
+                Nothing -> defaultNavigation
+                Just onUrlRequestMsg ->
+                  case NotFound.page.update onUrlRequestMsg pmodel of
+                    (pmodel_, pcmd) ->
+                      ( Model { model | session = pmodel_.session, route = State__NotFound pmodel_ }
+                      , Cmd.map Msg__NotFound pcmd
+                      )
+        
+
+            State__Preferences pmodel ->
+              case Preferences.page.onUrlRequest urlRequest of
+                Nothing -> defaultNavigation
+                Just onUrlRequestMsg ->
+                  case Preferences.page.update onUrlRequestMsg pmodel of
+                    (pmodel_, pcmd) ->
+                      ( Model { model | session = pmodel_.session, route = State__Preferences pmodel_ }
+                      , Cmd.map Msg__Preferences pcmd
+                      )
+        
+
+            State__Time pmodel ->
+              case Time.page.onUrlRequest urlRequest of
+                Nothing -> defaultNavigation
+                Just onUrlRequestMsg ->
+                  case Time.page.update onUrlRequestMsg pmodel of
+                    (pmodel_, pcmd) ->
+                      ( Model { model | session = pmodel_.session, route = State__Time pmodel_ }
+                      , Cmd.map Msg__Time pcmd
+                      )
+        
+
+            State__Top pmodel ->
+              case Top.page.onUrlRequest urlRequest of
+                Nothing -> defaultNavigation
+                Just onUrlRequestMsg ->
+                  case Top.page.update onUrlRequestMsg pmodel of
+                    (pmodel_, pcmd) ->
+                      ( Model { model | session = pmodel_.session, route = State__Top pmodel_ }
+                      , Cmd.map Msg__Top pcmd
+                      )
+        
+
+            State__URLParsing pmodel ->
+              case URLParsing.page.onUrlRequest urlRequest of
+                Nothing -> defaultNavigation
+                Just onUrlRequestMsg ->
+                  case URLParsing.page.update onUrlRequestMsg pmodel of
+                    (pmodel_, pcmd) ->
+                      ( Model { model | session = pmodel_.session, route = State__URLParsing pmodel_ }
+                      , Cmd.map Msg__URLParsing pcmd
+                      )
+        
 
     Navigate location ->
-      let
-          route =
-            parseLocation location
-      in
-      case route of
 
-        Route__Counter routeValue ->
-          case Counter.page.init model.flags location model.key routeValue (Just model.session) of
-            (initialModel, initialCmd) ->
-              ( Model { model | route = State__Counter initialModel }
-              , Cmd.map Msg__Counter initialCmd
-              )
+      let
+        defaultNavigation =
+            case parseLocation location of
+
+                Route__Counter routeValue ->
+                      case Counter.page.init model.flags location model.key routeValue (Just model.session) of
+                        (initialModel, initialCmd) ->
+                          ( Model { model | session = initialModel.session, route = State__Counter initialModel }
+                          , Cmd.map Msg__Counter initialCmd
+                          )
+                
+
+                Route__Http routeValue ->
+                      case Http.page.init model.flags location model.key routeValue (Just model.session) of
+                        (initialModel, initialCmd) ->
+                          ( Model { model | session = initialModel.session, route = State__Http initialModel }
+                          , Cmd.map Msg__Http initialCmd
+                          )
+                
+
+                Route__Minimum routeValue ->
+                      case Minimum.page.init model.flags location model.key routeValue (Just model.session) of
+                        (initialModel, initialCmd) ->
+                          ( Model { model | session = initialModel.session, route = State__Minimum initialModel }
+                          , Cmd.map Msg__Minimum initialCmd
+                          )
+                
+
+                Route__NotFound routeValue ->
+                      case NotFound.page.init model.flags location model.key routeValue (Just model.session) of
+                        (initialModel, initialCmd) ->
+                          ( Model { model | session = initialModel.session, route = State__NotFound initialModel }
+                          , Cmd.map Msg__NotFound initialCmd
+                          )
+                
+
+                Route__Preferences routeValue ->
+                      case Preferences.page.init model.flags location model.key routeValue (Just model.session) of
+                        (initialModel, initialCmd) ->
+                          ( Model { model | session = initialModel.session, route = State__Preferences initialModel }
+                          , Cmd.map Msg__Preferences initialCmd
+                          )
+                
+
+                Route__Time routeValue ->
+                      case Time.page.init model.flags location model.key routeValue (Just model.session) of
+                        (initialModel, initialCmd) ->
+                          ( Model { model | session = initialModel.session, route = State__Time initialModel }
+                          , Cmd.map Msg__Time initialCmd
+                          )
+                
+
+                Route__Top routeValue ->
+                      case Top.page.init model.flags location model.key routeValue (Just model.session) of
+                        (initialModel, initialCmd) ->
+                          ( Model { model | session = initialModel.session, route = State__Top initialModel }
+                          , Cmd.map Msg__Top initialCmd
+                          )
+                
+
+                Route__URLParsing routeValue ->
+                      case URLParsing.page.init model.flags location model.key routeValue (Just model.session) of
+                        (initialModel, initialCmd) ->
+                          ( Model { model | session = initialModel.session, route = State__URLParsing initialModel }
+                          , Cmd.map Msg__URLParsing initialCmd
+                          )
+                
+      in
+      case model.route of
+
+        State__Counter pmodel -> defaultNavigation
         
-        Route__Http routeValue ->
-          case Http.page.init model.flags location model.key routeValue (Just model.session) of
-            (initialModel, initialCmd) ->
-              ( Model { model | route = State__Http initialModel }
-              , Cmd.map Msg__Http initialCmd
-              )
+
+        State__Http pmodel -> defaultNavigation
         
-        Route__Minimum routeValue ->
-          case Minimum.page.init model.flags location model.key routeValue (Just model.session) of
-            (initialModel, initialCmd) ->
-              ( Model { model | route = State__Minimum initialModel }
-              , Cmd.map Msg__Minimum initialCmd
-              )
+
+        State__Minimum pmodel -> defaultNavigation
         
-        Route__NotFound routeValue ->
-          case NotFound.page.init model.flags location model.key routeValue (Just model.session) of
-            (initialModel, initialCmd) ->
-              ( Model { model | route = State__NotFound initialModel }
-              , Cmd.map Msg__NotFound initialCmd
-              )
+
+        State__NotFound pmodel -> defaultNavigation
         
-        Route__Preferences routeValue ->
-          case Preferences.page.init model.flags location model.key routeValue (Just model.session) of
-            (initialModel, initialCmd) ->
-              ( Model { model | route = State__Preferences initialModel }
-              , Cmd.map Msg__Preferences initialCmd
-              )
+
+        State__Preferences pmodel -> defaultNavigation
         
-        Route__Time routeValue ->
-          case Time.page.init model.flags location model.key routeValue (Just model.session) of
-            (initialModel, initialCmd) ->
-              ( Model { model | route = State__Time initialModel }
-              , Cmd.map Msg__Time initialCmd
-              )
+
+        State__Time pmodel -> defaultNavigation
         
-        Route__Top routeValue ->
-          case Top.page.init model.flags location model.key routeValue (Just model.session) of
-            (initialModel, initialCmd) ->
-              ( Model { model | route = State__Top initialModel }
-              , Cmd.map Msg__Top initialCmd
-              )
+
+        State__Top pmodel -> defaultNavigation
         
-        Route__URLParsing routeValue ->
-          case URLParsing.page.init model.flags location model.key routeValue (Just model.session) of
-            (initialModel, initialCmd) ->
-              ( Model { model | route = State__URLParsing initialModel }
-              , Cmd.map Msg__URLParsing initialCmd
-              )
+
+        State__URLParsing pmodel -> defaultNavigation
         
 
 

@@ -3,15 +3,15 @@ module ElmPortfolio.Page.URLParsing exposing (Model, Msg, Route, page, route)
 import Browser exposing (Document)
 import Browser.Navigation exposing (Key)
 import ElmPortfolio.Ports exposing (receiveThemeFromLocalStorage, requestThemeFromLocalStorage)
-import ElmPortfolio.Root as Root exposing (Flags, Session, initial, link, updateTopic)
+import ElmPortfolio.Root as Root exposing (Flags, Session, SessionMsg(..), initial, link, sessionOnUrlRequest, sessionUpdate, updateTopic)
 import Html exposing (Html, a, div, h1, img, p, text)
 import Html.Attributes exposing (class, href, src)
 import Url as Url exposing (Protocol(..), Url)
 import Url.Parser as UrlParser exposing ((</>), Parser, int, map, s)
 
 
-type Msg
-    = ReceiveThemeFromLocalStorage (Maybe String)
+type alias Msg =
+    SessionMsg ()
 
 
 type alias Model =
@@ -41,10 +41,10 @@ init _ location key id maybeSession =
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
-    case msg of
-        ReceiveThemeFromLocalStorage topic ->
-            ( updateTopic model topic, Cmd.none )
+update =
+    sessionUpdate <|
+        \msg model ->
+            ( model, Cmd.none )
 
 
 subscriptions : Model -> Sub Msg
@@ -73,4 +73,5 @@ page =
     , view = view
     , update = update
     , subscriptions = subscriptions
+    , onUrlRequest = sessionOnUrlRequest
     }

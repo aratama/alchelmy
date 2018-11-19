@@ -1,9 +1,9 @@
 module ElmPortfolio.Page.Http exposing (Model, Msg, Route, page, route)
 
-import Browser exposing (Document)
+import Browser exposing (Document, UrlRequest(..))
 import Browser.Navigation exposing (Key)
 import ElmPortfolio.Ports exposing (receiveThemeFromLocalStorage, requestThemeFromLocalStorage)
-import ElmPortfolio.Root as Root exposing (Flags, Session, initial, link, updateTopic)
+import ElmPortfolio.Root as Root exposing (Flags, Session, SessionMsg(..), initial, link, sessionOnUrlRequest, sessionUpdate, updateTopic)
 import Html exposing (Html, a, br, button, div, h1, h2, img, p, text)
 import Html.Attributes exposing (class, href, src)
 import Html.Events exposing (custom, onClick)
@@ -13,9 +13,12 @@ import Url exposing (Url)
 import Url.Parser as UrlParser exposing ((</>), Parser, map, s)
 
 
-type Msg
-    = ReceiveThemeFromLocalStorage (Maybe String)
-    | MorePlease
+type alias Msg =
+    SessionMsg PageMsg
+
+
+type PageMsg
+    = MorePlease
     | NewGif (Result Http.Error String)
 
 
@@ -45,23 +48,18 @@ init _ _ _ _ maybeSession =
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
-    case msg of
-        ReceiveThemeFromLocalStorage topic ->
-            let
-                model_ =
-                    updateTopic model topic
-            in
-            ( model_, getRandomGif model_.session.topic )
+update =
+    sessionUpdate <|
+        \msg model ->
+            case msg of
+                MorePlease ->
+                    ( { model | gifUrl = "waiting.gif" }, getRandomGif model.session.topic )
 
-        MorePlease ->
-            ( { model | gifUrl = "waiting.gif" }, getRandomGif model.session.topic )
+                NewGif (Ok newUrl) ->
+                    ( { model | gifUrl = newUrl }, Cmd.none )
 
-        NewGif (Ok newUrl) ->
-            ( { model | gifUrl = newUrl }, Cmd.none )
-
-        NewGif (Err _) ->
-            ( model, Cmd.none )
+                NewGif (Err _) ->
+                    ( model, Cmd.none )
 
 
 getRandomGif : String -> Cmd Msg
@@ -70,7 +68,7 @@ getRandomGif topic =
         url =
             "https://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=" ++ topic
     in
-    Http.send NewGif (Http.get url decodeGifUrl)
+    Http.send (PageMsg << NewGif) (Http.get url decodeGifUrl)
 
 
 decodeGifUrl : Decode.Decoder String
@@ -88,18 +86,19 @@ view model =
     { title = "Http - ElmPortfolio"
     , body =
         [ Root.view model.session <|
-            div [ class "page-http container" ]
-                [ h1 [] [ text "Http" ]
-                , h2 [] [ text <| "Topic: " ++ model.session.topic ]
-                , button [ onClick MorePlease ] [ text "More Please!" ]
-                , br [] []
-                , img [ src model.gifUrl ] []
-                , p []
-                    [ text "Go to "
-                    , link "/preferences" "the preferences page"
-                    , text " to change topic."
+            Html.map PageMsg <|
+                div [ class "page-http container" ]
+                    [ h1 [] [ text "Http" ]
+                    , h2 [] [ text <| "Topic: " ++ model.session.topic ]
+                    , button [ onClick MorePlease ] [ text "More Please!" ]
+                    , br [] []
+                    , img [ src model.gifUrl ] []
+                    , p []
+                        [ text "Go to "
+                        , link "/preferences" "the preferences page"
+                        , text " to change topic."
+                        ]
                     ]
-                ]
         ]
     }
 
@@ -111,4 +110,5 @@ page =
     , view = view
     , update = update
     , subscriptions = subscriptions
+    , onUrlRequest = sessionOnUrlRequest
     }

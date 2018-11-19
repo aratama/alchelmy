@@ -27,4 +27,5 @@ page =
     , view = \_ -> { title = "Minimum - ElmPortfolio", body = [ h1 [] [ text "Minimum" ] ] }
     , update = \msg model -> ( model, Cmd.none )
     , subscriptions = always Sub.none
+    , onUrlRequest = always Nothing
     }

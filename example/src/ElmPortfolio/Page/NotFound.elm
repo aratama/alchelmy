@@ -3,7 +3,7 @@ module ElmPortfolio.Page.NotFound exposing (Model, Msg, Route, page, route)
 import Browser exposing (Document)
 import Browser.Navigation exposing (Key, pushUrl)
 import ElmPortfolio.Ports exposing (receiveThemeFromLocalStorage, requestThemeFromLocalStorage)
-import ElmPortfolio.Root as Root exposing (Flags, Session, initial, link, updateTopic)
+import ElmPortfolio.Root as Root exposing (Flags, Session, initial, link, sessionOnUrlRequest, updateTopic)
 import Html exposing (Html, a, div, h1, img, p, text)
 import Html.Attributes exposing (class, href, src)
 import Json.Decode as Decode
@@ -69,4 +69,5 @@ page =
     , view = view
     , update = update
     , subscriptions = subscriptions
+    , onUrlRequest = always Nothing
     }

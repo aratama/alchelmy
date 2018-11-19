@@ -15,7 +15,7 @@ module """ <> application <> """.Page.""" <> pageName <> """ exposing (Route, Mo
 import Browser exposing (Document)
 import Browser.Navigation exposing (Key)
 import Html exposing (text, h1)
-import Maybe exposing (Maybe)
+import Maybe exposing (Maybe(..))
 import Url exposing (Url)
 import Url.Parser exposing (Parser, map, """ <> (case routing of
   RouteToPageName ->
@@ -71,13 +71,14 @@ view model =
   }
 
 
-page : Root.Page a Route Model Msg
+page : Root.Page Model Msg Route a
 page =
   { route = route
   , init = init
   , view = view
   , update = update
   , subscriptions = subscriptions
+  , onUrlRequest = always Nothing
   }
 
 """

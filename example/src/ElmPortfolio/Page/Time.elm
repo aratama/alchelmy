@@ -3,7 +3,7 @@ module ElmPortfolio.Page.Time exposing (Model, Msg, Route, page, route)
 import Browser exposing (Document)
 import Browser.Navigation exposing (Key, pushUrl)
 import ElmPortfolio.Ports exposing (receiveThemeFromLocalStorage, requestThemeFromLocalStorage)
-import ElmPortfolio.Root as Root exposing (Flags, Session, initial, link, updateTopic)
+import ElmPortfolio.Root as Root exposing (Flags, Session, SessionMsg(..), initial, link, sessionOnUrlRequest, sessionUpdate, updateTopic)
 import Html exposing (Html, a, br, button, div, h1, h2, img, p, text)
 import Html.Attributes exposing (class, href, src)
 import Svg exposing (circle, line, svg)
@@ -13,9 +13,12 @@ import Url exposing (Url)
 import Url.Parser as UrlParser exposing ((</>), Parser, map, s)
 
 
-type Msg
-    = ReceiveThemeFromLocalStorage (Maybe String)
-    | Tick Posix
+type alias Msg =
+    SessionMsg PageMsg
+
+
+type PageMsg
+    = Tick Posix
 
 
 type alias Model =
@@ -49,19 +52,18 @@ init _ _ _ _ maybeSession =
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
-    case msg of
-        ReceiveThemeFromLocalStorage topic ->
-            ( updateTopic model topic, Cmd.none )
-
-        Tick newTime ->
-            ( { model | posix = newTime }, Cmd.none )
+update =
+    sessionUpdate <|
+        \msg model ->
+            case msg of
+                Tick newTime ->
+                    ( { model | posix = newTime }, Cmd.none )
 
 
 subscriptions : Model -> Sub Msg
 subscriptions _ =
     Sub.batch
-        [ Time.every 50 Tick
+        [ Sub.map PageMsg <| Time.every 50 Tick
         , receiveThemeFromLocalStorage ReceiveThemeFromLocalStorage
         ]
 
@@ -71,23 +73,24 @@ view model =
     { title = "Time - ElmPortfolio"
     , body =
         [ Root.view model.session <|
-            div [ class "page-a container" ]
-                [ h1 [] [ text "Time" ]
-                , let
-                    angle =
-                        turns (toFloat (toSecond utc model.posix) / 60)
+            Html.map PageMsg <|
+                div [ class "page-a container" ]
+                    [ h1 [] [ text "Time" ]
+                    , let
+                        angle =
+                            turns (toFloat (toSecond utc model.posix) / 60)
 
-                    handX =
-                        String.fromFloat (50 + 40 * cos angle)
+                        handX =
+                            String.fromFloat (50 + 40 * cos angle)
 
-                    handY =
-                        String.fromFloat (50 + 40 * sin angle)
-                  in
-                  svg [ viewBox "0 0 100 100", width "300px" ]
-                    [ circle [ cx "50", cy "50", r "45", fill "#5b91ba" ] []
-                    , line [ x1 "50", y1 "50", x2 handX, y2 handY, stroke "#023963" ] []
+                        handY =
+                            String.fromFloat (50 + 40 * sin angle)
+                      in
+                      svg [ viewBox "0 0 100 100", width "300px" ]
+                        [ circle [ cx "50", cy "50", r "45", fill "#5b91ba" ] []
+                        , line [ x1 "50", y1 "50", x2 handX, y2 handY, stroke "#023963" ] []
+                        ]
                     ]
-                ]
         ]
     }
 
@@ -99,4 +102,5 @@ page =
     , view = view
     , update = update
     , subscriptions = subscriptions
+    , onUrlRequest = always Nothing
     }

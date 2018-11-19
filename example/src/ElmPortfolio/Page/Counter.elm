@@ -1,9 +1,9 @@
 module ElmPortfolio.Page.Counter exposing (Model, Msg, Route, page, route)
 
-import Browser exposing (Document)
+import Browser exposing (Document, UrlRequest(..))
 import Browser.Navigation exposing (Key)
 import ElmPortfolio.Ports exposing (receiveThemeFromLocalStorage, requestThemeFromLocalStorage)
-import ElmPortfolio.Root as Root exposing (Flags, Session, initial, updateTopic)
+import ElmPortfolio.Root as Root exposing (Flags, Session, SessionMsg(..), initial, sessionOnUrlRequest, sessionUpdate, updateTopic)
 import Html exposing (Html, a, button, div, h1, p, text)
 import Html.Attributes exposing (class, href, src)
 import Html.Events exposing (custom, onClick)
@@ -24,9 +24,12 @@ type alias Route =
 -- `Msg` is a local message container of the page.
 
 
-type Msg
-    = ReceiveThemeFromLocalStorage (Maybe String)
-    | Increment
+type alias Msg =
+    SessionMsg PageMsg
+
+
+type PageMsg
+    = Increment
     | Decrement
 
 
@@ -64,16 +67,15 @@ init _ _ _ _ maybeSession =
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
-    case msg of
-        ReceiveThemeFromLocalStorage topic ->
-            ( updateTopic model topic, Cmd.none )
+update =
+    sessionUpdate <|
+        \msg model ->
+            case msg of
+                Increment ->
+                    ( { model | count = model.count + 1 }, Cmd.none )
 
-        Increment ->
-            ( { model | count = model.count + 1 }, Cmd.none )
-
-        Decrement ->
-            ( { model | count = model.count - 1 }, Cmd.none )
+                Decrement ->
+                    ( { model | count = model.count - 1 }, Cmd.none )
 
 
 subscriptions : Model -> Sub Msg
@@ -86,12 +88,13 @@ view model =
     { title = "Counter - ElmPortfolio"
     , body =
         [ Root.view model.session <|
-            div [ class "page-counter container" ]
-                [ h1 [] [ text "Counter" ]
-                , p [] [ button [ onClick Decrement ] [ text "-" ] ]
-                , p [] [ div [] [ text (String.fromInt model.count) ] ]
-                , p [] [ button [ onClick Increment ] [ text "+" ] ]
-                ]
+            Html.map PageMsg <|
+                div [ class "page-counter container" ]
+                    [ h1 [] [ text "Counter" ]
+                    , p [] [ button [ onClick Decrement ] [ text "-" ] ]
+                    , p [] [ div [] [ text (String.fromInt model.count) ] ]
+                    , p [] [ button [ onClick Increment ] [ text "+" ] ]
+                    ]
         ]
     }
 
@@ -103,4 +106,5 @@ page =
     , view = view
     , update = update
     , subscriptions = subscriptions
+    , onUrlRequest = sessionOnUrlRequest
     }
