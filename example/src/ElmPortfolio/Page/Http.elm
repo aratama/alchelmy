@@ -1,6 +1,7 @@
 module ElmPortfolio.Page.Http exposing (Model, Msg, Route, page, route)
 
 import Browser exposing (Document)
+import Browser.Navigation exposing (Key)
 import ElmPortfolio.Ports exposing (receiveThemeFromLocalStorage, requestThemeFromLocalStorage)
 import ElmPortfolio.Root as Root exposing (Flags, Session, initial, link, updateTopic)
 import Html exposing (Html, a, br, button, div, h1, h2, img, p, text)
@@ -33,8 +34,8 @@ route =
     map () (s "http")
 
 
-init : Flags -> Url -> Route -> ( Model, Cmd Msg )
-init _ _ _ =
+init : Flags -> Url -> Key -> Route -> ( Model, Cmd Msg )
+init _ _ _ _ =
     ( Model initial "waiting.gif", requestThemeFromLocalStorage () )
 
 

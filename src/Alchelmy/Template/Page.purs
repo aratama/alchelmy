@@ -48,8 +48,8 @@ route =
               "custom \"NOTHING\" (\\_ -> Nothing)") <> """
 
 
-init : Flags -> Url -> Route -> ( Model, Cmd Msg )
-init _ _ _
+init : Flags -> Url -> Key -> Route -> ( Model, Cmd Msg )
+init _ _ _ _
   = ( { session = Root.initial }, Cmd.none )
 
 navigated : Url -> Route -> Session -> ( Model, Cmd Msg )

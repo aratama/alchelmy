@@ -26,7 +26,7 @@ initial = {}
 
 
 type alias Page a route model msg =
-    { init : Flags -> Url -> route -> ( { model | session : Session }, Cmd msg )
+    { init : Flags -> Url -> Key -> route -> ( { model | session : Session }, Cmd msg )
     , view : { model | session : Session } -> Document msg
     , update : msg -> { model | session : Session } -> ( { model | session : Session }, Cmd msg )
     , subscriptions : { model | session : Session } -> Sub msg

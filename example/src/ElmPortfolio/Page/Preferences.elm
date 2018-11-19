@@ -1,7 +1,7 @@
 module ElmPortfolio.Page.Preferences exposing (Model, Msg, Route, page, route)
 
 import Browser exposing (Document)
-import Browser.Navigation exposing (pushUrl)
+import Browser.Navigation exposing (Key, pushUrl)
 import ElmPortfolio.Ports exposing (receiveThemeFromLocalStorage, requestThemeFromLocalStorage, saveThemeToLocalStorage)
 import ElmPortfolio.Root as Root exposing (Flags, Session, initial, link, updateTopic)
 import Html exposing (Html, a, button, div, h1, img, input, p, text)
@@ -32,8 +32,8 @@ route =
     map {} (s "preferences")
 
 
-init : Flags -> Url -> Route -> ( Model, Cmd Msg )
-init _ _ _ =
+init : Flags -> Url -> Key -> Route -> ( Model, Cmd Msg )
+init _ _ _ _ =
     ( { session = initial, value = initial.topic }, requestThemeFromLocalStorage () )
 
 

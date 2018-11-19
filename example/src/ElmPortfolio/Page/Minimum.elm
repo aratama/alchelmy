@@ -23,7 +23,7 @@ type alias Route =
 page : Root.Page Model Msg Route a
 page =
     { route = map () (s "minimum")
-    , init = \_ _ _ -> ( { session = initial }, Cmd.none )
+    , init = \_ _ _ _ -> ( { session = initial }, Cmd.none )
     , navigated = \_ _ session -> ( { session = session }, Cmd.none )
     , view = \_ -> { title = "Minimum - ElmPortfolio", body = [ h1 [] [ text "Minimum" ] ] }
     , update = \msg model -> ( model, Cmd.none )
