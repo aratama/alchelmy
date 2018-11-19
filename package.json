@@ -1,6 +1,6 @@
 {
   "name": "alchelmy",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "",
   "bin": "./bin/index.js",
   "directories": {
