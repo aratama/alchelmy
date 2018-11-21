@@ -123,4 +123,6 @@ button:hover {
 
 .dialog .lower button {
     margin: 0.5rem;
+    color: white;
+    background-color: dimgray;
 }

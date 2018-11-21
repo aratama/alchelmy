@@ -1,6 +1,6 @@
-module Main exposing (..)
+module Main exposing (main)
 
-import TestProject.Alchelmy as Alchelmy exposing (Model, Msg)
+import Alchelmy exposing (Model, Msg)
 
 
 main : Program () Model Msg

@@ -9,7 +9,8 @@ bracket :: String -> String
 bracket str = "\"" <> str <> "\""
 
 renderBlankPage :: String -> String -> Routing -> String
-renderBlankPage application pageName routing = """
+renderBlankPage application pageName routing = """-- alchelmy page
+
 module """ <> application <> """.Page.""" <> pageName <> """ exposing (Route, Model, Msg, route, page)
 
 import Browser exposing (Document)

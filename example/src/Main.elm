@@ -1,7 +1,8 @@
-module Main exposing (..)
+module Main exposing (main)
 
-import ElmPortfolio.Alchelmy as Alchelmy exposing (Model, Msg, program)
+import Alchelmy exposing (Model, Msg, program)
 
 
 main : Program () Model Msg
-main = program
+main =
+    program

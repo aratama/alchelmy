@@ -1,67 +1,84 @@
-module Alchelmy where 
+module Alchelmy where
 
 import Alchelmy.Template.Page (renderBlankPage, Routing(..))
 import Alchelmy.Template.Root (renderRoot)
 import Alchelmy.Template.Router (renderRouter)
 import Alchelmy.Template.Style (renderStyle)
 import Control.Monad.Error.Class (throwError, try)
-import Data.Array (catMaybes, drop, null)
+import Data.Array (catMaybes, drop, null, filterA, head)
 import Data.Either (Either(..))
 import Data.Maybe (Maybe(..))
-import Data.String (joinWith)
+import Data.String (Pattern(..), joinWith, indexOf, split)
 import Data.String.Regex (regex, test)
 import Data.String.Regex.Flags (noFlags)
-import Data.Traversable (for)
+
+import Data.Traversable (for, for_)
 import Effect (Effect)
 import Effect.Aff (Aff, error, launchAff_, makeAff, nonCanceler)
 import Effect.Class (liftEffect)
-import Effect.Class.Console (log)
+import Effect.Class.Console (log, logShow)
 import Effect.Console (error) as Console
 import Effect.Exception (Error, throw)
 import Node.Buffer (fromString)
 import Node.Encoding (Encoding(..))
-import Node.FS.Aff (exists, mkdir, readdir, stat, writeFile)
+import Node.FS.Aff (exists, mkdir, readdir, stat, writeFile, readTextFile)
 import Node.FS.Stats (isDirectory)
-import Node.Path (FilePath, basenameWithoutExt, resolve)
+import Node.Path (FilePath, basenameWithoutExt, resolve, relative, sep, dirname)
 import Node.Process (argv, exit)
-import Prelude (Unit, bind, discard, flip, map, not, pure, void, when, ($), (<$>), (<>))
+import Prelude (Unit, bind, discard, flip, map, not, pure, void, when, ($), (<$>), (<>), (==))
 
-foreign import globEffect :: (Error -> Effect Unit) -> (Array FilePath -> Effect Unit) -> String -> Effect (Array FilePath) 
+foreign import globEffect :: (Error -> Effect Unit) -> (Array FilePath -> Effect Unit) -> String -> Effect (Array FilePath)
+
+magic :: String
+magic = "-- alchelmy page"
+
+rootMagic :: String
+rootMagic = "-- alchelmy root page"
 
 glob :: String -> Aff (Array FilePath)
-glob pattern = makeAff \resolve -> do 
+glob pattern = makeAff \resolve -> do
     results <- globEffect (\err -> resolve (Left err)) (\results -> resolve (Right results)) pattern
-    pure nonCanceler 
+    pure nonCanceler
 
-createApplication :: String -> Aff Unit 
-createApplication application = do  
+createApplication :: String -> Aff Unit
+createApplication application = do
     dir <- liftEffect (resolve ["src"] application)
     exists <- exists dir
-    if exists 
+    if exists
         then
             throwError (error $ "Directory " <> application <> " already exists.")
-        else case flip test application <$> regex "[A-Z][a-zA-Z0-9_]*" noFlags of  
+        else case flip test application <$> regex "[A-Z][a-zA-Z0-9_]*" noFlags of
             Left err -> throwError (error $ "Invalid Regexp")
-            Right true -> ensureDir dir 
+            Right true -> ensureDir dir
             Right false -> throwError (error $ application <> " is not a valid package name.")
 
 ensureDir :: FilePath -> Aff Unit
 ensureDir dir = void (try (mkdir dir))
 
 generateRouter :: Array String -> Aff Unit
-generateRouter argv = do 
+generateRouter argv = do
     -- create root Type.elm, Update.elm and View.elm
     application <- getApplicationName
 
-    rootPath <- liftEffect $ resolve ["src", application] "Root.elm"
-    rootExists <- exists rootPath
+    let srcDir = "./src/"
+    rootGlobDir <- liftEffect $ resolve [srcDir] "**/Root.elm"
+    rootElmFiles <- glob rootGlobDir
+    roots <- filterA (\file -> (\src -> indexOf (Pattern rootMagic) src == Just 0) <$> readTextFile UTF8 file) rootElmFiles
+    rootPath <- case head roots of
+        Nothing -> do
+            log $ "Generating " <> application <> "/Root.elm"
+            path <- liftEffect $ resolve [".", "src", application] "Root.elm"
+            rootExists <- exists path
+            if rootExists 
+                then do
+                    liftEffect $ throw "Root.elm already exists"
+                else do 
+                    rootBuffer <- liftEffect $ fromString (renderRoot application) UTF8
+                    writeFile path rootBuffer
+                    pure path
+        Just root -> do
+            pure root
 
-    when (not rootExists) do 
-        log $ "Generating " <> application <> "/Root.elm"    
-        path <- liftEffect $ resolve [".", "src", application] "Root.elm"
-        rootBuffer <- liftEffect $ fromString (renderRoot application) UTF8
-        writeFile path rootBuffer
-        
     -- generate NoutFound page
     notFoundExists <- pageExists "NotFound"
     when (not notFoundExists) do
@@ -73,20 +90,32 @@ generateRouter argv = do
         generateNewPage "Top" RouteToTop
 
     -- get page names
-    pageFiles <- glob $ "./src/" <> application <> "/Page/*.elm"
+    -- pageFiles <- glob $ "./src/" <> application <> "/Page/*.elm"
+
+    globDir <- liftEffect $ resolve [srcDir] "**/*.elm"
+    elmFiles <- glob globDir
+    pageFiles <- filterA (\file -> (\src -> indexOf (Pattern magic) src == Just 0) <$> readTextFile UTF8 file) elmFiles
+    pageModuleNames <- for pageFiles \file -> do
+        path <- liftEffect $ resolve [dirname file] (basenameWithoutExt file ".elm")
+        pure $ joinWith "." (split (Pattern sep) (relative srcDir path))
+
+    for_ pageModuleNames \file -> do
+        log $ "Found module: " <> file
+
     let pages = map (\p -> basenameWithoutExt p ".elm") pageFiles
     when (null pages) do
-        liftEffect $ throw "Pege not found."
+        liftEffect $ throw "Page not found."
 
     -- generate <application>.Alchelmy.elm
-    log $ "Generating ./src/" <> application <> "/Alchelmy.elm for "<> joinWith ", " pages <> "..."
-    sourceBuffer <- liftEffect $ fromString (renderRouter application pages) UTF8
-    writeFile ("./src/" <> application <> "/Alchelmy.elm") sourceBuffer
+    sourceBuffer <- liftEffect $ fromString (renderRouter application pageModuleNames) UTF8
+    generatedElmPath <- liftEffect $ resolve [srcDir] "Alchelmy.elm"
+    log $ "Generating " <> generatedElmPath <> " ..."
+    writeFile generatedElmPath sourceBuffer
 
     -- generate alchelmy.js
-    log $ "Generating ./src/" <> application <> "/alchelmy.js..."    
-    stylePath <- liftEffect $ resolve ["./src/", application] "alchelmy.js"
-    styleRendered <- renderStyle application pages
+    stylePath <- liftEffect $ resolve [srcDir] "alchelmy.js"
+    log $ "Generating " <> stylePath <> "..."
+    styleRendered <- renderStyle application pageModuleNames
     styleBuffer <- liftEffect $ fromString styleRendered UTF8
     writeFile stylePath styleBuffer
 
@@ -94,105 +123,105 @@ generateRouter argv = do
 
 
 getApplicationName :: Aff String
-getApplicationName = do 
-        
+getApplicationName = do
+
     filesInRoot <- readdir "./src"
-    
-    dirsWithNull <- for filesInRoot \file -> do 
+
+    dirsWithNull <- for filesInRoot \file -> do
         path <- liftEffect $ resolve ["./src/"] file
         stat <-  stat path
         pure if isDirectory stat then Just file else Nothing
-        
+
     let dirs = catMaybes dirsWithNull
 
-    case dirs of 
+    case dirs of
         [application] -> pure application
         _ -> throwError $ error "Cannot decide the application name. Too many directory or no directory in src directory. "
 
 main :: Effect Unit
 main = do
     args <- argv
-    case drop 2 args of 
+    case drop 2 args of
 
-        ["init", applicationName] -> launchAff_ do 
-            createApplication applicationName 
+        ["init", applicationName] -> launchAff_ do
+            createApplication applicationName
             generateRouter args
 
-        ["new", pageName] -> do 
+        ["new", pageName] -> do
             if validatePageName pageName
-                then launchAff_ do  
+                then launchAff_ do
                     generateNewPage pageName RouteToPageName
-                    generateRouter args 
+                    generateRouter args
 
-                else do  
+                else do
                     Console.error $ "Invalid page name: " <> pageName <> ". An page name must be an valid Elm module name."
-                    exit 1 
+                    exit 1
 
 
 
-        ["update"] -> launchAff_ do 
+        ["update"] -> launchAff_ do
             generateRouter args
 
-        [] -> log usage 
+        [] -> log usage
 
-        ["init"] -> log usage     
+        ["init"] -> log usage
 
-        ["new"] -> log usage     
+        ["new"] -> log usage
 
         ["--help"] -> log usage
 
         ["-h"] -> log usage
 
-        command -> do 
-            Console.error $ "[ERROR] Unknown sub command: " <> joinWith " " command  
-            exit 1 
+        command -> do
+            Console.error $ "[ERROR] Unknown sub command: " <> joinWith " " command
+            exit 1
 
 usage :: String
 usage = """
-Usage: 
+Usage:
 
   alchelmy init <application>
 
-    Create new application. 
+    Create new application.
 
-  alchelmy update    
+  alchelmy update
 
     (Re)Generate Alchemy.elm, alchemy.js
 
-  alchelmy new <name>      
+  alchelmy new <name>
 
     Create new page named <name>. <name> must be an valid module name.
 """
 
-validatePageName :: String -> Boolean 
-validatePageName pageName = case flip test pageName <$> regex "[A-Z][a-zA-Z0-9_]*" noFlags of  
+validatePageName :: String -> Boolean
+validatePageName pageName = case flip test pageName <$> regex "[A-Z][a-zA-Z0-9_]*" noFlags of
     Left err -> false
-    Right result -> result 
+    Right result -> result
 
 pageExists :: String -> Aff Boolean
-pageExists pageName = do    
+pageExists pageName = do
     if validatePageName pageName
-        then do 
+        then do
             application <- getApplicationName
             path <- liftEffect $ resolve ["./src/", application, "Page"] (pageName <> ".elm")
             exists path
-        else         
+        else
             throwError $ error $ "Invalid page name: " <> pageName <> ". An page name must be an valid Elm module name."
 
 generateNewPage :: String -> Routing -> Aff Unit
-generateNewPage pageName routing = do 
+generateNewPage pageName routing = do
 
-  if validatePageName pageName 
-    then do 
+  if validatePageName pageName
+    then do
         log $ "Generating new page: " <> pageName
         application <- getApplicationName
         log $ "Application found: " <> application
         exists <- pageExists pageName
         if exists
-            then liftEffect do 
+            then liftEffect do
                 Console.error $ "[Error] Page module '" <> pageName <> "' already exists."
                 exit 1
-            else do 
+            else do
                 dir <- liftEffect $ resolve ["./src/", application] "Page"
                 ensureDir dir
                 cssPath <- liftEffect $ resolve [dir] (pageName <> ".css")
@@ -201,6 +230,6 @@ generateNewPage pageName routing = do
                 elmPath <- liftEffect $ resolve [dir] (pageName <> ".elm")
                 elmBuffer <- liftEffect $ fromString (renderBlankPage application pageName routing) UTF8
                 writeFile elmPath elmBuffer
-                
+
     else do
         throwError $ error $ "Invalid page name: " <> pageName <> ". An page name must be an valid Elm module name."

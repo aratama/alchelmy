@@ -3686,7 +3686,7 @@ var PS = {};
   var renderBlankPage = function (application) {
       return function (pageName) {
           return function (routing) {
-              return "\x0amodule " + (application + (".Page." + (pageName + (" exposing (Route, Model, Msg, route, page)\x0a\x0aimport Browser exposing (Document)\x0aimport Browser.Navigation exposing (Key)\x0aimport Html exposing (text, h1)\x0aimport Maybe exposing (Maybe(..))\x0aimport Url exposing (Url)\x0aimport Url.Parser exposing (Parser, map, " + ((function () {
+              return "-- alchelmy page\x0a\x0amodule " + (application + (".Page." + (pageName + (" exposing (Route, Model, Msg, route, page)\x0a\x0aimport Browser exposing (Document)\x0aimport Browser.Navigation exposing (Key)\x0aimport Html exposing (text, h1)\x0aimport Maybe exposing (Maybe(..))\x0aimport Url exposing (Url)\x0aimport Url.Parser exposing (Parser, map, " + ((function () {
                   if (routing instanceof RouteToPageName) {
                       return "s ";
                   };
@@ -3696,7 +3696,7 @@ var PS = {};
                   if (routing instanceof RouteToNothing) {
                       return "custom";
                   };
-                  throw new Error("Failed pattern match at Alchelmy.Template.Page line 20, column 50 - line 26, column 13: " + [ routing.constructor.name ]);
+                  throw new Error("Failed pattern match at Alchelmy.Template.Page line 21, column 50 - line 27, column 13: " + [ routing.constructor.name ]);
               })() + (")\x0aimport " + (application + (".Root as Root exposing (Flags, Session)\x0a\x0atype Msg\x0a  = NoOp\x0a\x0a\x0atype alias Model\x0a  = { session : Session }\x0a\x0a\x0atype alias Route\x0a  = ()\x0a\x0a\x0aroute : Parser (Route -> a) a\x0aroute =\x0a  " + ((function () {
                   if (routing instanceof RouteToPageName) {
                       return "map () (s " + (bracket(Data_String_Common.toLower(pageName)) + ")");
@@ -3707,7 +3707,7 @@ var PS = {};
                   if (routing instanceof RouteToNothing) {
                       return "custom \"NOTHING\" (\\_ -> Nothing)";
                   };
-                  throw new Error("Failed pattern match at Alchelmy.Template.Page line 43, column 11 - line 49, column 52: " + [ routing.constructor.name ]);
+                  throw new Error("Failed pattern match at Alchelmy.Template.Page line 44, column 11 - line 50, column 52: " + [ routing.constructor.name ]);
               })() + ("\x0a\x0a\x0ainit : Flags -> Url -> Key -> Route -> Maybe Session -> ( Model, Cmd Msg )\x0ainit _ _ _ _ session\x0a  = ( { session = Maybe.withDefault Root.initial session }, Cmd.none )\x0a\x0a\x0aupdate : Msg -> Model -> ( Model, Cmd Msg )\x0aupdate msg model\x0a  = ( model, Cmd.none )\x0a\x0a\x0asubscriptions : Model -> Sub Msg\x0asubscriptions _\x0a  = Sub.none\x0a\x0a\x0aview : Model -> Document Msg\x0aview model =\x0a  { title = " + (bracket(pageName + (" - " + application)) + ("\x0a  , body = [ h1 [] [text " + (bracket(pageName) + "] ]\x0a  }\x0a\x0a\x0apage : Root.Page Model Msg Route a\x0apage =\x0a  { route = route\x0a  , init = init\x0a  , view = view\x0a  , update = update\x0a  , subscriptions = subscriptions\x0a  , onUrlRequest = always Nothing\x0a  }\x0a\x0a")))))))))))));
           };
       };
@@ -3723,7 +3723,7 @@ var PS = {};
   "use strict";
   var Data_Semigroup = PS["Data.Semigroup"];                 
   var renderRoot = function (application) {
-      return "\x0amodule " + (application + ".Root exposing (..)\x0a\x0aimport Browser exposing (Document, UrlRequest(..))\x0aimport Browser.Navigation exposing (Key)\x0aimport Maybe exposing (Maybe)\x0aimport Url exposing (Url)\x0aimport Url.Parser exposing (Parser)\x0a\x0atype alias Flags\x0a  = ()\x0a\x0a-- Application global state type.\x0a\x0a\x0atype alias Session\x0a  = {}\x0a\x0a\x0ainitial : Session\x0ainitial = {}\x0a\x0a\x0atype alias Page model msg route a =\x0a    { init : Flags -> Url -> Key -> route -> Maybe Session -> ( model, Cmd msg )\x0a    , view : model -> Document msg\x0a    , update : msg -> model -> ( model, Cmd msg )\x0a    , subscriptions : model -> Sub msg\x0a    , route : Parser (route -> a) a\x0a    , onUrlRequest : UrlRequest -> Maybe msg\x0a    }\x0a\x0a");
+      return "-- alchelmy root page\x0amodule " + (application + ".Root exposing (..)\x0a\x0aimport Browser exposing (Document, UrlRequest(..))\x0aimport Browser.Navigation exposing (Key)\x0aimport Maybe exposing (Maybe)\x0aimport Url exposing (Url)\x0aimport Url.Parser exposing (Parser)\x0a\x0atype alias Flags\x0a  = ()\x0a\x0a-- Application global state type.\x0a\x0a\x0atype alias Session\x0a  = {}\x0a\x0a\x0ainitial : Session\x0ainitial = {}\x0a\x0a\x0atype alias Page model msg route a =\x0a    { init : Flags -> Url -> Key -> route -> Maybe Session -> ( model, Cmd msg )\x0a    , view : model -> Document msg\x0a    , update : msg -> model -> ( model, Cmd msg )\x0a    , subscriptions : model -> Sub msg\x0a    , route : Parser (route -> a) a\x0a    , onUrlRequest : UrlRequest -> Maybe msg\x0a    }\x0a\x0a");
   };
   exports["renderRoot"] = renderRoot;
 })(PS["Alchelmy.Template.Root"] = PS["Alchelmy.Template.Root"] || {});
@@ -11190,48 +11190,68 @@ var PS = {};
 (function(exports) {
   // Generated by purs version 0.12.0
   "use strict";
+  var Control_Bind = PS["Control.Bind"];
   var Data_Array = PS["Data.Array"];
+  var Data_Eq = PS["Data.Eq"];
+  var Data_Function = PS["Data.Function"];
   var Data_Functor = PS["Data.Functor"];
+  var Data_Maybe = PS["Data.Maybe"];
   var Data_Ord = PS["Data.Ord"];
   var Data_Semigroup = PS["Data.Semigroup"];
   var Data_String = PS["Data.String"];
   var Data_String_Common = PS["Data.String.Common"];
+  var Data_String_Pattern = PS["Data.String.Pattern"];
   var Prelude = PS["Prelude"];                 
+  var u = function (s) {
+      return Data_String_Common.joinWith("_")(Data_String_Common.split(".")(s));
+  };
   var renderRouter = function (application) {
-      return function (pages) {
-          return "\x0a--------------------------\x0a-- Auto-generated codes --\x0a-- Do not edit this     --\x0a--------------------------\x0a\x0amodule " + (application + (".Alchelmy exposing (Model, Msg, program)\x0a\x0aimport Browser exposing (Document, UrlRequest(..), application)\x0aimport Browser.Navigation exposing (Key, load, pushUrl)\x0aimport Html as Html exposing (Html, text)\x0aimport Maybe as Maybe exposing (Maybe(..))\x0aimport Url exposing (Url)\x0aimport Url.Parser as UrlParser exposing (s, oneOf, Parser, parse, (</>))\x0aimport " + (application + (".Root as Root\x0a" + (Data_String_Common.joinWith("\x0a")(Data_Functor.map(Data_Functor.functorArray)(function (page) {
-              return "import " + (application + (".Page." + (page + (" as " + page))));
-          })(pages)) + ("\x0a\x0atype Model = Model\x0a  { route : RouteState\x0a  , session : Root.Session\x0a  , key : Key\x0a  , flags : Root.Flags\x0a  }\x0a\x0atype Route\x0a  = " + (Data_String_Common.joinWith("\x0a  | ")(Data_Functor.map(Data_Functor.functorArray)(function (page) {
-              return "Route__" + (page + (" " + (page + ".Route")));
-          })(pages)) + ("\x0a\x0atype RouteState\x0a  = " + (Data_String_Common.joinWith("\x0a  | ")(Data_Functor.map(Data_Functor.functorArray)(function (page) {
-              return "State__" + (page + (" " + (page + ".Model")));
-          })(pages)) + ("\x0a\x0atype Msg\x0a  = UrlRequest UrlRequest\x0a  | Navigate Url\x0a" + (Data_String_Common.joinWith("\x0a")(Data_Functor.map(Data_Functor.functorArray)(function (page) {
-              return "  | Msg__" + (page + (" " + (page + ".Msg")));
-          })(pages)) + ("\x0a\x0a\x0aupdate : Msg -> Model -> ( Model, Cmd Msg )\x0aupdate msg (Model model) =\x0a  case msg of\x0a    UrlRequest urlRequest ->\x0a      let\x0a        defaultNavigation =\x0a          case urlRequest of\x0a            Internal url ->\x0a              ( Model model\x0a              , pushUrl model.key (Url.toString url)\x0a              )\x0a\x0a            External url ->\x0a              ( Model model\x0a              , load url\x0a              )\x0a        in\x0a          case model.route of\x0a" + (Data_String_Common.joinWith("\x0a")(Data_Functor.map(Data_Functor.functorArray)(function (page) {
-              return "\x0a            State__" + (page + (" pmodel ->\x0a              case " + (page + (".page.onUrlRequest urlRequest of\x0a                Nothing -> defaultNavigation\x0a                Just onUrlRequestMsg ->\x0a                  case " + (page + (".page.update onUrlRequestMsg pmodel of\x0a                    (pmodel_, pcmd) ->\x0a                      ( Model { model | session = pmodel_.session, route = State__" + (page + (" pmodel_ }\x0a                      , Cmd.map Msg__" + (page + " pcmd\x0a                      )\x0a        ")))))))));
-          })(pages)) + ("\x0a\x0a    Navigate location ->\x0a\x0a      let\x0a        defaultNavigation =\x0a            case parseLocation location of\x0a" + (Data_String_Common.joinWith("\x0a")(Data_Functor.map(Data_Functor.functorArray)(function (page_) {
-              return "\x0a                Route__" + (page_ + (" routeValue ->\x0a                      case " + (page_ + (".page.init model.flags location model.key routeValue (Just model.session) of\x0a                        (initialModel, initialCmd) ->\x0a                          ( Model { model | session = initialModel.session, route = State__" + (page_ + (" initialModel }\x0a                          , Cmd.map Msg__" + (page_ + " initialCmd\x0a                          )\x0a                ")))))));
-          })(pages)) + ("\x0a      in\x0a      case model.route of\x0a" + (Data_String_Common.joinWith("\x0a")(Data_Functor.map(Data_Functor.functorArray)(function (page) {
-              return "\x0a        State__" + (page + " pmodel -> defaultNavigation\x0a        ");
-          })(pages)) + ("\x0a\x0a\x0a" + (Data_String_Common.joinWith("\x0a")(Data_Functor.map(Data_Functor.functorArray)(function (page) {
-              return "\x0a    Msg__" + (page + (" pageMsg ->\x0a      case model.route of\x0a        State__" + (page + (" pageModel ->\x0a          case " + (page + (".page.update pageMsg { pageModel | session = model.session } of\x0a            (pageModel_, pageCmd ) ->\x0a              (Model { model | session = pageModel_.session, route = State__" + (page + (" pageModel_ }, Cmd.map Msg__" + (page + (" pageCmd)\x0a        " + (function () {
-                  var $0 = 1 < Data_Array.length(pages);
-                  if ($0) {
+      return function (fullPageModuleNames) {
+          var pages = Data_Functor.map(Data_Functor.functorArray)(u)(fullPageModuleNames);
+          var notFound_ = Data_Array.head(Data_Array.catMaybes(Data_Functor.map(Data_Functor.functorArray)(function (moduleName) {
+              return Control_Bind.bind(Data_Maybe.bindMaybe)(Data_Array.last(Data_String_Common.split(".")(moduleName)))(function (v) {
+                  var $2 = v === "NotFound";
+                  if ($2) {
+                      return new Data_Maybe.Just(moduleName);
+                  };
+                  return Data_Maybe.Nothing.value;
+              });
+          })(fullPageModuleNames)));
+          var notFound = Data_Maybe.fromMaybe("***NOTDOUND***")(notFound_);
+          return "\x0a--------------------------\x0a-- Auto-generated codes --\x0a-- Do not edit this     --\x0a--------------------------\x0a\x0amodule Alchelmy exposing (Model, Msg, program)\x0a\x0aimport Browser exposing (Document, UrlRequest(..), application)\x0aimport Browser.Navigation exposing (Key, load, pushUrl)\x0aimport Html as Html exposing (Html, text)\x0aimport Maybe as Maybe exposing (Maybe(..))\x0aimport Url exposing (Url)\x0aimport Url.Parser as UrlParser exposing (s, oneOf, Parser, parse, (</>))\x0aimport " + (application + (".Root as Root\x0a" + (Data_String_Common.joinWith("\x0a")(Data_Functor.map(Data_Functor.functorArray)(function (page) {
+              return "import " + page;
+          })(fullPageModuleNames)) + ("\x0a\x0atype Model = Model\x0a  { route : RouteState\x0a  , session : Root.Session\x0a  , key : Key\x0a  , flags : Root.Flags\x0a  }\x0a\x0atype Route\x0a  = " + (Data_String_Common.joinWith("\x0a  | ")(Data_Functor.map(Data_Functor.functorArray)(function (page) {
+              return "Route__" + (u(page) + (" " + (page + ".Route")));
+          })(fullPageModuleNames)) + ("\x0a\x0atype RouteState\x0a  = " + (Data_String_Common.joinWith("\x0a  | ")(Data_Functor.map(Data_Functor.functorArray)(function (page) {
+              return "State__" + (u(page) + (" " + (page + ".Model")));
+          })(fullPageModuleNames)) + ("\x0a\x0atype Msg\x0a  = UrlRequest UrlRequest\x0a  | Navigate Url\x0a" + (Data_String_Common.joinWith("\x0a")(Data_Functor.map(Data_Functor.functorArray)(function (page) {
+              return "  | Msg__" + (u(page) + (" " + (page + ".Msg")));
+          })(fullPageModuleNames)) + ("\x0a\x0a\x0aupdate : Msg -> Model -> ( Model, Cmd Msg )\x0aupdate msg (Model model) =\x0a  case msg of\x0a    UrlRequest urlRequest ->\x0a      let\x0a        defaultNavigation =\x0a          case urlRequest of\x0a            Internal url ->\x0a              ( Model model\x0a              , pushUrl model.key (Url.toString url)\x0a              )\x0a\x0a            External url ->\x0a              ( Model model\x0a              , load url\x0a              )\x0a        in\x0a          case model.route of\x0a" + (Data_String_Common.joinWith("\x0a")(Data_Functor.map(Data_Functor.functorArray)(function (page) {
+              return "\x0a            State__" + (u(page) + (" pmodel ->\x0a              case " + (page + (".page.onUrlRequest urlRequest of\x0a                Nothing -> defaultNavigation\x0a                Just onUrlRequestMsg ->\x0a                  case " + (page + (".page.update onUrlRequestMsg pmodel of\x0a                    (pmodel_, pcmd) ->\x0a                      ( Model { model | session = pmodel_.session, route = State__" + (u(page) + (" pmodel_ }\x0a                      , Cmd.map Msg__" + (u(page) + " pcmd\x0a                      )\x0a        ")))))))));
+          })(fullPageModuleNames)) + ("\x0a\x0a    Navigate location ->\x0a\x0a      let\x0a        defaultNavigation =\x0a            case parseLocation location of\x0a" + (Data_String_Common.joinWith("\x0a")(Data_Functor.map(Data_Functor.functorArray)(function (page_) {
+              return "\x0a                Route__" + (u(page_) + (" routeValue ->\x0a                      case " + (page_ + (".page.init model.flags location model.key routeValue (Just model.session) of\x0a                        (initialModel, initialCmd) ->\x0a                          ( Model { model | session = initialModel.session, route = State__" + (u(page_) + (" initialModel }\x0a                          , Cmd.map Msg__" + (u(page_) + " initialCmd\x0a                          )\x0a                ")))))));
+          })(fullPageModuleNames)) + ("\x0a      in\x0a      case model.route of\x0a" + (Data_String_Common.joinWith("\x0a")(Data_Functor.map(Data_Functor.functorArray)(function (page) {
+              return "\x0a        State__" + (u(page) + " pmodel -> defaultNavigation\x0a        ");
+          })(fullPageModuleNames)) + ("\x0a\x0a\x0a" + (Data_String_Common.joinWith("\x0a")(Data_Functor.map(Data_Functor.functorArray)(function (page) {
+              return "\x0a    Msg__" + (u(page) + (" pageMsg ->\x0a      case model.route of\x0a        State__" + (u(page) + (" pageModel ->\x0a          case " + (page + (".page.update pageMsg { pageModel | session = model.session } of\x0a            (pageModel_, pageCmd ) ->\x0a              (Model { model | session = pageModel_.session, route = State__" + (u(page) + (" pageModel_ }, Cmd.map Msg__" + (u(page) + (" pageCmd)\x0a        " + (function () {
+                  var $3 = 1 < Data_Array.length(pages);
+                  if ($3) {
                       return "_ -> (Model model, Cmd.none)";
                   };
                   return "";
               })()))))))))));
-          })(pages)) + ("\x0a\x0adocumentMap : (msg -> Msg) -> Document msg -> Document Msg\x0adocumentMap f { title, body } = { title = title, body = List.map (Html.map f) body }\x0a\x0aview : Model -> Document Msg\x0aview (Model model) = case model.route of\x0a\x0a" + (Data_String_Common.joinWith("\x0a")(Data_Functor.map(Data_Functor.functorArray)(function (page) {
-              return "  State__" + (page + (" m -> documentMap Msg__" + (page + (" (" + (page + ".page.view { m | session = model.session })")))));
-          })(pages)) + ("\x0a\x0amatchers : Parser (Route -> a) a\x0amatchers =\x0a    oneOf\x0a        [ " + (Data_String_Common.joinWith("\x0a        , ")(Data_Functor.map(Data_Functor.functorArray)(function (page) {
-              return "UrlParser.map Route__" + (page + (" " + (page + ".page.route")));
-          })(pages)) + ("\x0a        ]\x0a\x0aparseLocation : Url -> Route\x0aparseLocation location =\x0a    case parse matchers location of\x0a        Just route ->\x0a            route\x0a\x0a        Nothing ->\x0a            Route__NotFound ()\x0a\x0anavigate : Url -> Msg\x0anavigate = Navigate\x0a\x0ainit : Root.Flags -> Url -> Key -> ( Model, Cmd Msg )\x0ainit flags location key =\x0a\x0a        case parseLocation location of\x0a\x0a" + (Data_String_Common.joinWith("\x0a")(Data_Functor.map(Data_Functor.functorArray)(function (page) {
-              return "          Route__" + (page + (" routeValue -> case " + (page + (".page.init flags location key routeValue Nothing of\x0a                (initialModel, initialCmd) ->\x0a                    ( Model\x0a                        { route = State__" + (page + (" initialModel\x0a                        , session = initialModel.session\x0a                        , key = key\x0a                        , flags = flags\x0a                        }\x0a                    , Cmd.map Msg__" + (page + " initialCmd\x0a                    )\x0a                ")))))));
-          })(pages)) + ("\x0a\x0asubscriptions : Model -> Sub Msg\x0asubscriptions (Model model) =\x0a    case model.route of\x0a" + (Data_String_Common.joinWith("\x0a")(Data_Functor.map(Data_Functor.functorArray)(function (page) {
-              return "        State__" + (page + (" routeValue -> Sub.map Msg__" + (page + (" (" + (page + ".page.subscriptions routeValue)")))));
-          })(pages)) + "\x0a\x0aprogram : Program Root.Flags Model Msg\x0aprogram =\x0a    application\x0a        { init = init\x0a        , view = view\x0a        , update = update\x0a        , subscriptions = subscriptions\x0a        , onUrlRequest = UrlRequest\x0a        , onUrlChange = Navigate\x0a        }\x0a\x0a\x0a")))))))))))))))))))))))))));
+          })(fullPageModuleNames)) + ("\x0a\x0adocumentMap : (msg -> Msg) -> Document msg -> Document Msg\x0adocumentMap f { title, body } = { title = title, body = List.map (Html.map f) body }\x0a\x0aview : Model -> Document Msg\x0aview (Model model) = case model.route of\x0a\x0a" + (Data_String_Common.joinWith("\x0a")(Data_Functor.map(Data_Functor.functorArray)(function (page) {
+              return "  State__" + (u(page) + (" m -> documentMap Msg__" + (u(page) + (" (" + (page + ".page.view { m | session = model.session })")))));
+          })(fullPageModuleNames)) + ("\x0a\x0amatchers : Parser (Route -> a) a\x0amatchers =\x0a    oneOf\x0a        [ " + (Data_String_Common.joinWith("\x0a        , ")(Data_Functor.map(Data_Functor.functorArray)(function (page) {
+              return "UrlParser.map Route__" + (u(page) + (" " + (page + ".page.route")));
+          })(fullPageModuleNames)) + ("\x0a        ]\x0a\x0aparseLocation : Url -> Route\x0aparseLocation location =\x0a    case parse matchers location of\x0a        Just route ->\x0a            route\x0a\x0a        Nothing ->\x0a            Route__" + (u(notFound) + (" ()\x0a\x0anavigate : Url -> Msg\x0anavigate = Navigate\x0a\x0ainit : Root.Flags -> Url -> Key -> ( Model, Cmd Msg )\x0ainit flags location key =\x0a\x0a        case parseLocation location of\x0a\x0a" + (Data_String_Common.joinWith("\x0a")(Data_Functor.map(Data_Functor.functorArray)(function (page) {
+              return "          Route__" + (u(page) + (" routeValue -> case " + (page + (".page.init flags location key routeValue Nothing of\x0a                (initialModel, initialCmd) ->\x0a                    ( Model\x0a                        { route = State__" + (u(page) + (" initialModel\x0a                        , session = initialModel.session\x0a                        , key = key\x0a                        , flags = flags\x0a                        }\x0a                    , Cmd.map Msg__" + (u(page) + " initialCmd\x0a                    )\x0a                ")))))));
+          })(fullPageModuleNames)) + ("\x0a\x0asubscriptions : Model -> Sub Msg\x0asubscriptions (Model model) =\x0a    case model.route of\x0a" + (Data_String_Common.joinWith("\x0a")(Data_Functor.map(Data_Functor.functorArray)(function (page) {
+              return "        State__" + (u(page) + (" routeValue -> Sub.map Msg__" + (u(page) + (" (" + (page + ".page.subscriptions routeValue)")))));
+          })(fullPageModuleNames)) + "\x0a\x0aprogram : Program Root.Flags Model Msg\x0aprogram =\x0a    application\x0a        { init = init\x0a        , view = view\x0a        , update = update\x0a        , subscriptions = subscriptions\x0a        , onUrlRequest = UrlRequest\x0a        , onUrlChange = Navigate\x0a        }\x0a\x0a\x0a")))))))))))))))))))))))))));
       };
   };
+  exports["u"] = u;
   exports["renderRouter"] = renderRouter;
 })(PS["Alchelmy.Template.Router"] = PS["Alchelmy.Template.Router"] || {});
 (function(exports) {
@@ -23834,7 +23854,8 @@ var PS = {};
   exports["fdClose"] = fdClose;
 })(PS["Node.FS.Aff"] = PS["Node.FS.Aff"] || {});
 (function(exports) {
-    "use strict";
+  // Generated by purs version 0.12.0
+  "use strict";
   var Control_Applicative = PS["Control.Applicative"];
   var Control_Bind = PS["Control.Bind"];
   var Data_Array = PS["Data.Array"];
@@ -23843,20 +23864,26 @@ var PS = {};
   var Data_Semigroup = PS["Data.Semigroup"];
   var Data_String = PS["Data.String"];
   var Data_String_Common = PS["Data.String.Common"];
+  var Data_String_Pattern = PS["Data.String.Pattern"];
   var Effect_Aff = PS["Effect.Aff"];
   var Node_FS_Aff = PS["Node.FS.Aff"];
+  var Node_Path = PS["Node.Path"];
   var Prelude = PS["Prelude"];                 
+  var p = function (s) {
+      return Data_String_Common.joinWith("/")(Data_String_Common.split(".")(s));
+  };
   var renderStyle = function (application) {
       return function (pages) {
           return Control_Bind.bind(Effect_Aff.bindAff)(Data_Array.filterA(Effect_Aff.applicativeAff)(function (page) {
-              return Node_FS_Aff.exists("./src/" + (application + ("/Page/" + (page + ".css"))));
+              return Node_FS_Aff.exists("./src/" + (p(page) + ".css"));
           })(pages))(function (v) {
               return Control_Applicative.pure(Effect_Aff.applicativeAff)("\x0a/////////////////////////\x0a// AUTO GENERATED FILE //\x0a// DO NOT EDIT THIS    //\x0a/////////////////////////\x0a" + Data_String_Common.joinWith("\x0a")(Data_Functor.map(Data_Functor.functorArray)(function (page) {
-                  return "import './Page/" + (page + ".css'");
+                  return "import './" + (p(page) + ".css'");
               })(v)));
           });
       };
   };
+  exports["p"] = p;
   exports["renderStyle"] = renderStyle;
 })(PS["Alchelmy.Template.Style"] = PS["Alchelmy.Template.Style"] || {});
 (function(exports) {
@@ -27086,13 +27113,17 @@ var PS = {};
   var Control_Monad_Error_Class = PS["Control.Monad.Error.Class"];
   var Data_Array = PS["Data.Array"];
   var Data_Either = PS["Data.Either"];
+  var Data_Eq = PS["Data.Eq"];
+  var Data_Foldable = PS["Data.Foldable"];
   var Data_Function = PS["Data.Function"];
   var Data_Functor = PS["Data.Functor"];
   var Data_HeytingAlgebra = PS["Data.HeytingAlgebra"];
   var Data_Maybe = PS["Data.Maybe"];
   var Data_Semigroup = PS["Data.Semigroup"];
   var Data_String = PS["Data.String"];
+  var Data_String_CodePoints = PS["Data.String.CodePoints"];
   var Data_String_Common = PS["Data.String.Common"];
+  var Data_String_Pattern = PS["Data.String.Pattern"];
   var Data_String_Regex = PS["Data.String.Regex"];
   var Data_String_Regex_Flags = PS["Data.String.Regex.Flags"];
   var Data_Traversable = PS["Data.Traversable"];
@@ -27117,9 +27148,11 @@ var PS = {};
       if (v instanceof Data_Either.Right) {
           return v.value0;
       };
-      throw new Error("Failed pattern match at Alchelmy line 168, column 29 - line 170, column 27: " + [ v.constructor.name ]);
+      throw new Error("Failed pattern match at Alchelmy line 192, column 29 - line 194, column 27: " + [ v.constructor.name ]);
   };
-  var usage = "\x0aUsage: \x0a\x0a  alchelmy init <application>\x0a\x0a    Create new application. \x0a\x0a  alchelmy update    \x0a\x0a    (Re)Generate Alchemy.elm, alchemy.js\x0a\x0a  alchelmy new <name>      \x0a\x0a    Create new page named <name>. <name> must be an valid module name.\x0a";
+  var usage = "\x0aUsage:\x0a\x0a  alchelmy init <application>\x0a\x0a    Create new application.\x0a\x0a  alchelmy update\x0a\x0a    (Re)Generate Alchemy.elm, alchemy.js\x0a\x0a  alchelmy new <name>\x0a\x0a    Create new page named <name>. <name> must be an valid module name.\x0a";
+  var rootMagic = "-- alchelmy root page";
+  var magic = "-- alchelmy page";
   var glob = function (pattern) {
       return Effect_Aff.makeAff(function (resolve) {
           return function __do() {
@@ -27137,8 +27170,8 @@ var PS = {};
           return Control_Bind.bind(Effect_Aff.bindAff)(Effect_Class.liftEffect(Effect_Aff.monadEffectAff)(Node_Path.resolve([ "./src/" ])(file)))(function (v1) {
               return Control_Bind.bind(Effect_Aff.bindAff)(Node_FS_Aff.stat(v1))(function (v2) {
                   return Control_Applicative.pure(Effect_Aff.applicativeAff)((function () {
-                      var $39 = Node_FS_Stats.isDirectory(v2);
-                      if ($39) {
+                      var $47 = Node_FS_Stats.isDirectory(v2);
+                      if ($47) {
                           return new Data_Maybe.Just(file);
                       };
                       return Data_Maybe.Nothing.value;
@@ -27154,8 +27187,8 @@ var PS = {};
       });
   });
   var pageExists = function (pageName) {
-      var $43 = validatePageName(pageName);
-      if ($43) {
+      var $51 = validatePageName(pageName);
+      if ($51) {
           return Control_Bind.bind(Effect_Aff.bindAff)(getApplicationName)(function (v) {
               return Control_Bind.bind(Effect_Aff.bindAff)(Effect_Class.liftEffect(Effect_Aff.monadEffectAff)(Node_Path.resolve([ "./src/", v, "Page" ])(pageName + ".elm")))(function (v1) {
                   return Node_FS_Aff.exists(v1);
@@ -27169,8 +27202,8 @@ var PS = {};
   };
   var generateNewPage = function (pageName) {
       return function (routing) {
-          var $46 = validatePageName(pageName);
-          if ($46) {
+          var $54 = validatePageName(pageName);
+          if ($54) {
               return Control_Bind.discard(Control_Bind.discardUnit)(Effect_Aff.bindAff)(Effect_Class_Console.log(Effect_Aff.monadEffectAff)("Generating new page: " + pageName))(function () {
                   return Control_Bind.bind(Effect_Aff.bindAff)(getApplicationName)(function (v) {
                       return Control_Bind.discard(Control_Bind.discardUnit)(Effect_Aff.bindAff)(Effect_Class_Console.log(Effect_Aff.monadEffectAff)("Application found: " + v))(function () {
@@ -27206,33 +27239,70 @@ var PS = {};
   };
   var generateRouter = function (argv) {
       return Control_Bind.bind(Effect_Aff.bindAff)(getApplicationName)(function (v) {
-          return Control_Bind.bind(Effect_Aff.bindAff)(Effect_Class.liftEffect(Effect_Aff.monadEffectAff)(Node_Path.resolve([ "src", v ])("Root.elm")))(function (v1) {
-              return Control_Bind.bind(Effect_Aff.bindAff)(Node_FS_Aff.exists(v1))(function (v2) {
-                  return Control_Bind.discard(Control_Bind.discardUnit)(Effect_Aff.bindAff)(Control_Applicative.when(Effect_Aff.applicativeAff)(!v2)(Control_Bind.discard(Control_Bind.discardUnit)(Effect_Aff.bindAff)(Effect_Class_Console.log(Effect_Aff.monadEffectAff)("Generating " + (v + "/Root.elm")))(function () {
-                      return Control_Bind.bind(Effect_Aff.bindAff)(Effect_Class.liftEffect(Effect_Aff.monadEffectAff)(Node_Path.resolve([ ".", "src", v ])("Root.elm")))(function (v3) {
-                          return Control_Bind.bind(Effect_Aff.bindAff)(Effect_Class.liftEffect(Effect_Aff.monadEffectAff)(Node_Buffer.fromString(Alchelmy_Template_Root.renderRoot(v))(Node_Encoding.UTF8.value)))(function (v4) {
-                              return Node_FS_Aff.writeFile(v3)(v4);
-                          });
-                      });
-                  })))(function () {
-                      return Control_Bind.bind(Effect_Aff.bindAff)(pageExists("NotFound"))(function (v3) {
-                          return Control_Bind.discard(Control_Bind.discardUnit)(Effect_Aff.bindAff)(Control_Applicative.when(Effect_Aff.applicativeAff)(!v3)(generateNewPage("NotFound")(Alchelmy_Template_Page.RouteToNothing.value)))(function () {
-                              return Control_Bind.bind(Effect_Aff.bindAff)(pageExists("Top"))(function (v4) {
-                                  return Control_Bind.discard(Control_Bind.discardUnit)(Effect_Aff.bindAff)(Control_Applicative.when(Effect_Aff.applicativeAff)(!v3)(generateNewPage("Top")(Alchelmy_Template_Page.RouteToTop.value)))(function () {
-                                      return Control_Bind.bind(Effect_Aff.bindAff)(glob("./src/" + (v + "/Page/*.elm")))(function (v5) {
-                                          var pages = Data_Functor.map(Data_Functor.functorArray)(function (p) {
-                                              return Node_Path.basenameWithoutExt(p)(".elm");
-                                          })(v5);
-                                          return Control_Bind.discard(Control_Bind.discardUnit)(Effect_Aff.bindAff)(Control_Applicative.when(Effect_Aff.applicativeAff)(Data_Array["null"](pages))(Effect_Class.liftEffect(Effect_Aff.monadEffectAff)(Effect_Exception["throw"]("Pege not found."))))(function () {
-                                              return Control_Bind.discard(Control_Bind.discardUnit)(Effect_Aff.bindAff)(Effect_Class_Console.log(Effect_Aff.monadEffectAff)("Generating ./src/" + (v + ("/Alchelmy.elm for " + (Data_String_Common.joinWith(", ")(pages) + "...")))))(function () {
-                                                  return Control_Bind.bind(Effect_Aff.bindAff)(Effect_Class.liftEffect(Effect_Aff.monadEffectAff)(Node_Buffer.fromString(Alchelmy_Template_Router.renderRouter(v)(pages))(Node_Encoding.UTF8.value)))(function (v6) {
-                                                      return Control_Bind.discard(Control_Bind.discardUnit)(Effect_Aff.bindAff)(Node_FS_Aff.writeFile("./src/" + (v + "/Alchelmy.elm"))(v6))(function () {
-                                                          return Control_Bind.discard(Control_Bind.discardUnit)(Effect_Aff.bindAff)(Effect_Class_Console.log(Effect_Aff.monadEffectAff)("Generating ./src/" + (v + "/alchelmy.js...")))(function () {
-                                                              return Control_Bind.bind(Effect_Aff.bindAff)(Effect_Class.liftEffect(Effect_Aff.monadEffectAff)(Node_Path.resolve([ "./src/", v ])("alchelmy.js")))(function (v7) {
-                                                                  return Control_Bind.bind(Effect_Aff.bindAff)(Alchelmy_Template_Style.renderStyle(v)(pages))(function (v8) {
-                                                                      return Control_Bind.bind(Effect_Aff.bindAff)(Effect_Class.liftEffect(Effect_Aff.monadEffectAff)(Node_Buffer.fromString(v8)(Node_Encoding.UTF8.value)))(function (v9) {
-                                                                          return Control_Bind.discard(Control_Bind.discardUnit)(Effect_Aff.bindAff)(Node_FS_Aff.writeFile(v7)(v9))(function () {
-                                                                              return Effect_Class_Console.log(Effect_Aff.monadEffectAff)("Done.");
+          return Control_Bind.bind(Effect_Aff.bindAff)(Effect_Class.liftEffect(Effect_Aff.monadEffectAff)(Node_Path.resolve([ "./src/" ])("**/Root.elm")))(function (v1) {
+              return Control_Bind.bind(Effect_Aff.bindAff)(glob(v1))(function (v2) {
+                  return Control_Bind.bind(Effect_Aff.bindAff)(Data_Array.filterA(Effect_Aff.applicativeAff)(function (file) {
+                      return Data_Functor.map(Effect_Aff.functorAff)(function (src) {
+                          return Data_Eq.eq(Data_Maybe.eqMaybe(Data_Eq.eqInt))(Data_String_CodePoints.indexOf(rootMagic)(src))(new Data_Maybe.Just(0));
+                      })(Node_FS_Aff.readTextFile(Node_Encoding.UTF8.value)(file));
+                  })(v2))(function (v3) {
+                      return Control_Bind.bind(Effect_Aff.bindAff)((function () {
+                          var v4 = Data_Array.head(v3);
+                          if (v4 instanceof Data_Maybe.Nothing) {
+                              return Control_Bind.discard(Control_Bind.discardUnit)(Effect_Aff.bindAff)(Effect_Class_Console.log(Effect_Aff.monadEffectAff)("Generating " + (v + "/Root.elm")))(function () {
+                                  return Control_Bind.bind(Effect_Aff.bindAff)(Effect_Class.liftEffect(Effect_Aff.monadEffectAff)(Node_Path.resolve([ ".", "src", v ])("Root.elm")))(function (v5) {
+                                      return Control_Bind.bind(Effect_Aff.bindAff)(Effect_Class.liftEffect(Effect_Aff.monadEffectAff)(Node_Buffer.fromString(Alchelmy_Template_Root.renderRoot(v))(Node_Encoding.UTF8.value)))(function (v6) {
+                                          return Control_Bind.discard(Control_Bind.discardUnit)(Effect_Aff.bindAff)(Node_FS_Aff.writeFile(v5)(v6))(function () {
+                                              return Control_Applicative.pure(Effect_Aff.applicativeAff)(v5);
+                                          });
+                                      });
+                                  });
+                              });
+                          };
+                          if (v4 instanceof Data_Maybe.Just) {
+                              return Control_Applicative.pure(Effect_Aff.applicativeAff)(v4.value0);
+                          };
+                          throw new Error("Failed pattern match at Alchelmy line 67, column 17 - line 75, column 22: " + [ v4.constructor.name ]);
+                      })())(function (v4) {
+                          return Control_Bind.bind(Effect_Aff.bindAff)(pageExists("NotFound"))(function (v5) {
+                              return Control_Bind.discard(Control_Bind.discardUnit)(Effect_Aff.bindAff)(Control_Applicative.when(Effect_Aff.applicativeAff)(!v5)(generateNewPage("NotFound")(Alchelmy_Template_Page.RouteToNothing.value)))(function () {
+                                  return Control_Bind.bind(Effect_Aff.bindAff)(pageExists("Top"))(function (v6) {
+                                      return Control_Bind.discard(Control_Bind.discardUnit)(Effect_Aff.bindAff)(Control_Applicative.when(Effect_Aff.applicativeAff)(!v5)(generateNewPage("Top")(Alchelmy_Template_Page.RouteToTop.value)))(function () {
+                                          return Control_Bind.bind(Effect_Aff.bindAff)(Effect_Class.liftEffect(Effect_Aff.monadEffectAff)(Node_Path.resolve([ "./src/" ])("**/*.elm")))(function (v7) {
+                                              return Control_Bind.bind(Effect_Aff.bindAff)(glob(v7))(function (v8) {
+                                                  return Control_Bind.bind(Effect_Aff.bindAff)(Data_Array.filterA(Effect_Aff.applicativeAff)(function (file) {
+                                                      return Data_Functor.map(Effect_Aff.functorAff)(function (src) {
+                                                          return Data_Eq.eq(Data_Maybe.eqMaybe(Data_Eq.eqInt))(Data_String_CodePoints.indexOf(magic)(src))(new Data_Maybe.Just(0));
+                                                      })(Node_FS_Aff.readTextFile(Node_Encoding.UTF8.value)(file));
+                                                  })(v8))(function (v9) {
+                                                      return Control_Bind.bind(Effect_Aff.bindAff)(Data_Traversable["for"](Effect_Aff.applicativeAff)(Data_Traversable.traversableArray)(v9)(function (file) {
+                                                          return Control_Bind.bind(Effect_Aff.bindAff)(Effect_Class.liftEffect(Effect_Aff.monadEffectAff)(Node_Path.resolve([ Node_Path.dirname(file) ])(Node_Path.basenameWithoutExt(file)(".elm"))))(function (v10) {
+                                                              return Control_Applicative.pure(Effect_Aff.applicativeAff)(Data_String_Common.joinWith(".")(Data_String_Common.split(Node_Path.sep)(Node_Path.relative("./src/")(v10))));
+                                                          });
+                                                      }))(function (v10) {
+                                                          return Control_Bind.discard(Control_Bind.discardUnit)(Effect_Aff.bindAff)(Data_Foldable.for_(Effect_Aff.applicativeAff)(Data_Foldable.foldableArray)(v10)(function (file) {
+                                                              return Effect_Class_Console.log(Effect_Aff.monadEffectAff)("Found module: " + file);
+                                                          }))(function () {
+                                                              var pages = Data_Functor.map(Data_Functor.functorArray)(function (p) {
+                                                                  return Node_Path.basenameWithoutExt(p)(".elm");
+                                                              })(v9);
+                                                              return Control_Bind.discard(Control_Bind.discardUnit)(Effect_Aff.bindAff)(Control_Applicative.when(Effect_Aff.applicativeAff)(Data_Array["null"](pages))(Effect_Class.liftEffect(Effect_Aff.monadEffectAff)(Effect_Exception["throw"]("Page not found."))))(function () {
+                                                                  return Control_Bind.bind(Effect_Aff.bindAff)(Effect_Class.liftEffect(Effect_Aff.monadEffectAff)(Node_Buffer.fromString(Alchelmy_Template_Router.renderRouter(v)(v10))(Node_Encoding.UTF8.value)))(function (v11) {
+                                                                      return Control_Bind.bind(Effect_Aff.bindAff)(Effect_Class.liftEffect(Effect_Aff.monadEffectAff)(Node_Path.resolve([ "./src/" ])("Alchelmy.elm")))(function (v12) {
+                                                                          return Control_Bind.discard(Control_Bind.discardUnit)(Effect_Aff.bindAff)(Effect_Class_Console.log(Effect_Aff.monadEffectAff)("Generating " + (v12 + " ...")))(function () {
+                                                                              return Control_Bind.discard(Control_Bind.discardUnit)(Effect_Aff.bindAff)(Node_FS_Aff.writeFile(v12)(v11))(function () {
+                                                                                  return Control_Bind.bind(Effect_Aff.bindAff)(Effect_Class.liftEffect(Effect_Aff.monadEffectAff)(Node_Path.resolve([ "./src/" ])("alchelmy.js")))(function (v13) {
+                                                                                      return Control_Bind.discard(Control_Bind.discardUnit)(Effect_Aff.bindAff)(Effect_Class_Console.log(Effect_Aff.monadEffectAff)("Generating " + (v13 + "...")))(function () {
+                                                                                          return Control_Bind.bind(Effect_Aff.bindAff)(Alchelmy_Template_Style.renderStyle(v)(v10))(function (v14) {
+                                                                                              return Control_Bind.bind(Effect_Aff.bindAff)(Effect_Class.liftEffect(Effect_Aff.monadEffectAff)(Node_Buffer.fromString(v14)(Node_Encoding.UTF8.value)))(function (v15) {
+                                                                                                  return Control_Bind.discard(Control_Bind.discardUnit)(Effect_Aff.bindAff)(Node_FS_Aff.writeFile(v13)(v15))(function () {
+                                                                                                      return Effect_Class_Console.log(Effect_Aff.monadEffectAff)("Done.");
+                                                                                                  });
+                                                                                              });
+                                                                                          });
+                                                                                      });
+                                                                                  });
+                                                                              });
                                                                           });
                                                                       });
                                                                   });
@@ -27268,7 +27338,7 @@ var PS = {};
               if (v2 instanceof Data_Either.Right && !v2.value0) {
                   return Control_Monad_Error_Class.throwError(Effect_Aff.monadThrowAff)(Effect_Exception.error(application + " is not a valid package name."));
               };
-              throw new Error("Failed pattern match at Alchelmy line 43, column 14 - line 46, column 95: " + [ v2.constructor.name ]);
+              throw new Error("Failed pattern match at Alchelmy line 50, column 14 - line 53, column 95: " + [ v2.constructor.name ]);
           });
       });
   };
@@ -27281,8 +27351,8 @@ var PS = {};
           }))();
       };
       if (v1.length === 2 && v1[0] === "new") {
-          var $78 = validatePageName(v1[1]);
-          if ($78) {
+          var $95 = validatePageName(v1[1]);
+          if ($95) {
               return Effect_Aff.launchAff_(Control_Bind.discard(Control_Bind.discardUnit)(Effect_Aff.bindAff)(generateNewPage(v1[1])(Alchelmy_Template_Page.RouteToPageName.value))(function () {
                   return generateRouter(v);
               }))();
@@ -27311,6 +27381,8 @@ var PS = {};
       Effect_Console.error("[ERROR] Unknown sub command: " + Data_String_Common.joinWith(" ")(v1))();
       return Node_Process.exit(1)();
   };
+  exports["magic"] = magic;
+  exports["rootMagic"] = rootMagic;
   exports["glob"] = glob;
   exports["createApplication"] = createApplication;
   exports["ensureDir"] = ensureDir;
