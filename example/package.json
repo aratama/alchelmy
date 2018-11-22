@@ -9,7 +9,8 @@
   "scripts": {
     "test": "npm run build",
     "inspect": "node --experimental-modules --inspect-brk ../src/alchelmy.mjs update",
-    "build": "node ../bin/alchelmy.js update && elm-app build",
+    "build": "node ../bin/alchelmy.js update && elm-app build && build-css",
+    "build-css": "npx node-sass --importer node_modules/node-sass-glob-importer/dist/cli.js -o src src/main.scss",
     "rebuild": "cd .. && npm run build && cd example && node ../bin/alchelmy.js update && elm-app build",
     "new": "node ../bin/alchelmy.js new Minimum",
     "clean": "rimraf src/ElmPortfolio/Alchelmy.elm src/ElmPortfolio/alchelmy.js elm-stuff tests/elm-stuff",
@@ -18,6 +19,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "node-sass": "^4.10.0",
+    "node-sass-glob-importer": "^5.2.0",
     "rimraf": "^2.6.2"
   }
 }

@@ -1,128 +1,113 @@
+@import url(C:/dev/alchelmy/example/src/ElmPortfolio/Page/Counter.css);
+@import url(C:/dev/alchelmy/example/src/ElmPortfolio/Page/Http.css);
+@import url(C:/dev/alchelmy/example/src/ElmPortfolio/Page/Minimum.css);
+@import url(C:/dev/alchelmy/example/src/ElmPortfolio/Page/NotFound.css);
+@import url(C:/dev/alchelmy/example/src/ElmPortfolio/Page/Preferences.css);
+@import url(C:/dev/alchelmy/example/src/ElmPortfolio/Page/Time.css);
+@import url(C:/dev/alchelmy/example/src/ElmPortfolio/Page/Top.css);
+@import url(C:/dev/alchelmy/example/src/ElmPortfolio/Page/URLParsing.css);
 * {
   transition-property: background-color;
   transition-duration: 0.6s;
-  box-sizing:border-box;
-}
+  box-sizing: border-box; }
 
 html, body {
   margin: 0;
-  padding: 0;
-}
-
+  padding: 0; }
 
 body {
   font-family: 'Source Sans Pro', 'Trebuchet MS', 'Lucida Grande', 'Bitstream Vera Sans', 'Helvetica Neue', sans-serif;
   margin: 0;
-  background-color: #333;
-}
+  background-color: #333; }
 
 h1 {
-  font-size: 30px;
-}
+  font-size: 30px; }
 
 img {
   margin: 20px 0;
-  max-width: 600px;
-}
+  max-width: 600px; }
 
 .root {
-  height: 100vh;
-}
+  height: 100vh; }
 
 .index {
-  color: white;
-}
+  color: white; }
 
 header {
   height: 150px;
   background-color: #333;
   color: white;
   padding: 8px;
-  padding-left: 40px;
-}
+  padding-left: 40px; }
 
 header h1 a {
   color: white;
   font-size: 50px;
-  font-weight: bold;
-}
+  font-weight: bold; }
 
 .page {
   height: calc(100vh - 150px);
   display: flex;
   flex-direction: row;
-  align-items: stretch;
-}
+  align-items: stretch; }
 
 .page > *:nth-child(1) {
   flex-grow: 0;
   background-color: #444;
   width: 200px;
-  text-align: center;
-}
+  text-align: center; }
 
 .page > *:nth-child(2) {
-  flex-grow: 1;
-}
+  flex-grow: 1; }
 
 .page > *:nth-child(2) > * {
-  padding: 20px;
-}
+  padding: 20px; }
 
 button {
   width: 200px;
-  height: 2em;
-}
+  height: 2em; }
 
 .page a {
-  color :white;
-}
+  color: white; }
 
 p {
-  padding: 10px;
-}
+  padding: 10px; }
 
 input[type=text] {
   background-color: transparent;
   color: white;
   padding: 4px;
-  border: solid 1px white;
-}
+  border: solid 1px white; }
 
 button {
   background-color: transparent;
   border: solid 1px white;
   border-radius: 4px;
-  color: white
-}
+  color: white; }
 
 button:hover {
-  background-color: rgba(255, 255, 255, 0.2)
-}
+  background-color: rgba(255, 255, 255, 0.2); }
 
 .dialog-outer {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    left: 0;
-    top: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: rgba(0, 0, 0, 0.6);
-}
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.6); }
+
 .dialog {
-    background-color: lightgrey;
-    box-shadow: 0 0 10px 4px rgba(0, 0, 0, 0.7);
-    padding: 2rem;
-}
+  background-color: lightgrey;
+  box-shadow: 0 0 10px 4px rgba(0, 0, 0, 0.7);
+  padding: 2rem; }
 
 .dialog .upper {
-    margin-bottom: 1rem;
-}
+  margin-bottom: 1rem; }
 
 .dialog .lower button {
-    margin: 0.5rem;
-    color: white;
-    background-color: dimgray;
-}
+  margin: 0.5rem;
+  color: white;
+  background-color: dimgray; }
