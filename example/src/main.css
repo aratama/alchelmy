@@ -1,4 +1,48 @@
-@import 'ElmPortfolio/**/*.css';
+.page-counter {
+    background-color: rgb(73, 48, 65);
+    color: white;
+    min-height: 100%;
+}
+
+
+.page-http {
+    background-color: rgb(57, 78, 57);
+    color: white;
+    min-height: 100%;
+}
+
+
+
+.page-not-found {
+    color: white;
+    min-height: 100vh;
+}
+
+.page-not-found a {
+    color: white;
+}
+.page-preferences {
+    color: white;
+    background-color: rgb(78, 53, 74);
+    height: 100%;
+}
+.page-a {
+    background-color: rgb(107, 104, 72);
+    color: white;
+    min-height: 100%;
+}
+
+
+.page-top {
+    color: white;
+    background-color: rgb(86, 92, 90);
+    height: 100%;
+}
+.page-url-parser {
+  background-color: rgb(114, 64, 64);
+  color: white;
+  min-height: 100%;
+}
 
 * {
   transition-property: background-color;
@@ -128,3 +172,4 @@ button:hover {
     color: white;
     background-color: dimgray;
 }
+

@@ -14,5 +14,3 @@ node_modules
 .DS_Store
 
 src/ElmPortfolio/**/Alchemy.elm
-
-src/main.css
