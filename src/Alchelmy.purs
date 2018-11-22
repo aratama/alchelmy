@@ -3,7 +3,6 @@ module Alchelmy where
 import Alchelmy.Template.Page (renderBlankPage, Routing(..))
 import Alchelmy.Template.Root (renderRoot)
 import Alchelmy.Template.Router (renderRouter)
-import Alchelmy.Template.Style (renderStyle)
 import Control.Monad.Error.Class (throwError, try)
 import Data.Array (catMaybes, drop, null, filterA, head)
 import Data.Either (Either(..))
@@ -111,13 +110,6 @@ generateRouter argv = do
     generatedElmPath <- liftEffect $ resolve [srcDir] "Alchelmy.elm"
     log $ "Generating " <> generatedElmPath <> " ..."
     writeFile generatedElmPath sourceBuffer
-
-    -- generate alchelmy.js
-    stylePath <- liftEffect $ resolve [srcDir] "alchelmy.js"
-    log $ "Generating " <> stylePath <> "..."
-    styleRendered <- renderStyle application pageModuleNames
-    styleBuffer <- liftEffect $ fromString styleRendered UTF8
-    writeFile stylePath styleBuffer
 
     log "Done."
 
