@@ -1,4 +1,3 @@
-import "./main.css";
 import { Elm } from "./Main.elm";
 import { register, unregister } from "./registerServiceWorker";
 
