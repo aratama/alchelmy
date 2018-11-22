@@ -9,7 +9,7 @@
   "scripts": {
     "test": "npm run build",
     "inspect": "node --experimental-modules --inspect-brk ../src/alchelmy.mjs update",
-    "build": "node ../bin/alchelmy.js update && elm-app build && npm run build-css",
+    "build": "node ../bin/alchelmy.js update && npm run build-css && elm-app build",
     "build-css": "npx node-sass --importer node_modules/node-sass-glob-importer/dist/cli.js -o src src/main.scss",
     "rebuild": "cd .. && npm run build && cd example && node ../bin/alchelmy.js update && elm-app build",
     "new": "node ../bin/alchelmy.js new Minimum",
