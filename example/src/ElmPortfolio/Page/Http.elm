@@ -5,7 +5,7 @@ module ElmPortfolio.Page.Http exposing (Model, Msg, Route, page, route)
 
 import Browser exposing (Document, UrlRequest(..))
 import Browser.Navigation exposing (Key)
-import ElmPortfolio.Ports exposing (receiveThemeFromLocalStorage, requestThemeFromLocalStorage)
+import ElmPortfolio.Ports exposing (receiveTopic, requestTopic)
 import ElmPortfolio.Root as Root exposing (Flags, Session, SessionMsg(..), initial, link, sessionOnUrlRequest, sessionUpdate, updateTopic)
 import Html exposing (Html, a, br, button, div, h1, h2, img, p, text)
 import Html.Attributes exposing (class, href, src)
@@ -44,7 +44,7 @@ init : Flags -> Url -> Key -> Route -> Maybe Session -> ( Model, Cmd Msg )
 init _ _ _ _ maybeSession =
     case maybeSession of
         Nothing ->
-            ( Model initial "waiting.gif", requestThemeFromLocalStorage () )
+            ( Model initial "waiting.gif", requestTopic () )
 
         Just session ->
             ( Model session "waiting.gif", getRandomGif session.topic )
@@ -81,7 +81,7 @@ decodeGifUrl =
 
 subscriptions : Model -> Sub Msg
 subscriptions _ =
-    receiveThemeFromLocalStorage ReceiveThemeFromLocalStorage
+    receiveTopic ReceiveTopic
 
 
 view : Model -> Document Msg

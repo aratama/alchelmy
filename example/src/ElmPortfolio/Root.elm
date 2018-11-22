@@ -86,7 +86,7 @@ view model content =
 
 
 type SessionMsg a
-    = ReceiveThemeFromLocalStorage (Maybe String)
+    = ReceiveTopic (Maybe String)
     | ExternalLink String
     | Jump String
     | CloseDialog
@@ -104,7 +104,7 @@ sessionUpdate f msg model =
             model.session
     in
     case msg of
-        ReceiveThemeFromLocalStorage maybeTopic ->
+        ReceiveTopic maybeTopic ->
             ( { model | session = { session | topic = Maybe.withDefault "goat" maybeTopic } }, Cmd.none )
 
         ExternalLink url ->

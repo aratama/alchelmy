@@ -5,7 +5,7 @@ module ElmPortfolio.Page.URLParsing exposing (Model, Msg, Route, page, route)
 
 import Browser exposing (Document)
 import Browser.Navigation exposing (Key)
-import ElmPortfolio.Ports exposing (receiveThemeFromLocalStorage, requestThemeFromLocalStorage)
+import ElmPortfolio.Ports exposing (receiveTopic, requestTopic)
 import ElmPortfolio.Root as Root exposing (Flags, Session, SessionMsg(..), initial, link, sessionOnUrlRequest, sessionUpdate, updateTopic)
 import Html exposing (Html, a, div, h1, img, p, text)
 import Html.Attributes exposing (class, href, src)
@@ -37,7 +37,7 @@ init : Flags -> Url -> Key -> Route -> Maybe Session -> ( Model, Cmd Msg )
 init _ location key id maybeSession =
     case maybeSession of
         Nothing ->
-            ( { session = initial, id = id, location = location }, requestThemeFromLocalStorage () )
+            ( { session = initial, id = id, location = location }, requestTopic () )
 
         Just session ->
             ( { session = session, id = id, location = location }, Cmd.none )
@@ -52,7 +52,7 @@ update =
 
 subscriptions : Model -> Sub Msg
 subscriptions _ =
-    receiveThemeFromLocalStorage ReceiveThemeFromLocalStorage
+    receiveTopic ReceiveTopic
 
 
 view : Model -> Document Msg

@@ -5,7 +5,7 @@ module ElmPortfolio.Page.Time exposing (Model, Msg, Route, page, route)
 
 import Browser exposing (Document)
 import Browser.Navigation exposing (Key, pushUrl)
-import ElmPortfolio.Ports exposing (receiveThemeFromLocalStorage, requestThemeFromLocalStorage)
+import ElmPortfolio.Ports exposing (receiveTopic, requestTopic)
 import ElmPortfolio.Root as Root exposing (Flags, Session, SessionMsg(..), initial, link, sessionOnUrlRequest, sessionUpdate, updateTopic)
 import Html exposing (Html, a, br, button, div, h1, h2, img, p, text)
 import Html.Attributes exposing (class, href, src)
@@ -43,14 +43,14 @@ init : Flags -> Url -> Key -> Route -> Maybe Session -> ( Model, Cmd Msg )
 init _ _ _ _ maybeSession =
     case maybeSession of
         Nothing ->
-            ( { session = initial, posix = millisToPosix 0 }, requestThemeFromLocalStorage () )
+            ( { session = initial, posix = millisToPosix 0 }, requestTopic () )
 
         Just session ->
             ( { session = session, posix = millisToPosix 0 }
               -- Mysterious bug workaround
               -- Originally, you can put just `Cmd.none`, however in the case the timer will not work.
               -- If you remove `route` in the routing, it work. Extremely confusing.
-            , requestThemeFromLocalStorage ()
+            , requestTopic ()
             )
 
 
@@ -67,7 +67,7 @@ subscriptions : Model -> Sub Msg
 subscriptions _ =
     Sub.batch
         [ Sub.map PageMsg <| Time.every 50 Tick
-        , receiveThemeFromLocalStorage ReceiveThemeFromLocalStorage
+        , receiveTopic ReceiveTopic
         ]
 
 

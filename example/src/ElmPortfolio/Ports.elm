@@ -1,10 +1,10 @@
 port module ElmPortfolio.Ports exposing (..)
 
 
-port saveThemeToLocalStorage : String -> Cmd msg
+port saveTopic : String -> Cmd msg
 
 
-port requestThemeFromLocalStorage : () -> Cmd msg
+port requestTopic : () -> Cmd msg
 
 
-port receiveThemeFromLocalStorage : (Maybe String -> msg) -> Sub msg
+port receiveTopic : (Maybe String -> msg) -> Sub msg

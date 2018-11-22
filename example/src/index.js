@@ -18,10 +18,10 @@ const app = Elm.Main.init({
 //register();
 unregister();
 
-app.ports.saveThemeToLocalStorage.subscribe(function (theme) {
-    localStorage.setItem("theme", theme)
+app.ports.saveTopic.subscribe(function (theme) {
+    localStorage.setItem("topic", theme)
 });
 
-app.ports.requestThemeFromLocalStorage.subscribe(function () {
-    app.ports.receiveThemeFromLocalStorage.send(localStorage.getItem("theme"))
+app.ports.requestTopic.subscribe(function () {
+    app.ports.receiveTopic.send(localStorage.getItem("topic"))
 });

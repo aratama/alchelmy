@@ -5,7 +5,7 @@ module ElmPortfolio.Page.Preferences exposing (Model, Msg, Route, page, route)
 
 import Browser exposing (Document)
 import Browser.Navigation exposing (Key, pushUrl)
-import ElmPortfolio.Ports exposing (receiveThemeFromLocalStorage, requestThemeFromLocalStorage, saveThemeToLocalStorage)
+import ElmPortfolio.Ports exposing (receiveTopic, requestTopic, saveTopic)
 import ElmPortfolio.Root as Root exposing (Flags, Session, SessionMsg(..), initial, link, sessionOnUrlRequest, sessionUpdate, updateTopic)
 import Html exposing (Html, a, button, div, h1, img, input, p, text)
 import Html.Attributes exposing (class, href, src, type_, value)
@@ -42,7 +42,7 @@ init : Flags -> Url -> Key -> Route -> Maybe Session -> ( Model, Cmd Msg )
 init _ _ _ _ maybeSession =
     case maybeSession of
         Nothing ->
-            ( { session = initial, value = initial.topic }, requestThemeFromLocalStorage () )
+            ( { session = initial, value = initial.topic }, requestTopic () )
 
         Just session ->
             ( { session = session, value = session.topic }, Cmd.none )
@@ -62,13 +62,13 @@ update =
                             model.session
                     in
                     ( { model | session = { session | topic = model.value } }
-                    , saveThemeToLocalStorage model.value
+                    , saveTopic model.value
                     )
 
 
 subscriptions : Model -> Sub Msg
 subscriptions _ =
-    receiveThemeFromLocalStorage ReceiveThemeFromLocalStorage
+    receiveTopic ReceiveTopic
 
 
 view : Model -> Document Msg
@@ -79,7 +79,7 @@ view model =
             Html.map PageMsg <|
                 div [ class "page-preferences container" ]
                     [ h1 [] [ text "Preferences" ]
-                    , p [] [ text "Theme: ", input [ type_ "text", onInput InputUserName, value model.value ] [] ]
+                    , p [] [ text "Topic: ", input [ type_ "text", onInput InputUserName, value model.value ] [] ]
                     , p [] [ button [ onClick SaveUserName ] [ text "Save" ] ]
                     ]
         ]
