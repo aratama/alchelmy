@@ -14,4 +14,3 @@ node_modules
 .DS_Store
 
 src/ElmPortfolio/**/Alchemy.elm
-src/ElmPortfolio/**/alchemy.js
