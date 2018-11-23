@@ -6,7 +6,7 @@ module ElmPortfolio.Page.Preferences exposing (Model, Msg, Route, page, route)
 import Browser exposing (Document)
 import Browser.Navigation exposing (Key, pushUrl)
 import ElmPortfolio.Ports exposing (receiveTopic, requestTopic, saveTopic)
-import ElmPortfolio.Root as Root exposing (Flags, Session, SessionMsg(..), initialSession, link, sessionOnUrlRequest, sessionUpdate, updateTopic)
+import ElmPortfolio.Root as Root exposing (Flags, Session, SessionMsg(..), initialSession, link, sessionUpdate, updateTopic)
 import Html exposing (Html, a, button, div, h1, img, input, p, text)
 import Html.Attributes exposing (class, href, src, type_, value)
 import Html.Events exposing (custom, onClick, onInput)
@@ -26,6 +26,7 @@ type PageMsg
 type alias Model =
     { value : String
     , session : Session
+    , key : Key
     }
 
 
@@ -39,13 +40,13 @@ route =
 
 
 init : Flags -> Url -> Key -> Route -> Maybe Session -> ( Model, Cmd Msg )
-init _ _ _ _ maybeSession =
+init _ _ key _ maybeSession =
     case maybeSession of
         Nothing ->
-            ( { session = initialSession, value = initialSession.topic }, requestTopic () )
+            ( { session = initialSession, value = initialSession.topic, key = key }, requestTopic () )
 
         Just session ->
-            ( { session = session, value = session.topic }, Cmd.none )
+            ( { session = session, value = session.topic, key = key }, Cmd.none )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -93,5 +94,6 @@ page =
     , view = view
     , update = update
     , subscriptions = subscriptions
-    , onUrlRequest = sessionOnUrlRequest
+    , onUrlRequest = UrlRequest
+    , session = \model -> model.session
     }

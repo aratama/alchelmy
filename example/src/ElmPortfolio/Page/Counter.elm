@@ -6,7 +6,7 @@ module ElmPortfolio.Page.Counter exposing (Model, Msg, Route, page)
 import Browser exposing (Document, UrlRequest(..))
 import Browser.Navigation exposing (Key)
 import ElmPortfolio.Ports exposing (receiveTopic, requestTopic)
-import ElmPortfolio.Root as Root exposing (Flags, Session, SessionMsg(..), initialSession, sessionOnUrlRequest, sessionUpdate, updateTopic)
+import ElmPortfolio.Root as Root exposing (Flags, Session, SessionMsg(..), initialSession, sessionUpdate, updateTopic, defaultNavigation)
 import Html exposing (Html, a, button, div, h1, p, text)
 import Html.Attributes exposing (class, href, src)
 import Html.Events exposing (custom, onClick)
@@ -42,6 +42,7 @@ type PageMsg
 
 type alias Model =
     { session : Session
+    , key : Key
     , count : Int
     }
 
@@ -60,13 +61,13 @@ route =
 
 
 init : Flags -> Url -> Key -> Route -> Maybe Session -> ( Model, Cmd Msg )
-init _ _ _ _ maybeSession =
+init _ _ key _ maybeSession =
     case maybeSession of
         Nothing ->
-            ( { session = initialSession, count = 0 }, requestTopic () )
+            ( { session = initialSession, key = key, count = 0 }, requestTopic () )
 
         Just session ->
-            ( { session = session, count = 0 }, Cmd.none )
+            ( { session = session, key = key, count = 0 }, Cmd.none )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -109,5 +110,6 @@ page =
     , view = view
     , update = update
     , subscriptions = subscriptions
-    , onUrlRequest = sessionOnUrlRequest
+    , onUrlRequest = UrlRequest 
+    , session = \model -> model.session
     }

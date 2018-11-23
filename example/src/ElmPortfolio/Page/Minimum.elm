@@ -3,9 +3,9 @@
 
 module ElmPortfolio.Page.Minimum exposing (Model, Msg, Route, page)
 
-import Browser exposing (Document)
+import Browser exposing (Document, UrlRequest(..))
 import Browser.Navigation exposing (Key)
-import ElmPortfolio.Root as Root exposing (Flags, Session, initialSession)
+import ElmPortfolio.Root as Root exposing (Flags, Session, initialSession, defaultNavigation)
 import Html exposing (h1, text)
 import Html.Attributes exposing (class)
 import Url exposing (Url)
@@ -13,11 +13,11 @@ import Url.Parser exposing (Parser, map, s)
 
 
 type Msg
-    = NoOp
+    = UrlRequest UrlRequest
 
 
 type alias Model =
-    { session : Session }
+    { session : Session, key : Key }
 
 
 type alias Route =
@@ -27,9 +27,11 @@ type alias Route =
 page : Root.Page Model Msg Route a
 page =
     { route = map () (s "minimum")
-    , init = \_ _ _ _ session -> ( { session = Maybe.withDefault initialSession session }, Cmd.none )
+    , init = \_ _ key _ session -> ( { session = Maybe.withDefault initialSession session, key = key }, Cmd.none )
     , view = always { title = "Minimum - ElmPortfolio", body = [ h1 [class "page-minimum"] [ text "Minimum" ] ] }
-    , update = \msg model -> ( model, Cmd.none )
+    , update = \msg model -> case msg of 
+        UrlRequest urlRequest -> defaultNavigation model urlRequest
     , subscriptions = always Sub.none
-    , onUrlRequest = always Nothing
+    , onUrlRequest = UrlRequest
+    , session = \model -> model.session
     }

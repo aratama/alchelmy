@@ -6,7 +6,7 @@ module ElmPortfolio.Page.URLParsing exposing (Model, Msg, Route, page, route)
 import Browser exposing (Document)
 import Browser.Navigation exposing (Key)
 import ElmPortfolio.Ports exposing (receiveTopic, requestTopic)
-import ElmPortfolio.Root as Root exposing (Flags, Session, SessionMsg(..), initialSession, link, sessionOnUrlRequest, sessionUpdate, updateTopic)
+import ElmPortfolio.Root as Root exposing (Flags, Session, SessionMsg(..), initialSession, link, sessionUpdate, updateTopic)
 import Html exposing (Html, a, div, h1, img, p, text)
 import Html.Attributes exposing (class, href, src)
 import Url as Url exposing (Protocol(..), Url)
@@ -21,6 +21,7 @@ type alias Model =
     { session : Session
     , id : Int
     , location : Url
+    , key : Key
     }
 
 
@@ -37,10 +38,10 @@ init : Flags -> Url -> Key -> Route -> Maybe Session -> ( Model, Cmd Msg )
 init _ location key id maybeSession =
     case maybeSession of
         Nothing ->
-            ( { session = initialSession, id = id, location = location }, requestTopic () )
+            ( { session = initialSession, id = id, location = location, key = key }, requestTopic () )
 
         Just session ->
-            ( { session = session, id = id, location = location }, Cmd.none )
+            ( { session = session, id = id, location = location, key = key }, Cmd.none )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -76,5 +77,6 @@ page =
     , view = view
     , update = update
     , subscriptions = subscriptions
-    , onUrlRequest = sessionOnUrlRequest
+    , onUrlRequest = UrlRequest
+    , session = \model -> model.session
     }

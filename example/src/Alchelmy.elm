@@ -82,10 +82,7 @@ update msg (Model model) =
           case model.route of
 
             State__ElmPortfolio_Page_Counter pmodel ->
-              case ElmPortfolio.Page.Counter.page.onUrlRequest urlRequest of
-                Nothing -> defaultNavigation
-                Just onUrlRequestMsg ->
-                  case ElmPortfolio.Page.Counter.page.update onUrlRequestMsg pmodel of
+                  case ElmPortfolio.Page.Counter.page.update (ElmPortfolio.Page.Counter.page.onUrlRequest urlRequest) pmodel of
                     (pmodel_, pcmd) ->
                       ( Model { model | session = pmodel_.session, route = State__ElmPortfolio_Page_Counter pmodel_ }
                       , Cmd.map Msg__ElmPortfolio_Page_Counter pcmd
@@ -93,10 +90,7 @@ update msg (Model model) =
         
 
             State__ElmPortfolio_Page_Http pmodel ->
-              case ElmPortfolio.Page.Http.page.onUrlRequest urlRequest of
-                Nothing -> defaultNavigation
-                Just onUrlRequestMsg ->
-                  case ElmPortfolio.Page.Http.page.update onUrlRequestMsg pmodel of
+                  case ElmPortfolio.Page.Http.page.update (ElmPortfolio.Page.Http.page.onUrlRequest urlRequest) pmodel of
                     (pmodel_, pcmd) ->
                       ( Model { model | session = pmodel_.session, route = State__ElmPortfolio_Page_Http pmodel_ }
                       , Cmd.map Msg__ElmPortfolio_Page_Http pcmd
@@ -104,10 +98,7 @@ update msg (Model model) =
         
 
             State__ElmPortfolio_Page_Minimum pmodel ->
-              case ElmPortfolio.Page.Minimum.page.onUrlRequest urlRequest of
-                Nothing -> defaultNavigation
-                Just onUrlRequestMsg ->
-                  case ElmPortfolio.Page.Minimum.page.update onUrlRequestMsg pmodel of
+                  case ElmPortfolio.Page.Minimum.page.update (ElmPortfolio.Page.Minimum.page.onUrlRequest urlRequest) pmodel of
                     (pmodel_, pcmd) ->
                       ( Model { model | session = pmodel_.session, route = State__ElmPortfolio_Page_Minimum pmodel_ }
                       , Cmd.map Msg__ElmPortfolio_Page_Minimum pcmd
@@ -115,10 +106,7 @@ update msg (Model model) =
         
 
             State__ElmPortfolio_Page_NotFound pmodel ->
-              case ElmPortfolio.Page.NotFound.page.onUrlRequest urlRequest of
-                Nothing -> defaultNavigation
-                Just onUrlRequestMsg ->
-                  case ElmPortfolio.Page.NotFound.page.update onUrlRequestMsg pmodel of
+                  case ElmPortfolio.Page.NotFound.page.update (ElmPortfolio.Page.NotFound.page.onUrlRequest urlRequest) pmodel of
                     (pmodel_, pcmd) ->
                       ( Model { model | session = pmodel_.session, route = State__ElmPortfolio_Page_NotFound pmodel_ }
                       , Cmd.map Msg__ElmPortfolio_Page_NotFound pcmd
@@ -126,10 +114,7 @@ update msg (Model model) =
         
 
             State__ElmPortfolio_Page_Preferences pmodel ->
-              case ElmPortfolio.Page.Preferences.page.onUrlRequest urlRequest of
-                Nothing -> defaultNavigation
-                Just onUrlRequestMsg ->
-                  case ElmPortfolio.Page.Preferences.page.update onUrlRequestMsg pmodel of
+                  case ElmPortfolio.Page.Preferences.page.update (ElmPortfolio.Page.Preferences.page.onUrlRequest urlRequest) pmodel of
                     (pmodel_, pcmd) ->
                       ( Model { model | session = pmodel_.session, route = State__ElmPortfolio_Page_Preferences pmodel_ }
                       , Cmd.map Msg__ElmPortfolio_Page_Preferences pcmd
@@ -137,10 +122,7 @@ update msg (Model model) =
         
 
             State__ElmPortfolio_Page_Time pmodel ->
-              case ElmPortfolio.Page.Time.page.onUrlRequest urlRequest of
-                Nothing -> defaultNavigation
-                Just onUrlRequestMsg ->
-                  case ElmPortfolio.Page.Time.page.update onUrlRequestMsg pmodel of
+                  case ElmPortfolio.Page.Time.page.update (ElmPortfolio.Page.Time.page.onUrlRequest urlRequest) pmodel of
                     (pmodel_, pcmd) ->
                       ( Model { model | session = pmodel_.session, route = State__ElmPortfolio_Page_Time pmodel_ }
                       , Cmd.map Msg__ElmPortfolio_Page_Time pcmd
@@ -148,10 +130,7 @@ update msg (Model model) =
         
 
             State__ElmPortfolio_Page_Top pmodel ->
-              case ElmPortfolio.Page.Top.page.onUrlRequest urlRequest of
-                Nothing -> defaultNavigation
-                Just onUrlRequestMsg ->
-                  case ElmPortfolio.Page.Top.page.update onUrlRequestMsg pmodel of
+                  case ElmPortfolio.Page.Top.page.update (ElmPortfolio.Page.Top.page.onUrlRequest urlRequest) pmodel of
                     (pmodel_, pcmd) ->
                       ( Model { model | session = pmodel_.session, route = State__ElmPortfolio_Page_Top pmodel_ }
                       , Cmd.map Msg__ElmPortfolio_Page_Top pcmd
@@ -159,10 +138,7 @@ update msg (Model model) =
         
 
             State__ElmPortfolio_Page_URLParsing pmodel ->
-              case ElmPortfolio.Page.URLParsing.page.onUrlRequest urlRequest of
-                Nothing -> defaultNavigation
-                Just onUrlRequestMsg ->
-                  case ElmPortfolio.Page.URLParsing.page.update onUrlRequestMsg pmodel of
+                  case ElmPortfolio.Page.URLParsing.page.update (ElmPortfolio.Page.URLParsing.page.onUrlRequest urlRequest) pmodel of
                     (pmodel_, pcmd) ->
                       ( Model { model | session = pmodel_.session, route = State__ElmPortfolio_Page_URLParsing pmodel_ }
                       , Cmd.map Msg__ElmPortfolio_Page_URLParsing pcmd

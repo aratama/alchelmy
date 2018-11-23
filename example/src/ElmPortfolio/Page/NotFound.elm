@@ -3,10 +3,10 @@
 
 module ElmPortfolio.Page.NotFound exposing (Model, Msg, Route, page, route)
 
-import Browser exposing (Document)
+import Browser exposing (Document, UrlRequest(..))
 import Browser.Navigation exposing (Key, pushUrl)
 import ElmPortfolio.Ports exposing (receiveTopic, requestTopic)
-import ElmPortfolio.Root as Root exposing (Flags, Session, SessionMsg(..), initialSession, link, sessionOnUrlRequest, updateTopic)
+import ElmPortfolio.Root as Root exposing (Flags, Session, SessionMsg(..), initialSession, link, updateTopic, defaultNavigation)
 import Html exposing (Html, a, div, h1, img, p, text)
 import Html.Attributes exposing (class, href, src)
 import Json.Decode as Decode
@@ -16,10 +16,11 @@ import Url.Parser as UrlParser exposing ((</>), Parser, map, s, top)
 
 type Msg
     = ReceiveTopic (Maybe String)
+    | UrlRequest UrlRequest
 
 
 type alias Model =
-    { session : Session }
+    { session : Session, key : Key }
 
 
 type alias Route =
@@ -32,13 +33,13 @@ route =
 
 
 init : Flags -> Url -> Key -> Route -> Maybe Session -> ( Model, Cmd Msg )
-init _ _ _ _ maybeSession =
+init _ _ key _ maybeSession =
     case maybeSession of
         Nothing ->
-            ( { session = initialSession }, requestTopic () )
+            ( { session = initialSession, key = key }, requestTopic () )
 
         Just session ->
-            ( { session = session }, Cmd.none )
+            ( { session = session, key = key }, Cmd.none )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -46,6 +47,9 @@ update msg model =
     case msg of
         ReceiveTopic topic ->
             ( updateTopic model topic, Cmd.none )
+
+        UrlRequest urlRequest ->
+            defaultNavigation model urlRequest
 
 
 subscriptions : Model -> Sub Msg
@@ -71,5 +75,6 @@ page =
     , view = view
     , update = update
     , subscriptions = subscriptions
-    , onUrlRequest = always Nothing
+    , onUrlRequest = UrlRequest
+    , session = \model -> model.session
     }

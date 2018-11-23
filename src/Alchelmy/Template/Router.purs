@@ -74,10 +74,7 @@ update msg (Model model) =
           case model.route of
 """ <> joinWith "\n" (map (\page -> """
             State__""" <> u page <> """ pmodel ->
-              case """ <> page <> """.page.onUrlRequest urlRequest of
-                Nothing -> defaultNavigation
-                Just onUrlRequestMsg ->
-                  case """ <> page <> """.page.update onUrlRequestMsg pmodel of
+                  case """ <> page <> """.page.update (""" <> page <> """.page.onUrlRequest urlRequest) pmodel of
                     (pmodel_, pcmd) ->
                       ( Model { model | session = pmodel_.session, route = State__""" <> u page <> """ pmodel_ }
                       , Cmd.map Msg__""" <> u page <> """ pcmd
@@ -152,7 +149,6 @@ init flags location key =
         case parseLocation location of
 
 """ <> joinWith "\n" (map (\page ->
-
 "          Route__" <> u page <> " routeValue -> case " <> page <> """.page.init flags location key routeValue Nothing of
                 (initialModel, initialCmd) ->
                     ( Model

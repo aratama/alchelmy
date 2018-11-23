@@ -1,9 +1,10 @@
 -- alchelmy root page
 
-module ElmPortfolio.Root exposing (Flags, Page, Session, SessionMsg(..), initialSession, link, sessionOnUrlRequest, sessionUpdate, updateTopic, view)
+
+module ElmPortfolio.Root exposing (Flags, Page, Session, SessionMsg(..), initialSession, link, defaultNavigation, sessionUpdate, updateTopic, view)
 
 import Browser exposing (Document, UrlRequest(..))
-import Browser.Navigation exposing (Key, load)
+import Browser.Navigation exposing (Key, load, pushUrl)
 import Html exposing (Html, a, button, div, h1, header, p, text)
 import Html.Attributes exposing (class, href)
 import Html.Events exposing (onClick)
@@ -27,8 +28,9 @@ type alias Page model msg route a =
     , view : model -> Document msg
     , update : msg -> model -> ( model, Cmd msg )
     , subscriptions : model -> Sub msg
+    , onUrlRequest : UrlRequest -> msg
     , route : Parser (route -> a) a
-    , onUrlRequest : UrlRequest -> Maybe msg
+    , session : model -> Session
     }
 
 
@@ -91,13 +93,14 @@ type SessionMsg a
     | Jump String
     | CloseDialog
     | PageMsg a
+    | UrlRequest UrlRequest
 
 
 sessionUpdate :
-    (a -> { model | session : Session } -> ( { model | session : Session }, Cmd (SessionMsg a) ))
+    (a -> { model | session : Session, key : Key } -> ( { model | session : Session, key : Key }, Cmd (SessionMsg a) ))
     -> SessionMsg a
-    -> { model | session : Session }
-    -> ( { model | session : Session }, Cmd (SessionMsg a) )
+    -> { model | session : Session, key : Key }
+    -> ( { model | session : Session, key : Key }, Cmd (SessionMsg a) )
 sessionUpdate f msg model =
     let
         session =
@@ -118,18 +121,19 @@ sessionUpdate f msg model =
 
         PageMsg pmsg ->
             f pmsg model
+    
+        UrlRequest urlRequest ->
+            case urlRequest of
+                    Internal url ->
+                        ( model
+                        , pushUrl model.key (Url.toString url)
+                        )
 
-
-sessionOnUrlRequest : UrlRequest -> Maybe (SessionMsg a)
-sessionOnUrlRequest req =
-    case req of
-        Internal _ ->
-            Nothing -- default behavior for Nothing
-
-        External url ->
-            Just <| ExternalLink url
-
-
+                    External url -> 
+                        ( { model | session = { session | destination = Just url } }
+                        , Cmd.none
+                        )
+                        
 updateTopic : { a | session : Session } -> Maybe String -> { a | session : Session }
 updateTopic model maybeTopic =
     let
@@ -140,3 +144,17 @@ updateTopic model maybeTopic =
             Maybe.withDefault "goat" maybeTopic
     in
     { model | session = { session | topic = topic } }
+
+
+defaultNavigation : { model | key : Key, session : Session } -> UrlRequest -> ( { model | key : Key, session : Session }, Cmd msg )
+defaultNavigation model urlRequest =
+    case urlRequest of
+        Internal url ->
+            ( model
+            , pushUrl model.key (Url.toString url)
+            )
+
+        External url -> let session = model.session in
+            ( model
+            , load url
+            )
