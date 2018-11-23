@@ -61,11 +61,12 @@ view model =
     { title = "URLParsing - ElmPortfolio"
     , body =
         [ Root.view model.session <|
-            div [ class "page-url-parser container" ]
-                [ h1 [] [ text "URL Parsing" ]
-                , p [] [ text <| "URL: " ++ Url.toString model.location ]
-                , p [] [ text <| "Parameter: " ++ String.fromInt model.id ]
-                ]
+            Html.map PageMsg <|
+                div [ class "page-url-parser container" ]
+                    [ h1 [] [ text "URL Parsing" ]
+                    , p [] [ text <| "URL: " ++ Url.toString model.location ]
+                    , p [] [ text <| "Parameter: " ++ String.fromInt model.id ]
+                    ]
         ]
     }
 

@@ -60,9 +60,10 @@ view model =
     { title = "Top - ElmPortfolio"
     , body =
         [ Root.view model.session <|
-            div [ class "page-top" ]
-                [ h1 [] [ text "Top" ]
-                ]
+            Html.map PageMsg <|
+                div [ class "page-top" ]
+                    [ h1 [] [ text "Top" ]
+                    ]
         ]
     }
 
