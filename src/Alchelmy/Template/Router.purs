@@ -37,7 +37,6 @@ import """ <> application <> """.Root as Root
 
 type Model = Model
   { route : RouteState
-  , session : Root.Session
   , key : Key
   , flags : Root.Flags
   }
@@ -52,6 +51,13 @@ type Msg
   = UrlRequest UrlRequest
   | Navigate Url
 """ <> joinWith "\n" (map (\page -> "  | Msg__" <> u page <> " " <> page <> ".Msg") fullPageModuleNames) <> """
+
+currentSession : RouteState -> Root.Session
+currentSession route = case route of 
+""" <> joinWith "\n" (map (\page -> """
+        State__""" <> u page <> """ pageModel ->
+          """ <> page <> """.page.session pageModel """
+) fullPageModuleNames) <> """
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -76,7 +82,7 @@ update msg (Model model) =
             State__""" <> u page <> """ pmodel ->
                   case """ <> page <> """.page.update (""" <> page <> """.page.onUrlRequest urlRequest) pmodel of
                     (pmodel_, pcmd) ->
-                      ( Model { model | session = pmodel_.session, route = State__""" <> u page <> """ pmodel_ }
+                      ( Model { model | route = State__""" <> u page <> """ pmodel_ }
                       , Cmd.map Msg__""" <> u page <> """ pcmd
                       )
         """
@@ -89,9 +95,9 @@ update msg (Model model) =
             case parseLocation location of
 """ <> joinWith "\n" (map (\page_ -> """
                 Route__""" <> u page_ <> """ routeValue ->
-                      case """ <> page_ <> """.page.init model.flags location model.key routeValue (Just model.session) of
+                      case """ <> page_ <> """.page.init model.flags location model.key routeValue (Just (currentSession model.route)) of
                         (initialModel, initialCmd) ->
-                          ( Model { model | session = initialModel.session, route = State__""" <> u page_ <> """ initialModel }
+                          ( Model { model | route = State__""" <> u page_ <> """ initialModel }
                           , Cmd.map Msg__""" <> u page_ <> """ initialCmd
                           )
                 """
@@ -109,9 +115,9 @@ update msg (Model model) =
     Msg__""" <> u page <> """ pageMsg ->
       case model.route of
         State__""" <> u page <> """ pageModel ->
-          case """ <> page <> """.page.update pageMsg { pageModel | session = model.session } of
+          case """ <> page <> """.page.update pageMsg pageModel of
             (pageModel_, pageCmd ) ->
-              (Model { model | session = pageModel_.session, route = State__""" <> u page <> """ pageModel_ }, Cmd.map Msg__""" <> u page <> """ pageCmd)
+              (Model { model | route = State__""" <> u page <> """ pageModel_ }, Cmd.map Msg__""" <> u page <> """ pageCmd)
         """ <> if 1 < length pages then "_ -> (Model model, Cmd.none)" else ""
 ) fullPageModuleNames) <> """
 
@@ -122,7 +128,7 @@ view : Model -> Document Msg
 view (Model model) = case model.route of
 
 """ <> joinWith "\n" (map (\page ->
-        "  State__" <> u page <> " m -> documentMap Msg__" <> u page <> " (" <> page <> ".page.view { m | session = model.session })"
+        "  State__" <> u page <> " m -> documentMap Msg__" <> u page <> " (" <> page <> ".page.view m)"
 ) fullPageModuleNames) <> """
 
 matchers : Parser (Route -> a) a
@@ -153,7 +159,6 @@ init flags location key =
                 (initialModel, initialCmd) ->
                     ( Model
                         { route = State__""" <> u page <> """ initialModel
-                        , session = initialModel.session
                         , key = key
                         , flags = flags
                         }
