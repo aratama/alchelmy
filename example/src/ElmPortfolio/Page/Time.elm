@@ -6,7 +6,7 @@ module ElmPortfolio.Page.Time exposing (Model, Msg, Route, page, route)
 import Browser exposing (Document)
 import Browser.Navigation exposing (Key, pushUrl)
 import ElmPortfolio.Ports exposing (receiveTopic, requestTopic)
-import ElmPortfolio.Root as Root exposing (Flags, Session, SessionMsg(..), initial, link, sessionOnUrlRequest, sessionUpdate, updateTopic)
+import ElmPortfolio.Root as Root exposing (Flags, Session, SessionMsg(..), initialSession, link, sessionOnUrlRequest, sessionUpdate, updateTopic)
 import Html exposing (Html, a, br, button, div, h1, h2, img, p, text)
 import Html.Attributes exposing (class, href, src)
 import Svg exposing (circle, line, svg)
@@ -43,7 +43,7 @@ init : Flags -> Url -> Key -> Route -> Maybe Session -> ( Model, Cmd Msg )
 init _ _ _ _ maybeSession =
     case maybeSession of
         Nothing ->
-            ( { session = initial, posix = millisToPosix 0 }, requestTopic () )
+            ( { session = initialSession, posix = millisToPosix 0 }, requestTopic () )
 
         Just session ->
             ( { session = session, posix = millisToPosix 0 }

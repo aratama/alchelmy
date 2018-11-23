@@ -1,12 +1,12 @@
 -- alchelmy page
 
 
-module ElmPortfolio.Page.Counter exposing (Model, Msg, Route, page, route)
+module ElmPortfolio.Page.Counter exposing (Model, Msg, Route, page)
 
 import Browser exposing (Document, UrlRequest(..))
 import Browser.Navigation exposing (Key)
 import ElmPortfolio.Ports exposing (receiveTopic, requestTopic)
-import ElmPortfolio.Root as Root exposing (Flags, Session, SessionMsg(..), initial, sessionOnUrlRequest, sessionUpdate, updateTopic)
+import ElmPortfolio.Root as Root exposing (Flags, Session, SessionMsg(..), initialSession, sessionOnUrlRequest, sessionUpdate, updateTopic)
 import Html exposing (Html, a, button, div, h1, p, text)
 import Html.Attributes exposing (class, href, src)
 import Html.Events exposing (custom, onClick)
@@ -63,7 +63,7 @@ init : Flags -> Url -> Key -> Route -> Maybe Session -> ( Model, Cmd Msg )
 init _ _ _ _ maybeSession =
     case maybeSession of
         Nothing ->
-            ( { session = initial, count = 0 }, requestTopic () )
+            ( { session = initialSession, count = 0 }, requestTopic () )
 
         Just session ->
             ( { session = session, count = 0 }, Cmd.none )

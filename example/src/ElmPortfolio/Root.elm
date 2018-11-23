@@ -1,6 +1,6 @@
 -- alchelmy root page
 
-module ElmPortfolio.Root exposing (Flags, Page, Session, SessionMsg(..), initial, link, sessionOnUrlRequest, sessionUpdate, updateTopic, view)
+module ElmPortfolio.Root exposing (Flags, Page, Session, SessionMsg(..), initialSession, link, sessionOnUrlRequest, sessionUpdate, updateTopic, view)
 
 import Browser exposing (Document, UrlRequest(..))
 import Browser.Navigation exposing (Key, load)
@@ -32,8 +32,8 @@ type alias Page model msg route a =
     }
 
 
-initial : Session
-initial =
+initialSession : Session
+initialSession =
     { topic = "goat", destination = Nothing }
 
 
@@ -124,7 +124,7 @@ sessionOnUrlRequest : UrlRequest -> Maybe (SessionMsg a)
 sessionOnUrlRequest req =
     case req of
         Internal _ ->
-            Nothing
+            Nothing -- default behavior for Nothing
 
         External url ->
             Just <| ExternalLink url

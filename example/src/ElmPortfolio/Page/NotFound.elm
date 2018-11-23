@@ -6,7 +6,7 @@ module ElmPortfolio.Page.NotFound exposing (Model, Msg, Route, page, route)
 import Browser exposing (Document)
 import Browser.Navigation exposing (Key, pushUrl)
 import ElmPortfolio.Ports exposing (receiveTopic, requestTopic)
-import ElmPortfolio.Root as Root exposing (Flags, Session, SessionMsg(..), initial, link, sessionOnUrlRequest, updateTopic)
+import ElmPortfolio.Root as Root exposing (Flags, Session, SessionMsg(..), initialSession, link, sessionOnUrlRequest, updateTopic)
 import Html exposing (Html, a, div, h1, img, p, text)
 import Html.Attributes exposing (class, href, src)
 import Json.Decode as Decode
@@ -35,7 +35,7 @@ init : Flags -> Url -> Key -> Route -> Maybe Session -> ( Model, Cmd Msg )
 init _ _ _ _ maybeSession =
     case maybeSession of
         Nothing ->
-            ( { session = initial }, requestTopic () )
+            ( { session = initialSession }, requestTopic () )
 
         Just session ->
             ( { session = session }, Cmd.none )

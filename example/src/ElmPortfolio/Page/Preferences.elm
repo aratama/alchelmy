@@ -6,7 +6,7 @@ module ElmPortfolio.Page.Preferences exposing (Model, Msg, Route, page, route)
 import Browser exposing (Document)
 import Browser.Navigation exposing (Key, pushUrl)
 import ElmPortfolio.Ports exposing (receiveTopic, requestTopic, saveTopic)
-import ElmPortfolio.Root as Root exposing (Flags, Session, SessionMsg(..), initial, link, sessionOnUrlRequest, sessionUpdate, updateTopic)
+import ElmPortfolio.Root as Root exposing (Flags, Session, SessionMsg(..), initialSession, link, sessionOnUrlRequest, sessionUpdate, updateTopic)
 import Html exposing (Html, a, button, div, h1, img, input, p, text)
 import Html.Attributes exposing (class, href, src, type_, value)
 import Html.Events exposing (custom, onClick, onInput)
@@ -42,7 +42,7 @@ init : Flags -> Url -> Key -> Route -> Maybe Session -> ( Model, Cmd Msg )
 init _ _ _ _ maybeSession =
     case maybeSession of
         Nothing ->
-            ( { session = initial, value = initial.topic }, requestTopic () )
+            ( { session = initialSession, value = initialSession.topic }, requestTopic () )
 
         Just session ->
             ( { session = session, value = session.topic }, Cmd.none )
