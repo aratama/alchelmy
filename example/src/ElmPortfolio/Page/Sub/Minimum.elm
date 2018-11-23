@@ -1,7 +1,7 @@
 -- alchelmy page
 
 
-module ElmPortfolio.Page.Minimum exposing (Model, Msg, Route, page)
+module ElmPortfolio.Page.Sub.Minimum exposing (Model, Msg, Route, page)
 
 import Browser exposing (Document, UrlRequest(..))
 import Browser.Navigation exposing (Key)

@@ -1,6 +1,6 @@
 import './ElmPortfolio/Page/Counter.css'
 import './ElmPortfolio/Page/Http.css'
-import './ElmPortfolio/Page/Minimum.css'
+import './ElmPortfolio/Page/Sub/Minimum.css'
 import './ElmPortfolio/Page/NotFound.css'
 import './ElmPortfolio/Page/Preferences.css'
 import './ElmPortfolio/Page/Time.css'

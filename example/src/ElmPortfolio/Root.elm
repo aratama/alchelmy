@@ -74,13 +74,13 @@ view model content =
                 div [ class "dialog-outer" ]
                     [ div [ class "dialog" ]
                         [ div [ class "upper" ]
-                            [ text "外部サイト"
+                            [ text "Would you go to \""
                             , text destination
-                            , text "に移動しますか？"
+                            , text "\" ?"
                             ]
                         , div [ class "lower" ]
-                            [ button [ onClick (Jump destination) ] [ text "移動する" ]
-                            , button [ onClick CloseDialog ] [ text "取り消す" ]
+                            [ button [ onClick (Jump destination) ] [ text "Go to the page" ]
+                            , button [ onClick CloseDialog ] [ text "Cancel" ]
                             ]
                         ]
                     ]
