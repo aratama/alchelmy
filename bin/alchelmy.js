@@ -11232,8 +11232,8 @@ var PS = {};
           })(fullPageModuleNames)) + ("\x0a\x0a    Navigate location ->\x0a\x0a      let\x0a        defaultNavigation =\x0a            case parseLocation location of\x0a" + (Data_String_Common.joinWith("\x0a")(Data_Functor.map(Data_Functor.functorArray)(function (page_) {
               return "\x0a                Route__" + (u(page_) + (" routeValue ->\x0a                      case " + (page_ + (".page.init model.flags location model.key routeValue (Just (currentSession model.route)) of\x0a                        (initialModel, initialCmd) ->\x0a                          ( Model { model | route = State__" + (u(page_) + (" initialModel }\x0a                          , Cmd.map Msg__" + (u(page_) + " initialCmd\x0a                          )\x0a                ")))))));
           })(fullPageModuleNames)) + ("\x0a      in\x0a      case model.route of\x0a" + (Data_String_Common.joinWith("\x0a")(Data_Functor.map(Data_Functor.functorArray)(function (page) {
-              return "\x0a        State__" + (u(page) + " pmodel -> defaultNavigation\x0a        ");
-          })(fullPageModuleNames)) + ("\x0a\x0a\x0a" + (Data_String_Common.joinWith("\x0a")(Data_Functor.map(Data_Functor.functorArray)(function (page) {
+              return "\x0a        State__" + (u(page) + " pmodel -> defaultNavigation");
+          })(fullPageModuleNames)) + ("\x0a" + (Data_String_Common.joinWith("\x0a")(Data_Functor.map(Data_Functor.functorArray)(function (page) {
               return "\x0a    Msg__" + (u(page) + (" pageMsg ->\x0a      case model.route of\x0a        State__" + (u(page) + (" pageModel ->\x0a          case " + (page + (".page.update pageMsg pageModel of\x0a            (pageModel_, pageCmd ) ->\x0a              (Model { model | route = State__" + (u(page) + (" pageModel_ }, Cmd.map Msg__" + (u(page) + (" pageCmd)\x0a        " + (function () {
                   var $3 = 1 < Data_Array.length(pages);
                   if ($3) {

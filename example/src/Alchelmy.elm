@@ -244,30 +244,20 @@ update msg (Model model) =
       case model.route of
 
         State__ElmPortfolio_Page_Counter pmodel -> defaultNavigation
-        
 
         State__ElmPortfolio_Page_Http pmodel -> defaultNavigation
-        
 
         State__ElmPortfolio_Page_NotFound pmodel -> defaultNavigation
-        
 
         State__ElmPortfolio_Page_Preferences pmodel -> defaultNavigation
-        
 
         State__ElmPortfolio_Page_Sub_Minimum pmodel -> defaultNavigation
-        
 
         State__ElmPortfolio_Page_Time pmodel -> defaultNavigation
-        
 
         State__ElmPortfolio_Page_Top pmodel -> defaultNavigation
-        
 
         State__ElmPortfolio_Page_URLParsing pmodel -> defaultNavigation
-        
-
-
 
     Msg__ElmPortfolio_Page_Counter pageMsg ->
       case model.route of

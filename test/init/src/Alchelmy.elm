@@ -106,12 +106,8 @@ update msg (Model model) =
       case model.route of
 
         State__TestProject_Page_NotFound pmodel -> defaultNavigation
-        
 
         State__TestProject_Page_Top pmodel -> defaultNavigation
-        
-
-
 
     Msg__TestProject_Page_NotFound pageMsg ->
       case model.route of

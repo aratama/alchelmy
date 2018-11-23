@@ -106,11 +106,8 @@ update msg (Model model) =
       in
       case model.route of
 """ <> joinWith "\n" (map (\page -> """
-        State__""" <> u page <> """ pmodel -> defaultNavigation
-        """
+        State__""" <> u page <> """ pmodel -> defaultNavigation"""
 ) fullPageModuleNames) <> """
-
-
 """ <> joinWith "\n" (map (\page -> """
     Msg__""" <> u page <> """ pageMsg ->
       case model.route of
