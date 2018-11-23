@@ -18,7 +18,6 @@ import TestProject.Page.Top
 
 type Model = Model
   { route : RouteState
-  , session : Root.Session
   , key : Key
   , flags : Root.Flags
   }
@@ -36,6 +35,15 @@ type Msg
   | Navigate Url
   | Msg__TestProject_Page_NotFound TestProject.Page.NotFound.Msg
   | Msg__TestProject_Page_Top TestProject.Page.Top.Msg
+
+currentSession : RouteState -> Root.Session
+currentSession route = case route of 
+
+        State__TestProject_Page_NotFound pageModel ->
+          TestProject.Page.NotFound.page.session pageModel 
+
+        State__TestProject_Page_Top pageModel ->
+          TestProject.Page.Top.page.session pageModel 
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -58,23 +66,17 @@ update msg (Model model) =
           case model.route of
 
             State__TestProject_Page_NotFound pmodel ->
-              case TestProject.Page.NotFound.page.onUrlRequest urlRequest of
-                Nothing -> defaultNavigation
-                Just onUrlRequestMsg ->
-                  case TestProject.Page.NotFound.page.update onUrlRequestMsg pmodel of
+                  case TestProject.Page.NotFound.page.update (TestProject.Page.NotFound.page.onUrlRequest urlRequest) pmodel of
                     (pmodel_, pcmd) ->
-                      ( Model { model | session = pmodel_.session, route = State__TestProject_Page_NotFound pmodel_ }
+                      ( Model { model | route = State__TestProject_Page_NotFound pmodel_ }
                       , Cmd.map Msg__TestProject_Page_NotFound pcmd
                       )
         
 
             State__TestProject_Page_Top pmodel ->
-              case TestProject.Page.Top.page.onUrlRequest urlRequest of
-                Nothing -> defaultNavigation
-                Just onUrlRequestMsg ->
-                  case TestProject.Page.Top.page.update onUrlRequestMsg pmodel of
+                  case TestProject.Page.Top.page.update (TestProject.Page.Top.page.onUrlRequest urlRequest) pmodel of
                     (pmodel_, pcmd) ->
-                      ( Model { model | session = pmodel_.session, route = State__TestProject_Page_Top pmodel_ }
+                      ( Model { model | route = State__TestProject_Page_Top pmodel_ }
                       , Cmd.map Msg__TestProject_Page_Top pcmd
                       )
         
@@ -86,17 +88,17 @@ update msg (Model model) =
             case parseLocation location of
 
                 Route__TestProject_Page_NotFound routeValue ->
-                      case TestProject.Page.NotFound.page.init model.flags location model.key routeValue (Just model.session) of
+                      case TestProject.Page.NotFound.page.init model.flags location model.key routeValue (Just (currentSession model.route)) of
                         (initialModel, initialCmd) ->
-                          ( Model { model | session = initialModel.session, route = State__TestProject_Page_NotFound initialModel }
+                          ( Model { model | route = State__TestProject_Page_NotFound initialModel }
                           , Cmd.map Msg__TestProject_Page_NotFound initialCmd
                           )
                 
 
                 Route__TestProject_Page_Top routeValue ->
-                      case TestProject.Page.Top.page.init model.flags location model.key routeValue (Just model.session) of
+                      case TestProject.Page.Top.page.init model.flags location model.key routeValue (Just (currentSession model.route)) of
                         (initialModel, initialCmd) ->
-                          ( Model { model | session = initialModel.session, route = State__TestProject_Page_Top initialModel }
+                          ( Model { model | route = State__TestProject_Page_Top initialModel }
                           , Cmd.map Msg__TestProject_Page_Top initialCmd
                           )
                 
@@ -114,17 +116,17 @@ update msg (Model model) =
     Msg__TestProject_Page_NotFound pageMsg ->
       case model.route of
         State__TestProject_Page_NotFound pageModel ->
-          case TestProject.Page.NotFound.page.update pageMsg { pageModel | session = model.session } of
+          case TestProject.Page.NotFound.page.update pageMsg pageModel of
             (pageModel_, pageCmd ) ->
-              (Model { model | session = pageModel_.session, route = State__TestProject_Page_NotFound pageModel_ }, Cmd.map Msg__TestProject_Page_NotFound pageCmd)
+              (Model { model | route = State__TestProject_Page_NotFound pageModel_ }, Cmd.map Msg__TestProject_Page_NotFound pageCmd)
         _ -> (Model model, Cmd.none)
 
     Msg__TestProject_Page_Top pageMsg ->
       case model.route of
         State__TestProject_Page_Top pageModel ->
-          case TestProject.Page.Top.page.update pageMsg { pageModel | session = model.session } of
+          case TestProject.Page.Top.page.update pageMsg pageModel of
             (pageModel_, pageCmd ) ->
-              (Model { model | session = pageModel_.session, route = State__TestProject_Page_Top pageModel_ }, Cmd.map Msg__TestProject_Page_Top pageCmd)
+              (Model { model | route = State__TestProject_Page_Top pageModel_ }, Cmd.map Msg__TestProject_Page_Top pageCmd)
         _ -> (Model model, Cmd.none)
 
 documentMap : (msg -> Msg) -> Document msg -> Document Msg
@@ -133,8 +135,8 @@ documentMap f { title, body } = { title = title, body = List.map (Html.map f) bo
 view : Model -> Document Msg
 view (Model model) = case model.route of
 
-  State__TestProject_Page_NotFound m -> documentMap Msg__TestProject_Page_NotFound (TestProject.Page.NotFound.page.view { m | session = model.session })
-  State__TestProject_Page_Top m -> documentMap Msg__TestProject_Page_Top (TestProject.Page.Top.page.view { m | session = model.session })
+  State__TestProject_Page_NotFound m -> documentMap Msg__TestProject_Page_NotFound (TestProject.Page.NotFound.page.view m)
+  State__TestProject_Page_Top m -> documentMap Msg__TestProject_Page_Top (TestProject.Page.Top.page.view m)
 
 matchers : Parser (Route -> a) a
 matchers =
@@ -164,7 +166,6 @@ init flags location key =
                 (initialModel, initialCmd) ->
                     ( Model
                         { route = State__TestProject_Page_NotFound initialModel
-                        , session = initialModel.session
                         , key = key
                         , flags = flags
                         }
@@ -175,7 +176,6 @@ init flags location key =
                 (initialModel, initialCmd) ->
                     ( Model
                         { route = State__TestProject_Page_Top initialModel
-                        , session = initialModel.session
                         , key = key
                         , flags = flags
                         }
