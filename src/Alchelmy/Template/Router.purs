@@ -64,19 +64,6 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg (Model model) =
   case msg of
     UrlRequest urlRequest ->
-      let
-        defaultNavigation =
-          case urlRequest of
-            Internal url ->
-              ( Model model
-              , pushUrl model.key (Url.toString url)
-              )
-
-            External url ->
-              ( Model model
-              , load url
-              )
-        in
           case model.route of
 """ <> joinWith "\n" (map (\page -> """
             State__""" <> u page <> """ pmodel ->
@@ -89,10 +76,7 @@ update msg (Model model) =
 ) fullPageModuleNames) <> """
 
     Navigate location ->
-
-      let
-        defaultNavigation =
-            case parseLocation location of
+      case parseLocation location of
 """ <> joinWith "\n" (map (\page_ -> """
                 Route__""" <> u page_ <> """ routeValue ->
                       case """ <> page_ <> """.page.init model.flags location model.key routeValue (Just (currentSession model.route)) of
@@ -103,11 +87,7 @@ update msg (Model model) =
                 """
       ) fullPageModuleNames) <>
 """
-      in
-      case model.route of
-""" <> joinWith "\n" (map (\page -> """
-        State__""" <> u page <> """ pmodel -> defaultNavigation"""
-) fullPageModuleNames) <> """
+  
 """ <> joinWith "\n" (map (\page -> """
     Msg__""" <> u page <> """ pageMsg ->
       case model.route of
@@ -142,9 +122,6 @@ parseLocation location =
 
         Nothing ->
             Route__""" <> u notFound <> """ ()
-
-navigate : Url -> Msg
-navigate = Navigate
 
 init : Root.Flags -> Url -> Key -> ( Model, Cmd Msg )
 init flags location key =

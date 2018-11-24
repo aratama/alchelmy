@@ -11,7 +11,7 @@ An experimental code generator for an Single Page Application with multiple page
 
 ## Abstract/Motivation
 
-[The Elm Architecture](https://guide.elm-lang.org/architecture/) is simple and readable architecture that suitable for use with simgle page application. However, you need write a lot of boring boilerplates when you want to add a new page in your application: For example, in your Main module, You need to add import declarations, add data constructor to hold `Msg` from child in parent `Msg`, add routes in routing and so on. alchelmy try to automatically generate those boilerplates.
+[The Elm Architecture](https://guide.elm-lang.org/architecture/) is simple and readable architecture that suitable for use with simgle page application. However, you need write a lot of boring boilerplates when you want to add a new page in your application: For example, in your Main module, You need to add import declarations, add data constructor to hold `Msg` from child in parent `Msg`, add routes in routing and so on. alchelmy try to generate those boilerplates automatically.
 
 In PHP, to add a new page, all you need is adding a single `Foo.php` in your project. In a like manner, in Alchelmy, all you need is adding only `<PageName>.elm` and writing few codes in it. You don't need to tweak a lot of huge `case-of` branches by hand any more.
 
@@ -105,7 +105,7 @@ $ npm run build
 
 ## Known Limitations
 
-- You can't specify order of precedence of routes. You should take care not to overlap other routings.
+- You can't specify order of precedence of routes. You should take care not to overlap routings.
 - You can't call the parent command from the child command. It's on purpose. Both `Root` modules and the page module aren't component and it's not in parent-child relationships.
 
 ## References 

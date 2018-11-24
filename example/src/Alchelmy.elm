@@ -92,19 +92,6 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg (Model model) =
   case msg of
     UrlRequest urlRequest ->
-      let
-        defaultNavigation =
-          case urlRequest of
-            Internal url ->
-              ( Model model
-              , pushUrl model.key (Url.toString url)
-              )
-
-            External url ->
-              ( Model model
-              , load url
-              )
-        in
           case model.route of
 
             State__ElmPortfolio_Page_Counter pmodel ->
@@ -172,10 +159,7 @@ update msg (Model model) =
         
 
     Navigate location ->
-
-      let
-        defaultNavigation =
-            case parseLocation location of
+      case parseLocation location of
 
                 Route__ElmPortfolio_Page_Counter routeValue ->
                       case ElmPortfolio.Page.Counter.page.init model.flags location model.key routeValue (Just (currentSession model.route)) of
@@ -240,24 +224,7 @@ update msg (Model model) =
                           , Cmd.map Msg__ElmPortfolio_Page_URLParsing initialCmd
                           )
                 
-      in
-      case model.route of
-
-        State__ElmPortfolio_Page_Counter pmodel -> defaultNavigation
-
-        State__ElmPortfolio_Page_Http pmodel -> defaultNavigation
-
-        State__ElmPortfolio_Page_NotFound pmodel -> defaultNavigation
-
-        State__ElmPortfolio_Page_Preferences pmodel -> defaultNavigation
-
-        State__ElmPortfolio_Page_Sub_Minimum pmodel -> defaultNavigation
-
-        State__ElmPortfolio_Page_Time pmodel -> defaultNavigation
-
-        State__ElmPortfolio_Page_Top pmodel -> defaultNavigation
-
-        State__ElmPortfolio_Page_URLParsing pmodel -> defaultNavigation
+  
 
     Msg__ElmPortfolio_Page_Counter pageMsg ->
       case model.route of
@@ -359,9 +326,6 @@ parseLocation location =
 
         Nothing ->
             Route__ElmPortfolio_Page_NotFound ()
-
-navigate : Url -> Msg
-navigate = Navigate
 
 init : Root.Flags -> Url -> Key -> ( Model, Cmd Msg )
 init flags location key =
