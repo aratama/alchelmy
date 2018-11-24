@@ -62,8 +62,8 @@ currentSession route = case route of
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg (Model model) =
-  case msg of
-    UrlRequest urlRequest ->
+  case (msg, model.route) of
+    (UrlRequest urlRequest, _) ->
           case model.route of
 """ <> joinWith "\n" (map (\page -> """
             State__""" <> u page <> """ pmodel ->
@@ -75,7 +75,7 @@ update msg (Model model) =
         """
 ) fullPageModuleNames) <> """
 
-    Navigate location ->
+    (Navigate location, _) ->
       case parseLocation location of
 """ <> joinWith "\n" (map (\page_ -> """
                 Route__""" <> u page_ <> """ routeValue ->
@@ -89,14 +89,14 @@ update msg (Model model) =
 """
   
 """ <> joinWith "\n" (map (\page -> """
-    Msg__""" <> u page <> """ pageMsg ->
-      case model.route of
-        State__""" <> u page <> """ pageModel ->
+    (Msg__""" <> u page <> """ pageMsg, State__""" <> u page <> """ pageModel) ->
           case """ <> page <> """.page.update pageMsg pageModel of
             (pageModel_, pageCmd ) ->
               (Model { model | route = State__""" <> u page <> """ pageModel_ }, Cmd.map Msg__""" <> u page <> """ pageCmd)
-        """ <> if 1 < length pages then "_ -> (Model model, Cmd.none)" else ""
+        """
 ) fullPageModuleNames) <> """
+
+    (_, _) -> (Model model, Cmd.none)
 
 documentMap : (msg -> Msg) -> Document msg -> Document Msg
 documentMap f { title, body } = { title = title, body = List.map (Html.map f) body }

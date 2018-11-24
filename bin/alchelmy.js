@@ -11194,7 +11194,6 @@ var PS = {};
   var Data_Function = PS["Data.Function"];
   var Data_Functor = PS["Data.Functor"];
   var Data_Maybe = PS["Data.Maybe"];
-  var Data_Ord = PS["Data.Ord"];
   var Data_Semigroup = PS["Data.Semigroup"];
   var Data_String = PS["Data.String"];
   var Data_String_Common = PS["Data.String.Common"];
@@ -11224,19 +11223,13 @@ var PS = {};
               return "  | Msg__" + (u(page) + (" " + (page + ".Msg")));
           })(fullPageModuleNames)) + ("\x0a\x0acurrentSession : RouteState -> Root.Session\x0acurrentSession route = case route of \x0a" + (Data_String_Common.joinWith("\x0a")(Data_Functor.map(Data_Functor.functorArray)(function (page) {
               return "\x0a        State__" + (u(page) + (" pageModel ->\x0a          " + (page + ".page.session pageModel ")));
-          })(fullPageModuleNames)) + ("\x0a\x0a\x0aupdate : Msg -> Model -> ( Model, Cmd Msg )\x0aupdate msg (Model model) =\x0a  case msg of\x0a    UrlRequest urlRequest ->\x0a          case model.route of\x0a" + (Data_String_Common.joinWith("\x0a")(Data_Functor.map(Data_Functor.functorArray)(function (page) {
+          })(fullPageModuleNames)) + ("\x0a\x0a\x0aupdate : Msg -> Model -> ( Model, Cmd Msg )\x0aupdate msg (Model model) =\x0a  case (msg, model.route) of\x0a    (UrlRequest urlRequest, _) ->\x0a          case model.route of\x0a" + (Data_String_Common.joinWith("\x0a")(Data_Functor.map(Data_Functor.functorArray)(function (page) {
               return "\x0a            State__" + (u(page) + (" pmodel ->\x0a                  case " + (page + (".page.update (" + (page + (".page.onUrlRequest urlRequest) pmodel of\x0a                    (pmodel_, pcmd) ->\x0a                      ( Model { model | route = State__" + (u(page) + (" pmodel_ }\x0a                      , Cmd.map Msg__" + (u(page) + " pcmd\x0a                      )\x0a        ")))))))));
-          })(fullPageModuleNames)) + ("\x0a\x0a    Navigate location ->\x0a      case parseLocation location of\x0a" + (Data_String_Common.joinWith("\x0a")(Data_Functor.map(Data_Functor.functorArray)(function (page_) {
+          })(fullPageModuleNames)) + ("\x0a\x0a    (Navigate location, _) ->\x0a      case parseLocation location of\x0a" + (Data_String_Common.joinWith("\x0a")(Data_Functor.map(Data_Functor.functorArray)(function (page_) {
               return "\x0a                Route__" + (u(page_) + (" routeValue ->\x0a                      case " + (page_ + (".page.init model.flags location model.key routeValue (Just (currentSession model.route)) of\x0a                        (initialModel, initialCmd) ->\x0a                          ( Model { model | route = State__" + (u(page_) + (" initialModel }\x0a                          , Cmd.map Msg__" + (u(page_) + " initialCmd\x0a                          )\x0a                ")))))));
           })(fullPageModuleNames)) + ("\x0a  \x0a" + (Data_String_Common.joinWith("\x0a")(Data_Functor.map(Data_Functor.functorArray)(function (page) {
-              return "\x0a    Msg__" + (u(page) + (" pageMsg ->\x0a      case model.route of\x0a        State__" + (u(page) + (" pageModel ->\x0a          case " + (page + (".page.update pageMsg pageModel of\x0a            (pageModel_, pageCmd ) ->\x0a              (Model { model | route = State__" + (u(page) + (" pageModel_ }, Cmd.map Msg__" + (u(page) + (" pageCmd)\x0a        " + (function () {
-                  var $3 = 1 < Data_Array.length(pages);
-                  if ($3) {
-                      return "_ -> (Model model, Cmd.none)";
-                  };
-                  return "";
-              })()))))))))));
-          })(fullPageModuleNames)) + ("\x0a\x0adocumentMap : (msg -> Msg) -> Document msg -> Document Msg\x0adocumentMap f { title, body } = { title = title, body = List.map (Html.map f) body }\x0a\x0aview : Model -> Document Msg\x0aview (Model model) = case model.route of\x0a\x0a" + (Data_String_Common.joinWith("\x0a")(Data_Functor.map(Data_Functor.functorArray)(function (page) {
+              return "\x0a    (Msg__" + (u(page) + (" pageMsg, State__" + (u(page) + (" pageModel) ->\x0a          case " + (page + (".page.update pageMsg pageModel of\x0a            (pageModel_, pageCmd ) ->\x0a              (Model { model | route = State__" + (u(page) + (" pageModel_ }, Cmd.map Msg__" + (u(page) + " pageCmd)\x0a        ")))))))));
+          })(fullPageModuleNames)) + ("\x0a\x0a    (_, _) -> (Model model, Cmd.none)\x0a\x0adocumentMap : (msg -> Msg) -> Document msg -> Document Msg\x0adocumentMap f { title, body } = { title = title, body = List.map (Html.map f) body }\x0a\x0aview : Model -> Document Msg\x0aview (Model model) = case model.route of\x0a\x0a" + (Data_String_Common.joinWith("\x0a")(Data_Functor.map(Data_Functor.functorArray)(function (page) {
               return "  State__" + (u(page) + (" m -> documentMap Msg__" + (u(page) + (" (" + (page + ".page.view m)")))));
           })(fullPageModuleNames)) + ("\x0a\x0amatchers : Parser (Route -> a) a\x0amatchers =\x0a    oneOf\x0a        [ " + (Data_String_Common.joinWith("\x0a        , ")(Data_Functor.map(Data_Functor.functorArray)(function (page) {
               return "UrlParser.map Route__" + (u(page) + (" " + (page + ".page.route")));

@@ -90,8 +90,8 @@ currentSession route = case route of
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg (Model model) =
-  case msg of
-    UrlRequest urlRequest ->
+  case (msg, model.route) of
+    (UrlRequest urlRequest, _) ->
           case model.route of
 
             State__ElmPortfolio_Page_Counter pmodel ->
@@ -158,7 +158,7 @@ update msg (Model model) =
                       )
         
 
-    Navigate location ->
+    (Navigate location, _) ->
       case parseLocation location of
 
                 Route__ElmPortfolio_Page_Counter routeValue ->
@@ -226,69 +226,55 @@ update msg (Model model) =
                 
   
 
-    Msg__ElmPortfolio_Page_Counter pageMsg ->
-      case model.route of
-        State__ElmPortfolio_Page_Counter pageModel ->
+    (Msg__ElmPortfolio_Page_Counter pageMsg, State__ElmPortfolio_Page_Counter pageModel) ->
           case ElmPortfolio.Page.Counter.page.update pageMsg pageModel of
             (pageModel_, pageCmd ) ->
               (Model { model | route = State__ElmPortfolio_Page_Counter pageModel_ }, Cmd.map Msg__ElmPortfolio_Page_Counter pageCmd)
-        _ -> (Model model, Cmd.none)
+        
 
-    Msg__ElmPortfolio_Page_Http pageMsg ->
-      case model.route of
-        State__ElmPortfolio_Page_Http pageModel ->
+    (Msg__ElmPortfolio_Page_Http pageMsg, State__ElmPortfolio_Page_Http pageModel) ->
           case ElmPortfolio.Page.Http.page.update pageMsg pageModel of
             (pageModel_, pageCmd ) ->
               (Model { model | route = State__ElmPortfolio_Page_Http pageModel_ }, Cmd.map Msg__ElmPortfolio_Page_Http pageCmd)
-        _ -> (Model model, Cmd.none)
+        
 
-    Msg__ElmPortfolio_Page_NotFound pageMsg ->
-      case model.route of
-        State__ElmPortfolio_Page_NotFound pageModel ->
+    (Msg__ElmPortfolio_Page_NotFound pageMsg, State__ElmPortfolio_Page_NotFound pageModel) ->
           case ElmPortfolio.Page.NotFound.page.update pageMsg pageModel of
             (pageModel_, pageCmd ) ->
               (Model { model | route = State__ElmPortfolio_Page_NotFound pageModel_ }, Cmd.map Msg__ElmPortfolio_Page_NotFound pageCmd)
-        _ -> (Model model, Cmd.none)
+        
 
-    Msg__ElmPortfolio_Page_Preferences pageMsg ->
-      case model.route of
-        State__ElmPortfolio_Page_Preferences pageModel ->
+    (Msg__ElmPortfolio_Page_Preferences pageMsg, State__ElmPortfolio_Page_Preferences pageModel) ->
           case ElmPortfolio.Page.Preferences.page.update pageMsg pageModel of
             (pageModel_, pageCmd ) ->
               (Model { model | route = State__ElmPortfolio_Page_Preferences pageModel_ }, Cmd.map Msg__ElmPortfolio_Page_Preferences pageCmd)
-        _ -> (Model model, Cmd.none)
+        
 
-    Msg__ElmPortfolio_Page_Sub_Minimum pageMsg ->
-      case model.route of
-        State__ElmPortfolio_Page_Sub_Minimum pageModel ->
+    (Msg__ElmPortfolio_Page_Sub_Minimum pageMsg, State__ElmPortfolio_Page_Sub_Minimum pageModel) ->
           case ElmPortfolio.Page.Sub.Minimum.page.update pageMsg pageModel of
             (pageModel_, pageCmd ) ->
               (Model { model | route = State__ElmPortfolio_Page_Sub_Minimum pageModel_ }, Cmd.map Msg__ElmPortfolio_Page_Sub_Minimum pageCmd)
-        _ -> (Model model, Cmd.none)
+        
 
-    Msg__ElmPortfolio_Page_Time pageMsg ->
-      case model.route of
-        State__ElmPortfolio_Page_Time pageModel ->
+    (Msg__ElmPortfolio_Page_Time pageMsg, State__ElmPortfolio_Page_Time pageModel) ->
           case ElmPortfolio.Page.Time.page.update pageMsg pageModel of
             (pageModel_, pageCmd ) ->
               (Model { model | route = State__ElmPortfolio_Page_Time pageModel_ }, Cmd.map Msg__ElmPortfolio_Page_Time pageCmd)
-        _ -> (Model model, Cmd.none)
+        
 
-    Msg__ElmPortfolio_Page_Top pageMsg ->
-      case model.route of
-        State__ElmPortfolio_Page_Top pageModel ->
+    (Msg__ElmPortfolio_Page_Top pageMsg, State__ElmPortfolio_Page_Top pageModel) ->
           case ElmPortfolio.Page.Top.page.update pageMsg pageModel of
             (pageModel_, pageCmd ) ->
               (Model { model | route = State__ElmPortfolio_Page_Top pageModel_ }, Cmd.map Msg__ElmPortfolio_Page_Top pageCmd)
-        _ -> (Model model, Cmd.none)
+        
 
-    Msg__ElmPortfolio_Page_URLParsing pageMsg ->
-      case model.route of
-        State__ElmPortfolio_Page_URLParsing pageModel ->
+    (Msg__ElmPortfolio_Page_URLParsing pageMsg, State__ElmPortfolio_Page_URLParsing pageModel) ->
           case ElmPortfolio.Page.URLParsing.page.update pageMsg pageModel of
             (pageModel_, pageCmd ) ->
               (Model { model | route = State__ElmPortfolio_Page_URLParsing pageModel_ }, Cmd.map Msg__ElmPortfolio_Page_URLParsing pageCmd)
-        _ -> (Model model, Cmd.none)
+        
+
+    (_, _) -> (Model model, Cmd.none)
 
 documentMap : (msg -> Msg) -> Document msg -> Document Msg
 documentMap f { title, body } = { title = title, body = List.map (Html.map f) body }

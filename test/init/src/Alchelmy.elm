@@ -48,8 +48,8 @@ currentSession route = case route of
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg (Model model) =
-  case msg of
-    UrlRequest urlRequest ->
+  case (msg, model.route) of
+    (UrlRequest urlRequest, _) ->
           case model.route of
 
             State__TestProject_Page_NotFound pmodel ->
@@ -68,7 +68,7 @@ update msg (Model model) =
                       )
         
 
-    Navigate location ->
+    (Navigate location, _) ->
       case parseLocation location of
 
                 Route__TestProject_Page_NotFound routeValue ->
@@ -88,21 +88,19 @@ update msg (Model model) =
                 
   
 
-    Msg__TestProject_Page_NotFound pageMsg ->
-      case model.route of
-        State__TestProject_Page_NotFound pageModel ->
+    (Msg__TestProject_Page_NotFound pageMsg, State__TestProject_Page_NotFound pageModel) ->
           case TestProject.Page.NotFound.page.update pageMsg pageModel of
             (pageModel_, pageCmd ) ->
               (Model { model | route = State__TestProject_Page_NotFound pageModel_ }, Cmd.map Msg__TestProject_Page_NotFound pageCmd)
-        _ -> (Model model, Cmd.none)
+        
 
-    Msg__TestProject_Page_Top pageMsg ->
-      case model.route of
-        State__TestProject_Page_Top pageModel ->
+    (Msg__TestProject_Page_Top pageMsg, State__TestProject_Page_Top pageModel) ->
           case TestProject.Page.Top.page.update pageMsg pageModel of
             (pageModel_, pageCmd ) ->
               (Model { model | route = State__TestProject_Page_Top pageModel_ }, Cmd.map Msg__TestProject_Page_Top pageCmd)
-        _ -> (Model model, Cmd.none)
+        
+
+    (_, _) -> (Model model, Cmd.none)
 
 documentMap : (msg -> Msg) -> Document msg -> Document Msg
 documentMap f { title, body } = { title = title, body = List.map (Html.map f) body }
