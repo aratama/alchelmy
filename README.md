@@ -13,7 +13,7 @@ An experimental code generator for an Single Page Application with multiple page
 
 [The Elm Architecture](https://guide.elm-lang.org/architecture/) is simple and readable architecture that suitable for use with simgle page application. However, you need write a lot of boring boilerplates when you want to add a new page in your application: For example, in your Main module, You need to add import declarations, add data constructor to hold `Msg` from child in parent `Msg`, add routes in routing and so on. alchelmy try to automatically generate those boilerplates.
 
-In PHP, to add a new page, all you need is adding a single `Foo.php` in your project. In a like manner, in Alchelmy, all you need is adding only `src/<ProjectName>/Page/Foo.elm` and writing few codes in it. You don't need to tweak a lot of huge `case-of` branches by hand any more.
+In PHP, to add a new page, all you need is adding a single `Foo.php` in your project. In a like manner, in Alchelmy, all you need is adding only `<PageName>.elm` and writing few codes in it. You don't need to tweak a lot of huge `case-of` branches by hand any more.
 
 In essense, the behavior of Alchelmy is very simple: alchelmy generates only one source file named **`Alchemly.elm`**. This is the Elm codes that orchestrates Web pages written in Elm. 
 
@@ -24,7 +24,7 @@ This project is highly experimental, so your comments or suggestions are welcome
 
 ## Working Sample Application
 
-Please see [example](example) and the automatically generated [Alchelmy.elm](https://github.com/aratama/alchelmy/blob/master/example/src/ElmPortfolio/Alchelmy.elm) for more information. You can also check out the example app at the following url:
+Please see [example](example) and the automatically generated [Alchelmy.elm](https://github.com/aratama/alchelmy/blob/master/example/src/Alchelmy.elm) for more information. You can also check out the example app at the following url:
 
 * https://alchelmy.netlify.com/
 
@@ -74,6 +74,12 @@ You also need a **Root Module**. The module have a following magic comment at th
 ```elm
 -- alchelmy root page
 ```
+
+The Root page have to export following types:
+
+* `Flags`
+* `Session`
+* `Page`
 
 
 ### Installation
