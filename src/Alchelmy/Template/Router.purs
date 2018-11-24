@@ -2,11 +2,11 @@ module Alchelmy.Template.Router where
 
 import Data.Maybe (Maybe(..), fromMaybe)
 import Data.Array (length,  head, last, catMaybes)
-import Data.String (joinWith, split, Pattern(..))
-import Prelude (map, (<>), (<), (<$>), ($), bind, pure, (==))
+import Data.String (joinWith, split, Pattern(..), replaceAll, Replacement(..))
+import Prelude (bind, map, ($), (<), (<$>), (<>), (==))
 
 u :: String -> String
-u s = joinWith "_" (split (Pattern ".") s)
+u = replaceAll (Pattern ".") (Replacement "_")
 
 renderRouter :: String -> Array String -> String
 renderRouter application fullPageModuleNames =

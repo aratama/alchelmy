@@ -15,7 +15,7 @@ import Data.Traversable (for, for_)
 import Effect (Effect)
 import Effect.Aff (Aff, error, launchAff_, makeAff, nonCanceler)
 import Effect.Class (liftEffect)
-import Effect.Class.Console (log, logShow)
+import Effect.Class.Console (log)
 import Effect.Console (error) as Console
 import Effect.Exception (Error, throw)
 import Node.Buffer (fromString)
