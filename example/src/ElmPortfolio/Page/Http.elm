@@ -68,11 +68,11 @@ update =
 
 getRandomGif : String -> Cmd Msg
 getRandomGif topic =
-    let
-        url =
-            "https://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=" ++ topic
-    in
-    Http.send (PageMsg << NewGif) (Http.get url decodeGifUrl)
+    Cmd.map PageMsg <|
+        Http.get
+            { url = "https://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=" ++ topic
+            , expect = Http.expectJson NewGif decodeGifUrl
+            }
 
 
 decodeGifUrl : Decode.Decoder String
