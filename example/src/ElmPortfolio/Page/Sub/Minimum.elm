@@ -18,7 +18,9 @@ type Msg
 
 
 type alias Model =
-    { session : Session, key : Key }
+    { session : Session
+    , key : Key
+    }
 
 
 type alias Route =
@@ -28,7 +30,7 @@ type alias Route =
 page : Root.Page Model Msg Route a
 page =
     { route = map () (s "minimum")
-    , init = \_ _ key _ session -> ( { session = Maybe.withDefault initialSession session, key = key }, Cmd.none )
+    , init = \_ _ key _ session -> ( { session = Maybe.withDefault (initialSession key) session, key = key }, Cmd.none )
     , view = always { title = "Minimum - ElmPortfolio", body = [ h1 [ class "page-minimum" ] [ text "Minimum" ] ] }
     , update =
         \msg model ->

@@ -5,7 +5,7 @@ module ElmPortfolio.Page.Preferences exposing (Model, Msg, Route, page, route)
 
 import Browser exposing (Document)
 import Browser.Navigation exposing (Key, pushUrl)
-import ElmPortfolio.Common as Common exposing (SessionMsg(..), link, sessionUpdate, updateTopic)
+import ElmPortfolio.Common as Common exposing (link, updateTopic)
 import ElmPortfolio.Ports exposing (receiveTopic, requestTopic, saveTopic)
 import ElmPortfolio.Root as Root exposing (Flags, Session, initialSession)
 import Html exposing (Html, a, button, div, h1, img, input, p, text)
@@ -16,7 +16,7 @@ import Url.Parser as UrlParser exposing ((</>), Parser, map, s)
 
 
 type alias Msg =
-    SessionMsg PageMsg
+    Common.Msg PageMsg
 
 
 type PageMsg
@@ -27,7 +27,6 @@ type PageMsg
 type alias Model =
     { value : String
     , session : Session
-    , key : Key
     }
 
 
@@ -42,17 +41,21 @@ route =
 
 init : Flags -> Url -> Key -> Route -> Maybe Session -> ( Model, Cmd Msg )
 init _ _ key _ maybeSession =
+    let
+        initial =
+            initialSession key
+    in
     case maybeSession of
         Nothing ->
-            ( { session = initialSession, value = initialSession.topic, key = key }, requestTopic () )
+            ( { session = initial, value = initial.topic }, requestTopic () )
 
         Just session ->
-            ( { session = session, value = session.topic, key = key }, Cmd.none )
+            ( { session = session, value = session.topic }, Cmd.none )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update =
-    sessionUpdate <|
+    Common.update <|
         \msg model ->
             case msg of
                 InputUserName str ->
@@ -70,7 +73,7 @@ update =
 
 subscriptions : Model -> Sub Msg
 subscriptions _ =
-    receiveTopic ReceiveTopic
+    receiveTopic Common.ReceiveTopic
 
 
 view : Model -> Document Msg
@@ -78,7 +81,7 @@ view model =
     { title = "Preference - ElmPortfolio"
     , body =
         [ Common.view model.session <|
-            Html.map PageMsg <|
+            Html.map Common.PageMsg <|
                 div [ class "page-preferences container" ]
                     [ h1 [] [ text "Preferences" ]
                     , p [] [ text "Topic: ", input [ type_ "text", onInput InputUserName, value model.value ] [] ]
@@ -95,6 +98,6 @@ page =
     , view = view
     , update = update
     , subscriptions = subscriptions
-    , onUrlRequest = UrlRequest
+    , onUrlRequest = Common.UrlRequest
     , session = \model -> model.session
     }

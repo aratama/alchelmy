@@ -5,7 +5,7 @@ module ElmPortfolio.Page.Time exposing (Model, Msg, Route, page, route)
 
 import Browser exposing (Document)
 import Browser.Navigation exposing (Key, pushUrl)
-import ElmPortfolio.Common as Common exposing (SessionMsg(..), link, sessionUpdate, updateTopic)
+import ElmPortfolio.Common as Common exposing (link, updateTopic)
 import ElmPortfolio.Ports exposing (receiveTopic, requestTopic)
 import ElmPortfolio.Root as Root exposing (Flags, Session, initialSession)
 import Html exposing (Html, a, br, button, div, h1, h2, img, p, text)
@@ -18,7 +18,7 @@ import Url.Parser as UrlParser exposing ((</>), Parser, map, s)
 
 
 type alias Msg =
-    SessionMsg PageMsg
+    Common.Msg PageMsg
 
 
 type PageMsg
@@ -28,7 +28,6 @@ type PageMsg
 type alias Model =
     { session : Session
     , posix : Posix
-    , key : Key
     }
 
 
@@ -45,10 +44,10 @@ init : Flags -> Url -> Key -> Route -> Maybe Session -> ( Model, Cmd Msg )
 init _ _ key _ maybeSession =
     case maybeSession of
         Nothing ->
-            ( { session = initialSession, posix = millisToPosix 0, key = key }, requestTopic () )
+            ( { session = initialSession key, posix = millisToPosix 0 }, requestTopic () )
 
         Just session ->
-            ( { session = session, posix = millisToPosix 0, key = key }
+            ( { session = session, posix = millisToPosix 0 }
               -- Mysterious bug workaround
               -- Originally, you can put just `Cmd.none`, however in the case the timer will not work.
               -- If you remove `route` in the routing, it work. Extremely confusing.
@@ -58,7 +57,7 @@ init _ _ key _ maybeSession =
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update =
-    sessionUpdate <|
+    Common.update <|
         \msg model ->
             case msg of
                 Tick newTime ->
@@ -68,8 +67,8 @@ update =
 subscriptions : Model -> Sub Msg
 subscriptions _ =
     Sub.batch
-        [ Sub.map PageMsg <| Time.every 50 Tick
-        , receiveTopic ReceiveTopic
+        [ Sub.map Common.PageMsg <| Time.every 50 Tick
+        , receiveTopic Common.ReceiveTopic
         ]
 
 
@@ -78,7 +77,7 @@ view model =
     { title = "Time - ElmPortfolio"
     , body =
         [ Common.view model.session <|
-            Html.map PageMsg <|
+            Html.map Common.PageMsg <|
                 div [ class "page-a container" ]
                     [ h1 [] [ text "Time" ]
                     , let
@@ -107,6 +106,6 @@ page =
     , view = view
     , update = update
     , subscriptions = subscriptions
-    , onUrlRequest = UrlRequest
+    , onUrlRequest = Common.UrlRequest
     , session = \model -> model.session
     }

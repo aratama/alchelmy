@@ -5,7 +5,7 @@ module ElmPortfolio.Page.Http exposing (Model, Msg, Route, page, route)
 
 import Browser exposing (Document, UrlRequest(..))
 import Browser.Navigation exposing (Key)
-import ElmPortfolio.Common as Common exposing (SessionMsg(..), link, sessionUpdate, updateTopic)
+import ElmPortfolio.Common as Common exposing (link, updateTopic)
 import ElmPortfolio.Ports exposing (receiveTopic, requestTopic)
 import ElmPortfolio.Root as Root exposing (Flags, Session, initialSession)
 import Html exposing (Html, a, br, button, div, h1, h2, img, p, text)
@@ -18,7 +18,7 @@ import Url.Parser as UrlParser exposing ((</>), Parser, map, s)
 
 
 type alias Msg =
-    SessionMsg PageMsg
+    Common.Msg PageMsg
 
 
 type PageMsg
@@ -28,7 +28,6 @@ type PageMsg
 
 type alias Model =
     { session : Session
-    , key : Key
     , gifUrl : String
     }
 
@@ -46,15 +45,15 @@ init : Flags -> Url -> Key -> Route -> Maybe Session -> ( Model, Cmd Msg )
 init _ _ key _ maybeSession =
     case maybeSession of
         Nothing ->
-            ( Model initialSession key "waiting.gif", requestTopic () )
+            ( Model (initialSession key) "waiting.gif", requestTopic () )
 
         Just session ->
-            ( Model session key "waiting.gif", getRandomGif session.topic )
+            ( Model session "waiting.gif", getRandomGif session.topic )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update =
-    sessionUpdate <|
+    Common.update <|
         \msg model ->
             case msg of
                 MorePlease ->
@@ -69,7 +68,7 @@ update =
 
 getRandomGif : String -> Cmd Msg
 getRandomGif topic =
-    Cmd.map PageMsg <|
+    Cmd.map Common.PageMsg <|
         Http.get
             { url = "https://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=" ++ topic
             , expect = Http.expectJson NewGif decodeGifUrl
@@ -83,7 +82,7 @@ decodeGifUrl =
 
 subscriptions : Model -> Sub Msg
 subscriptions _ =
-    receiveTopic ReceiveTopic
+    receiveTopic Common.ReceiveTopic
 
 
 view : Model -> Document Msg
@@ -91,7 +90,7 @@ view model =
     { title = "Http - ElmPortfolio"
     , body =
         [ Common.view model.session <|
-            Html.map PageMsg <|
+            Html.map Common.PageMsg <|
                 div [ class "page-http container" ]
                     [ h1 [] [ text "Http" ]
                     , h2 [] [ text <| "Topic: " ++ model.session.topic ]
@@ -115,6 +114,6 @@ page =
     , view = view
     , update = update
     , subscriptions = subscriptions
-    , onUrlRequest = UrlRequest
+    , onUrlRequest = Common.UrlRequest
     , session = \model -> model.session
     }

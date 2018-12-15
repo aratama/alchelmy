@@ -5,7 +5,7 @@ module ElmPortfolio.Page.Counter exposing (Model, Msg, Route, page)
 
 import Browser exposing (Document, UrlRequest(..))
 import Browser.Navigation exposing (Key)
-import ElmPortfolio.Common as Common exposing (SessionMsg(..), link, sessionUpdate, updateTopic)
+import ElmPortfolio.Common as Common exposing (link, updateTopic)
 import ElmPortfolio.Ports exposing (receiveTopic, requestTopic)
 import ElmPortfolio.Root as Root exposing (Flags, Session, initialSession)
 import Html exposing (Html, a, button, div, h1, p, text)
@@ -29,7 +29,7 @@ type alias Route =
 
 
 type alias Msg =
-    SessionMsg PageMsg
+    Common.Msg PageMsg
 
 
 type PageMsg
@@ -43,7 +43,6 @@ type PageMsg
 
 type alias Model =
     { session : Session
-    , key : Key
     , count : Int
     }
 
@@ -65,15 +64,15 @@ init : Flags -> Url -> Key -> Route -> Maybe Session -> ( Model, Cmd Msg )
 init _ _ key _ maybeSession =
     case maybeSession of
         Nothing ->
-            ( { session = initialSession, key = key, count = 0 }, requestTopic () )
+            ( { session = initialSession key, count = 0 }, requestTopic () )
 
         Just session ->
-            ( { session = session, key = key, count = 0 }, Cmd.none )
+            ( { session = session, count = 0 }, Cmd.none )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update =
-    sessionUpdate <|
+    Common.update <|
         \msg model ->
             case msg of
                 Increment ->
@@ -85,7 +84,7 @@ update =
 
 subscriptions : Model -> Sub Msg
 subscriptions _ =
-    receiveTopic ReceiveTopic
+    receiveTopic Common.ReceiveTopic
 
 
 view : Model -> Document Msg
@@ -93,7 +92,7 @@ view model =
     { title = "Counter - ElmPortfolio"
     , body =
         [ Common.view model.session <|
-            Html.map PageMsg <|
+            Html.map Common.PageMsg <|
                 div [ class "page-counter container" ]
                     [ h1 [] [ text "Counter" ]
                     , p [] [ button [ onClick Decrement ] [ text "-" ] ]
@@ -111,6 +110,6 @@ page =
     , view = view
     , update = update
     , subscriptions = subscriptions
-    , onUrlRequest = UrlRequest
+    , onUrlRequest = Common.UrlRequest
     , session = \model -> model.session
     }

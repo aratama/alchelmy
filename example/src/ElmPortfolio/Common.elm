@@ -1,4 +1,4 @@
-module ElmPortfolio.Common exposing (SessionMsg(..), defaultNavigation, link, sessionUpdate, updateTopic, view)
+module ElmPortfolio.Common exposing (Msg(..), defaultNavigation, link, update, updateTopic, view)
 
 import Browser exposing (Document, UrlRequest(..))
 import Browser.Navigation exposing (Key, load, pushUrl)
@@ -16,7 +16,7 @@ link url label =
     a [ href url ] [ text label ]
 
 
-view : Session -> Html (SessionMsg msg) -> Html (SessionMsg msg)
+view : Session -> Html (Msg msg) -> Html (Msg msg)
 view model content =
     div [ class "root" ]
         [ header []
@@ -59,7 +59,7 @@ view model content =
         ]
 
 
-type SessionMsg a
+type Msg a
     = ReceiveTopic (Maybe String)
     | ExternalLink String
     | Jump String
@@ -68,12 +68,12 @@ type SessionMsg a
     | UrlRequest UrlRequest
 
 
-sessionUpdate :
-    (a -> { model | session : Session, key : Key } -> ( { model | session : Session, key : Key }, Cmd (SessionMsg a) ))
-    -> SessionMsg a
-    -> { model | session : Session, key : Key }
-    -> ( { model | session : Session, key : Key }, Cmd (SessionMsg a) )
-sessionUpdate f msg model =
+update :
+    (a -> { model | session : Session } -> ( { model | session : Session }, Cmd (Msg a) ))
+    -> Msg a
+    -> { model | session : Session }
+    -> ( { model | session : Session }, Cmd (Msg a) )
+update f msg model =
     let
         session =
             model.session
@@ -98,7 +98,7 @@ sessionUpdate f msg model =
             case urlRequest of
                 Internal url ->
                     ( model
-                    , pushUrl model.key (Url.toString url)
+                    , pushUrl model.session.key (Url.toString url)
                     )
 
                 External url ->
@@ -119,12 +119,12 @@ updateTopic model maybeTopic =
     { model | session = { session | topic = topic } }
 
 
-defaultNavigation : { model | key : Key, session : Session } -> UrlRequest -> ( { model | key : Key, session : Session }, Cmd msg )
+defaultNavigation : { model | session : Session } -> UrlRequest -> ( { model | session : Session }, Cmd msg )
 defaultNavigation model urlRequest =
     case urlRequest of
         Internal url ->
             ( model
-            , pushUrl model.key (Url.toString url)
+            , pushUrl model.session.key (Url.toString url)
             )
 
         External url ->

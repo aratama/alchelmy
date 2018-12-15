@@ -5,7 +5,7 @@ module ElmPortfolio.Page.URLParsing exposing (Model, Msg, Route, page, route)
 
 import Browser exposing (Document)
 import Browser.Navigation exposing (Key)
-import ElmPortfolio.Common as Common exposing (SessionMsg(..), link, sessionUpdate, updateTopic)
+import ElmPortfolio.Common as Common exposing (link, updateTopic)
 import ElmPortfolio.Ports exposing (receiveTopic, requestTopic)
 import ElmPortfolio.Root as Root exposing (Flags, Session, initialSession)
 import Html exposing (Html, a, div, h1, img, p, text)
@@ -15,14 +15,13 @@ import Url.Parser as UrlParser exposing ((</>), Parser, int, map, s)
 
 
 type alias Msg =
-    SessionMsg ()
+    Common.Msg ()
 
 
 type alias Model =
     { session : Session
     , id : Int
     , location : Url
-    , key : Key
     }
 
 
@@ -39,22 +38,22 @@ init : Flags -> Url -> Key -> Route -> Maybe Session -> ( Model, Cmd Msg )
 init _ location key id maybeSession =
     case maybeSession of
         Nothing ->
-            ( { session = initialSession, id = id, location = location, key = key }, requestTopic () )
+            ( { session = initialSession key, id = id, location = location }, requestTopic () )
 
         Just session ->
-            ( { session = session, id = id, location = location, key = key }, Cmd.none )
+            ( { session = session, id = id, location = location }, Cmd.none )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update =
-    sessionUpdate <|
+    Common.update <|
         \msg model ->
             ( model, Cmd.none )
 
 
 subscriptions : Model -> Sub Msg
 subscriptions _ =
-    receiveTopic ReceiveTopic
+    receiveTopic Common.ReceiveTopic
 
 
 view : Model -> Document Msg
@@ -62,7 +61,7 @@ view model =
     { title = "URLParsing - ElmPortfolio"
     , body =
         [ Common.view model.session <|
-            Html.map PageMsg <|
+            Html.map Common.PageMsg <|
                 div [ class "page-url-parser container" ]
                     [ h1 [] [ text "URL Parsing" ]
                     , p [] [ text <| "URL: " ++ Url.toString model.location ]
@@ -79,6 +78,6 @@ page =
     , view = view
     , update = update
     , subscriptions = subscriptions
-    , onUrlRequest = UrlRequest
+    , onUrlRequest = Common.UrlRequest
     , session = \model -> model.session
     }

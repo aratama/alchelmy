@@ -21,7 +21,8 @@ type Msg
 
 
 type alias Model =
-    { session : Session, key : Key }
+    { session : Session
+    }
 
 
 type alias Route =
@@ -37,10 +38,10 @@ init : Flags -> Url -> Key -> Route -> Maybe Session -> ( Model, Cmd Msg )
 init _ _ key _ maybeSession =
     case maybeSession of
         Nothing ->
-            ( { session = initialSession, key = key }, requestTopic () )
+            ( { session = initialSession key }, requestTopic () )
 
         Just session ->
-            ( { session = session, key = key }, Cmd.none )
+            ( { session = session }, Cmd.none )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
