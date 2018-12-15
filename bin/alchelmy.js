@@ -3686,7 +3686,7 @@ var PS = {};
   var renderBlankPage = function (application) {
       return function (pageName) {
           return function (routing) {
-              return "-- alchelmy page\x0a\x0amodule " + (application + (".Page." + (pageName + (" exposing (Route, Model, Msg, route, page)\x0a\x0aimport Browser exposing (Document, UrlRequest(..))\x0aimport Browser.Navigation exposing (Key, load, pushUrl)\x0aimport Html exposing (text, h1)\x0aimport Maybe exposing (Maybe(..))\x0aimport Url exposing (Url)\x0aimport Url.Parser exposing (Parser, map, " + ((function () {
+              return "module " + (application + (".Page." + (pageName + (" exposing (Route, Model, Msg, route, page)\x0a\x0aimport Browser exposing (Document, UrlRequest(..))\x0aimport Browser.Navigation exposing (Key, load, pushUrl)\x0aimport Html exposing (text, h1)\x0aimport Maybe exposing (Maybe(..))\x0aimport Url exposing (Url)\x0aimport Url.Parser exposing (Parser, map, " + ((function () {
                   if (routing instanceof RouteToPageName) {
                       return "s ";
                   };
@@ -3696,7 +3696,7 @@ var PS = {};
                   if (routing instanceof RouteToNothing) {
                       return "custom";
                   };
-                  throw new Error("Failed pattern match at Alchelmy.Template.Page line 21, column 50 - line 27, column 13: " + [ routing.constructor.name ]);
+                  throw new Error("Failed pattern match at Alchelmy.Template.Page line 19, column 50 - line 25, column 13: " + [ routing.constructor.name ]);
               })() + (")\x0aimport " + (application + (".Root as Root exposing (Flags, Session)\x0a\x0atype Msg\x0a  = UrlRequest UrlRequest\x0a\x0a\x0atype alias Model\x0a  = { session : Session, key : Key }\x0a\x0a\x0atype alias Route\x0a  = ()\x0a\x0a\x0aroute : Parser (Route -> a) a\x0aroute =\x0a  " + ((function () {
                   if (routing instanceof RouteToPageName) {
                       return "map () (s " + (bracket(Data_String_Common.toLower(pageName)) + ")");
@@ -3707,7 +3707,7 @@ var PS = {};
                   if (routing instanceof RouteToNothing) {
                       return "custom \"NOTHING\" (\\_ -> Nothing)";
                   };
-                  throw new Error("Failed pattern match at Alchelmy.Template.Page line 44, column 11 - line 50, column 52: " + [ routing.constructor.name ]);
+                  throw new Error("Failed pattern match at Alchelmy.Template.Page line 42, column 11 - line 48, column 52: " + [ routing.constructor.name ]);
               })() + ("\x0a\x0a\x0ainit : Flags -> Url -> Key -> Route -> Maybe Session -> ( Model, Cmd Msg )\x0ainit _ _ key _ session\x0a  = ( { session = Maybe.withDefault Root.initial session, key = key }, Cmd.none )\x0a\x0a\x0aupdate : Msg -> Model -> ( Model, Cmd Msg )\x0aupdate msg model\x0a  = case msg of \x0a    UrlRequest urlRequest -> \x0a      case urlRequest of\x0a        Internal url ->\x0a          ( model, pushUrl model.key (Url.toString url) )\x0a        External url -> \x0a          ( model, load url )\x0a\x0asubscriptions : Model -> Sub Msg\x0asubscriptions _\x0a  = Sub.none\x0a\x0a\x0aview : Model -> Document Msg\x0aview model =\x0a  { title = " + (bracket(pageName + (" - " + application)) + ("\x0a  , body = [ h1 [] [text " + (bracket(pageName) + "] ]\x0a  }\x0a\x0a\x0apage : Root.Page Model Msg Route a\x0apage =\x0a  { route = route\x0a  , init = init\x0a  , view = view\x0a  , update = update\x0a  , subscriptions = subscriptions\x0a  , onUrlRequest = UrlRequest\x0a  , session = \\model -> model.session\x0a  }\x0a\x0a")))))))))))));
           };
       };
@@ -3723,7 +3723,7 @@ var PS = {};
   "use strict";
   var Data_Semigroup = PS["Data.Semigroup"];                 
   var renderRoot = function (application) {
-      return "-- alchelmy root page\x0amodule " + (application + ".Root exposing (..)\x0a\x0aimport Browser exposing (Document, UrlRequest(..))\x0aimport Browser.Navigation exposing (Key)\x0aimport Maybe exposing (Maybe)\x0aimport Url exposing (Url)\x0aimport Url.Parser exposing (Parser)\x0a\x0atype alias Flags\x0a  = ()\x0a\x0a-- Application global state type.\x0a\x0a\x0atype alias Session\x0a  = {}\x0a\x0a\x0ainitial : Session\x0ainitial = {}\x0a\x0a\x0atype alias Page model msg route a =\x0a    { init : Flags -> Url -> Key -> route -> Maybe Session -> ( model, Cmd msg )\x0a    , view : model -> Document msg\x0a    , update : msg -> model -> ( model, Cmd msg )\x0a    , subscriptions : model -> Sub msg\x0a    , route : Parser (route -> a) a\x0a    , onUrlRequest : UrlRequest -> msg\x0a    , session : model -> Session\x0a    }\x0a\x0a");
+      return "module " + (application + ".Root exposing (..)\x0a\x0aimport Browser exposing (Document, UrlRequest(..))\x0aimport Browser.Navigation exposing (Key)\x0aimport Maybe exposing (Maybe)\x0aimport Url exposing (Url)\x0aimport Url.Parser exposing (Parser)\x0a\x0atype alias Flags\x0a  = ()\x0a\x0a-- Application global state type.\x0a\x0a\x0atype alias Session\x0a  = {}\x0a\x0a\x0ainitial : Session\x0ainitial = {}\x0a\x0a\x0atype alias Page model msg route a =\x0a    { init : Flags -> Url -> Key -> route -> Maybe Session -> ( model, Cmd msg )\x0a    , view : model -> Document msg\x0a    , update : msg -> model -> ( model, Cmd msg )\x0a    , subscriptions : model -> Sub msg\x0a    , route : Parser (route -> a) a\x0a    , onUrlRequest : UrlRequest -> msg\x0a    , session : model -> Session\x0a    }\x0a\x0a");
   };
   exports["renderRoot"] = renderRoot;
 })(PS["Alchelmy.Template.Root"] = PS["Alchelmy.Template.Root"] || {});
@@ -27059,7 +27059,8 @@ var PS = {};
   exports["exit"] = $foreign.exit;
 })(PS["Node.Process"] = PS["Node.Process"] || {});
 (function(exports) {
-    "use strict";
+  // Generated by purs version 0.12.0
+  "use strict";
   var $foreign = PS["Alchelmy"];
   var Alchelmy_Template_Page = PS["Alchelmy.Template.Page"];
   var Alchelmy_Template_Root = PS["Alchelmy.Template.Root"];

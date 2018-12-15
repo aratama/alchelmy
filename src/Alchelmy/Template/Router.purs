@@ -1,9 +1,9 @@
 module Alchelmy.Template.Router where
 
 import Data.Maybe (Maybe(..), fromMaybe)
-import Data.Array (length,  head, last, catMaybes)
+import Data.Array (catMaybes, head, last)
 import Data.String (joinWith, split, Pattern(..), replaceAll, Replacement(..))
-import Prelude (bind, map, ($), (<), (<$>), (<>), (==))
+import Prelude (bind, map, ($), (<$>), (<>), (==))
 
 u :: String -> String
 u = replaceAll (Pattern ".") (Replacement "_")

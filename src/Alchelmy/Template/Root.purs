@@ -3,8 +3,7 @@ module Alchelmy.Template.Root where
 import Data.Semigroup ((<>))
 
 renderRoot :: String -> String
-renderRoot application = """-- alchelmy root page
-module """ <> application <> """.Root exposing (..)
+renderRoot application = """module """ <> application <> """.Root exposing (..)
 
 import Browser exposing (Document, UrlRequest(..))
 import Browser.Navigation exposing (Key)
