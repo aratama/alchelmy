@@ -5,8 +5,9 @@ module ElmPortfolio.Page.NotFound exposing (Model, Msg, Route, page, route)
 
 import Browser exposing (Document, UrlRequest(..))
 import Browser.Navigation exposing (Key, pushUrl)
+import ElmPortfolio.Common exposing (defaultNavigation, link, updateTopic)
 import ElmPortfolio.Ports exposing (receiveTopic, requestTopic)
-import ElmPortfolio.Root as Root exposing (Flags, Session, SessionMsg(..), initialSession, link, updateTopic, defaultNavigation)
+import ElmPortfolio.Root as Root exposing (Flags, Session, initialSession)
 import Html exposing (Html, a, div, h1, img, p, text)
 import Html.Attributes exposing (class, href, src)
 import Json.Decode as Decode
@@ -43,7 +44,7 @@ init _ _ key _ maybeSession =
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model = 
+update msg model =
     case msg of
         ReceiveTopic topic ->
             ( updateTopic model topic, Cmd.none )
@@ -55,6 +56,7 @@ update msg model =
 subscriptions : Model -> Sub Msg
 subscriptions _ =
     receiveTopic ReceiveTopic
+
 
 view : Model -> Document Msg
 view model =

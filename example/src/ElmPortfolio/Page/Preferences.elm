@@ -5,8 +5,9 @@ module ElmPortfolio.Page.Preferences exposing (Model, Msg, Route, page, route)
 
 import Browser exposing (Document)
 import Browser.Navigation exposing (Key, pushUrl)
+import ElmPortfolio.Common as Common exposing (SessionMsg(..), link, sessionUpdate, updateTopic)
 import ElmPortfolio.Ports exposing (receiveTopic, requestTopic, saveTopic)
-import ElmPortfolio.Root as Root exposing (Flags, Session, SessionMsg(..), initialSession, link, sessionUpdate, updateTopic)
+import ElmPortfolio.Root as Root exposing (Flags, Session, initialSession)
 import Html exposing (Html, a, button, div, h1, img, input, p, text)
 import Html.Attributes exposing (class, href, src, type_, value)
 import Html.Events exposing (custom, onClick, onInput)
@@ -76,7 +77,7 @@ view : Model -> Document Msg
 view model =
     { title = "Preference - ElmPortfolio"
     , body =
-        [ Root.view model.session <|
+        [ Common.view model.session <|
             Html.map PageMsg <|
                 div [ class "page-preferences container" ]
                     [ h1 [] [ text "Preferences" ]

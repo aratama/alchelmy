@@ -5,8 +5,9 @@ module ElmPortfolio.Page.Top exposing (Model, Msg, Route, page, route)
 
 import Browser exposing (Document, UrlRequest(..))
 import Browser.Navigation exposing (Key)
+import ElmPortfolio.Common as Common exposing (SessionMsg(..), link, sessionUpdate, updateTopic)
 import ElmPortfolio.Ports exposing (receiveTopic, requestTopic)
-import ElmPortfolio.Root as Root exposing (Flags, Session, SessionMsg(..), initialSession, link, sessionUpdate, updateTopic)
+import ElmPortfolio.Root as Root exposing (Flags, Session, initialSession)
 import Html exposing (Html, a, div, h1, img, p, text)
 import Html.Attributes exposing (class, href, src)
 import Url exposing (Url)
@@ -23,7 +24,8 @@ type PageMsg
 
 type alias Model =
     { session : Session
-    , key : Key }
+    , key : Key
+    }
 
 
 type alias Route =
@@ -59,7 +61,7 @@ view : Model -> Document Msg
 view model =
     { title = "Top - ElmPortfolio"
     , body =
-        [ Root.view model.session <|
+        [ Common.view model.session <|
             Html.map PageMsg <|
                 div [ class "page-top" ]
                     [ h1 [] [ text "Top" ]

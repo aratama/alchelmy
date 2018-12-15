@@ -5,8 +5,9 @@ module ElmPortfolio.Page.URLParsing exposing (Model, Msg, Route, page, route)
 
 import Browser exposing (Document)
 import Browser.Navigation exposing (Key)
+import ElmPortfolio.Common as Common exposing (SessionMsg(..), link, sessionUpdate, updateTopic)
 import ElmPortfolio.Ports exposing (receiveTopic, requestTopic)
-import ElmPortfolio.Root as Root exposing (Flags, Session, SessionMsg(..), initialSession, link, sessionUpdate, updateTopic)
+import ElmPortfolio.Root as Root exposing (Flags, Session, initialSession)
 import Html exposing (Html, a, div, h1, img, p, text)
 import Html.Attributes exposing (class, href, src)
 import Url as Url exposing (Protocol(..), Url)
@@ -60,7 +61,7 @@ view : Model -> Document Msg
 view model =
     { title = "URLParsing - ElmPortfolio"
     , body =
-        [ Root.view model.session <|
+        [ Common.view model.session <|
             Html.map PageMsg <|
                 div [ class "page-url-parser container" ]
                     [ h1 [] [ text "URL Parsing" ]

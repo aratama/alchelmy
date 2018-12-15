@@ -1,4 +1,4 @@
-port module ElmPortfolio.Ports exposing (..)
+port module ElmPortfolio.Ports exposing (receiveTopic, requestTopic, saveTopic)
 
 
 port saveTopic : String -> Cmd msg

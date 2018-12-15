@@ -5,8 +5,9 @@ module ElmPortfolio.Page.Time exposing (Model, Msg, Route, page, route)
 
 import Browser exposing (Document)
 import Browser.Navigation exposing (Key, pushUrl)
+import ElmPortfolio.Common as Common exposing (SessionMsg(..), link, sessionUpdate, updateTopic)
 import ElmPortfolio.Ports exposing (receiveTopic, requestTopic)
-import ElmPortfolio.Root as Root exposing (Flags, Session, SessionMsg(..), initialSession, link, sessionUpdate, updateTopic)
+import ElmPortfolio.Root as Root exposing (Flags, Session, initialSession)
 import Html exposing (Html, a, br, button, div, h1, h2, img, p, text)
 import Html.Attributes exposing (class, href, src)
 import Svg exposing (circle, line, svg)
@@ -76,7 +77,7 @@ view : Model -> Document Msg
 view model =
     { title = "Time - ElmPortfolio"
     , body =
-        [ Root.view model.session <|
+        [ Common.view model.session <|
             Html.map PageMsg <|
                 div [ class "page-a container" ]
                     [ h1 [] [ text "Time" ]

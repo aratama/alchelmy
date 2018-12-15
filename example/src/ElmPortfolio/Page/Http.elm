@@ -5,8 +5,9 @@ module ElmPortfolio.Page.Http exposing (Model, Msg, Route, page, route)
 
 import Browser exposing (Document, UrlRequest(..))
 import Browser.Navigation exposing (Key)
+import ElmPortfolio.Common as Common exposing (SessionMsg(..), link, sessionUpdate, updateTopic)
 import ElmPortfolio.Ports exposing (receiveTopic, requestTopic)
-import ElmPortfolio.Root as Root exposing (Flags, Session, SessionMsg(..), initialSession, link, sessionUpdate, updateTopic)
+import ElmPortfolio.Root as Root exposing (Flags, Session, initialSession)
 import Html exposing (Html, a, br, button, div, h1, h2, img, p, text)
 import Html.Attributes exposing (class, href, src)
 import Html.Events exposing (custom, onClick)
@@ -89,7 +90,7 @@ view : Model -> Document Msg
 view model =
     { title = "Http - ElmPortfolio"
     , body =
-        [ Root.view model.session <|
+        [ Common.view model.session <|
             Html.map PageMsg <|
                 div [ class "page-http container" ]
                     [ h1 [] [ text "Http" ]
