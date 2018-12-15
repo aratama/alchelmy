@@ -1,6 +1,3 @@
--- alchelmy page
-
-
 module ElmPortfolio.Page.Counter exposing (Model, Msg, Route, page)
 
 import Browser exposing (Document, UrlRequest(..))

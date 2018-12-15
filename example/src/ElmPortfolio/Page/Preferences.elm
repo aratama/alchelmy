@@ -1,6 +1,3 @@
--- alchelmy page
-
-
 module ElmPortfolio.Page.Preferences exposing (Model, Msg, Route, page, route)
 
 import Browser exposing (Document)

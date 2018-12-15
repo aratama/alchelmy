@@ -1,10 +1,6 @@
--- alchelmy root page
-
-
 module ElmPortfolio.Root exposing (Flags, Page, Session, initialSession)
 
 {-| This module is a alchemy root page.
-alchemy detects it by `-- alchemy root page` magic comment in the first line of the source file.
 Alchemy.elm refers `Flags`, `Session` and `initialSession` in the module.
 `Page` is refered to by each page modules and it also have to be exported.
 -}

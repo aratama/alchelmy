@@ -54,16 +54,15 @@ createApplication application = do
 ensureDir :: FilePath -> Aff Unit
 ensureDir dir = void (try (mkdir dir))
 
-generateRouter :: Array String -> Aff Unit
-generateRouter argv = do
+generateRouter :: String -> String -> Aff Unit
+generateRouter rootPattern pagePattern = do
     -- create root Type.elm, Update.elm and View.elm
     application <- getApplicationName
 
     let srcDir = "./src/"
-    rootGlobDir <- liftEffect $ resolve [srcDir] "**/Root.elm"
-    rootElmFiles <- glob rootGlobDir
-    roots <- filterA (\file -> (\src -> indexOf (Pattern rootMagic) src == Just 0) <$> readTextFile UTF8 file) rootElmFiles
-    rootPath <- case head roots of
+
+    rootElmFiles <- glob rootPattern
+    rootPath <- case head rootElmFiles of
         Nothing -> do
             log $ "Generating " <> application <> "/Root.elm"
             path <- liftEffect $ resolve [".", "src", application] "Root.elm"
@@ -91,17 +90,15 @@ generateRouter argv = do
     -- get page names
     -- pageFiles <- glob $ "./src/" <> application <> "/Page/*.elm"
 
-    globDir <- liftEffect $ resolve [srcDir] "**/*.elm"
-    elmFiles <- glob globDir
-    pageFiles <- filterA (\file -> (\src -> indexOf (Pattern magic) src == Just 0) <$> readTextFile UTF8 file) elmFiles
-    pageModuleNames <- for pageFiles \file -> do
+    elmFiles <- glob pagePattern
+    pageModuleNames <- for elmFiles \file -> do
         path <- liftEffect $ resolve [dirname file] (basenameWithoutExt file ".elm")
         pure $ joinWith "." (split (Pattern sep) (relative srcDir path))
 
     for_ pageModuleNames \file -> do
         log $ "Found module: " <> file
 
-    let pages = map (\p -> basenameWithoutExt p ".elm") pageFiles
+    let pages = map (\p -> basenameWithoutExt p ".elm") elmFiles
     when (null pages) do
         liftEffect $ throw "Page not found."
 
@@ -132,18 +129,20 @@ getApplicationName = do
 
 main :: Effect Unit
 main = do
+    let defaultPagePattern = "src/**/Page/*.elm"
+    let defaultRootPattern = "src/**/Root.elm"
     args <- argv
     case drop 2 args of
 
         ["init", applicationName] -> launchAff_ do
             createApplication applicationName
-            generateRouter args
+            generateRouter defaultRootPattern defaultPagePattern
 
         ["new", pageName] -> do
             if validatePageName pageName
                 then launchAff_ do
                     generateNewPage pageName RouteToPageName
-                    generateRouter args
+                    generateRouter defaultRootPattern defaultPagePattern
 
                 else do
                     Console.error $ "Invalid page name: " <> pageName <> ". An page name must be an valid Elm module name."
@@ -152,7 +151,16 @@ main = do
 
 
         ["update"] -> launchAff_ do
-            generateRouter args
+            generateRouter defaultRootPattern defaultPagePattern
+
+        ["update", "--page", pattern] -> launchAff_ do
+            generateRouter defaultRootPattern pattern
+
+        ["update", "--root", pattern] -> launchAff_ do
+            generateRouter pattern defaultPagePattern
+
+        ["update", "--root", rootPattern, "--page", pagePattern] -> launchAff_ do
+            generateRouter rootPattern pagePattern
 
         [] -> log usage
 
