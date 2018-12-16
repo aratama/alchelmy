@@ -4,7 +4,7 @@
 -- Do not edit this     --
 --------------------------
 
-module Alchelmy exposing (Model, Msg, program)
+module Alchelmy exposing (Flags, Model, Msg, Session, program)
 
 import Browser exposing (Document, UrlRequest(..), application)
 import Browser.Navigation exposing (Key, load, pushUrl)
@@ -15,6 +15,15 @@ import Url.Parser as UrlParser exposing (s, oneOf, Parser, parse, (</>))
 import TestProject.Root as Root
 import TestProject.Page.NotFound
 import TestProject.Page.Top
+
+
+type alias Flags =
+    Root.Flags
+
+
+type alias Session =
+    Root.Session
+
 
 type Model = Model
   { route : RouteState

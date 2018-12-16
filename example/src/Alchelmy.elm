@@ -4,7 +4,7 @@
 -- Do not edit this     --
 --------------------------
 
-module Alchelmy exposing (Model, Msg, program)
+module Alchelmy exposing (Flags, Model, Msg, Session, program)
 
 import Browser exposing (Document, UrlRequest(..), application)
 import Browser.Navigation exposing (Key, load, pushUrl)
@@ -20,6 +20,15 @@ import ElmPortfolio.Page.Preferences
 import ElmPortfolio.Page.Time
 import ElmPortfolio.Page.Top
 import ElmPortfolio.Page.URLParsing
+
+
+type alias Flags =
+    Root.Flags
+
+
+type alias Session =
+    Root.Session
+
 
 type Model = Model
   { route : RouteState

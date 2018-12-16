@@ -24,7 +24,7 @@ renderRouter application fullPageModuleNames =
 -- Do not edit this     --
 --------------------------
 
-module Alchelmy exposing (Model, Msg, program)
+module Alchelmy exposing (Flags, Model, Msg, Session, program)
 
 import Browser exposing (Document, UrlRequest(..), application)
 import Browser.Navigation exposing (Key, load, pushUrl)
@@ -34,6 +34,15 @@ import Url exposing (Url)
 import Url.Parser as UrlParser exposing (s, oneOf, Parser, parse, (</>))
 import """ <> application <> """.Root as Root
 """ <> joinWith "\n" (map (\page -> "import " <> page) fullPageModuleNames) <> """
+
+
+type alias Flags =
+    Root.Flags
+
+
+type alias Session =
+    Root.Session
+
 
 type Model = Model
   { route : RouteState
