@@ -24,7 +24,7 @@ import Node.FS.Aff (exists, mkdir, readdir, stat, writeFile)
 import Node.FS.Stats (isDirectory)
 import Node.Path (FilePath, basenameWithoutExt, resolve, relative, sep, dirname)
 import Node.Process (argv, exit)
-import Prelude (Unit, bind, discard, flip, map, not, pure, void, when, ($), (<$>), (<>))
+import Prelude (Unit, bind, discard, flip, map, not, pure, void, when, ($), (<$>), (<>), unit)
 
 foreign import globEffect :: (Error -> Effect Unit) -> (Array FilePath -> Effect Unit) -> String -> Effect (Array FilePath)
 
@@ -39,8 +39,17 @@ glob pattern = makeAff \resolve -> do
     results <- globEffect (\err -> resolve (Left err)) (\results -> resolve (Right results)) pattern
     pure nonCanceler
 
+checkProjectDirectory :: Aff Unit 
+checkProjectDirectory = do     
+    path <- liftEffect (resolve [] "elm.json")
+    exists <- exists path
+    if exists 
+        then pure unit
+        else throwError $ error $ "ERROR: elm.json not found. Make sure you are in elm project root."
+
 createApplication :: String -> Aff Unit
 createApplication application = do
+    checkProjectDirectory
     dir <- liftEffect (resolve ["src"] application)
     exists <- exists dir
     if exists
@@ -56,6 +65,7 @@ ensureDir dir = void (try (mkdir dir))
 
 generateRouter :: String -> String -> Aff Unit
 generateRouter rootPattern pagePattern = do
+    checkProjectDirectory
     -- create root Type.elm, Update.elm and View.elm
     application <- getApplicationName
 
