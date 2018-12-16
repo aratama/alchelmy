@@ -62,8 +62,8 @@ generateRouter rootPattern pagePattern = do
     let srcDir = "./src/"
 
     rootElmFiles <- glob rootPattern
-    rootPath <- case head rootElmFiles of
-        Nothing -> do
+    rootPath <- case rootElmFiles of
+        [] -> do
             log $ "Generating " <> application <> "/Root.elm"
             path <- liftEffect $ resolve [".", "src", application] "Root.elm"
             rootExists <- exists path
@@ -74,8 +74,12 @@ generateRouter rootPattern pagePattern = do
                     rootBuffer <- liftEffect $ fromString (renderRoot application) UTF8
                     writeFile path rootBuffer
                     pure path
-        Just root -> do
+        [root] -> do
             pure root
+
+        _ -> 
+            liftEffect $ throw "Two or more alchelmy root modules found."
+                
 
     -- generate NoutFound page
     notFoundExists <- pageExists "NotFound"
