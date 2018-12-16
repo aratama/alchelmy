@@ -37,12 +37,6 @@ Please see [example](example) and the automatically generated [Alchelmy.elm](htt
 
 #### Alchelmy Page Module
 
-In Alchelmy, each page are defined as a ordinary Elm modules. Alchelmy identifies page modules by the following magic comment in the source file: 
-
-```elm
--- alchelmy page
-```
-
 An page module have to export types and values named as:
 
 * `Route`
@@ -69,18 +63,13 @@ This `Page` type is similar to the first argument of [Browser.application](https
 
 #### Alchelmy Root Page Module
 
-You also need a **Root Module**. The module have a following magic comment at the first line of the source file:
-
-```elm
--- alchelmy root page
-```
-
 The Root page have to export following types:
 
 * `Flags`
 * `Session`
 * `Page`
 
+TODO: More explanation
 
 ### Installation
 
