@@ -26,7 +26,7 @@ type alias Session =
 
 
 type Model = Model
-  { route : RouteState
+  { state : RouteState
   , key : Key
   , flags : Root.Flags
   }
@@ -46,7 +46,7 @@ type Msg
   | Msg__TestProject_Page_Top TestProject.Page.Top.Msg
 
 currentSession : RouteState -> Root.Session
-currentSession route = case route of 
+currentSession state = case state of 
 
         State__TestProject_Page_NotFound pageModel ->
           TestProject.Page.NotFound.page.session pageModel 
@@ -57,14 +57,14 @@ currentSession route = case route of
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg (Model model) =
-  case (msg, model.route) of
+  case (msg, model.state) of
     (UrlRequest urlRequest, _) ->
-          case model.route of
+          case model.state of
 
             State__TestProject_Page_NotFound pmodel ->
                   case TestProject.Page.NotFound.page.update (TestProject.Page.NotFound.page.onUrlRequest urlRequest) pmodel of
                     (pmodel_, pcmd) ->
-                      ( Model { model | route = State__TestProject_Page_NotFound pmodel_ }
+                      ( Model { model | state = State__TestProject_Page_NotFound pmodel_ }
                       , Cmd.map Msg__TestProject_Page_NotFound pcmd
                       )
         
@@ -72,7 +72,7 @@ update msg (Model model) =
             State__TestProject_Page_Top pmodel ->
                   case TestProject.Page.Top.page.update (TestProject.Page.Top.page.onUrlRequest urlRequest) pmodel of
                     (pmodel_, pcmd) ->
-                      ( Model { model | route = State__TestProject_Page_Top pmodel_ }
+                      ( Model { model | state = State__TestProject_Page_Top pmodel_ }
                       , Cmd.map Msg__TestProject_Page_Top pcmd
                       )
         
@@ -81,17 +81,17 @@ update msg (Model model) =
       case parseLocation location of
 
                 Route__TestProject_Page_NotFound routeValue ->
-                      case TestProject.Page.NotFound.page.init model.flags location model.key routeValue (Just (currentSession model.route)) of
+                      case TestProject.Page.NotFound.page.init model.flags location model.key routeValue (Just (currentSession model.state)) of
                         (initialModel, initialCmd) ->
-                          ( Model { model | route = State__TestProject_Page_NotFound initialModel }
+                          ( Model { model | state = State__TestProject_Page_NotFound initialModel }
                           , Cmd.map Msg__TestProject_Page_NotFound initialCmd
                           )
                 
 
                 Route__TestProject_Page_Top routeValue ->
-                      case TestProject.Page.Top.page.init model.flags location model.key routeValue (Just (currentSession model.route)) of
+                      case TestProject.Page.Top.page.init model.flags location model.key routeValue (Just (currentSession model.state)) of
                         (initialModel, initialCmd) ->
-                          ( Model { model | route = State__TestProject_Page_Top initialModel }
+                          ( Model { model | state = State__TestProject_Page_Top initialModel }
                           , Cmd.map Msg__TestProject_Page_Top initialCmd
                           )
                 
@@ -100,13 +100,13 @@ update msg (Model model) =
     (Msg__TestProject_Page_NotFound pageMsg, State__TestProject_Page_NotFound pageModel) ->
           case TestProject.Page.NotFound.page.update pageMsg pageModel of
             (pageModel_, pageCmd ) ->
-              (Model { model | route = State__TestProject_Page_NotFound pageModel_ }, Cmd.map Msg__TestProject_Page_NotFound pageCmd)
+              (Model { model | state = State__TestProject_Page_NotFound pageModel_ }, Cmd.map Msg__TestProject_Page_NotFound pageCmd)
         
 
     (Msg__TestProject_Page_Top pageMsg, State__TestProject_Page_Top pageModel) ->
           case TestProject.Page.Top.page.update pageMsg pageModel of
             (pageModel_, pageCmd ) ->
-              (Model { model | route = State__TestProject_Page_Top pageModel_ }, Cmd.map Msg__TestProject_Page_Top pageCmd)
+              (Model { model | state = State__TestProject_Page_Top pageModel_ }, Cmd.map Msg__TestProject_Page_Top pageCmd)
         
 
     (_, _) -> (Model model, Cmd.none)
@@ -115,7 +115,7 @@ documentMap : (msg -> Msg) -> Document msg -> Document Msg
 documentMap f { title, body } = { title = title, body = List.map (Html.map f) body }
 
 view : Model -> Document Msg
-view (Model model) = case model.route of
+view (Model model) = case model.state of
 
   State__TestProject_Page_NotFound m -> documentMap Msg__TestProject_Page_NotFound (TestProject.Page.NotFound.page.view m)
   State__TestProject_Page_Top m -> documentMap Msg__TestProject_Page_Top (TestProject.Page.Top.page.view m)
@@ -144,7 +144,7 @@ init flags location key =
           Route__TestProject_Page_NotFound routeValue -> case TestProject.Page.NotFound.page.init flags location key routeValue Nothing of
                 (initialModel, initialCmd) ->
                     ( Model
-                        { route = State__TestProject_Page_NotFound initialModel
+                        { state = State__TestProject_Page_NotFound initialModel
                         , key = key
                         , flags = flags
                         }
@@ -154,7 +154,7 @@ init flags location key =
           Route__TestProject_Page_Top routeValue -> case TestProject.Page.Top.page.init flags location key routeValue Nothing of
                 (initialModel, initialCmd) ->
                     ( Model
-                        { route = State__TestProject_Page_Top initialModel
+                        { state = State__TestProject_Page_Top initialModel
                         , key = key
                         , flags = flags
                         }
@@ -164,7 +164,7 @@ init flags location key =
 
 subscriptions : Model -> Sub Msg
 subscriptions (Model model) =
-    case model.route of
+    case model.state of
         State__TestProject_Page_NotFound routeValue -> Sub.map Msg__TestProject_Page_NotFound (TestProject.Page.NotFound.page.subscriptions routeValue)
         State__TestProject_Page_Top routeValue -> Sub.map Msg__TestProject_Page_Top (TestProject.Page.Top.page.subscriptions routeValue)
 

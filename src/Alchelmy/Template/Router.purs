@@ -8,8 +8,8 @@ import Prelude (bind, map, ($), (<$>), (<>), (==))
 u :: String -> String
 u = replaceAll (Pattern ".") (Replacement "_")
 
-renderRouter :: String -> Array String -> String
-renderRouter application fullPageModuleNames =
+renderRouter :: String -> String -> Array String -> String
+renderRouter application rootModuleName fullPageModuleNames =
     let
         notFound_ = head $ catMaybes $ (\moduleName -> do
             n <- last $ split (Pattern ".") moduleName
@@ -32,7 +32,7 @@ import Html as Html exposing (Html, text)
 import Maybe as Maybe exposing (Maybe(..))
 import Url exposing (Url)
 import Url.Parser as UrlParser exposing (s, oneOf, Parser, parse, (</>))
-import """ <> application <> """.Root as Root
+import """ <> rootModuleName <> """ as Root
 """ <> joinWith "\n" (map (\page -> "import " <> page) fullPageModuleNames) <> """
 
 
@@ -45,7 +45,7 @@ type alias Session =
 
 
 type Model = Model
-  { route : RouteState
+  { state : RouteState
   , key : Key
   , flags : Root.Flags
   }
@@ -62,7 +62,7 @@ type Msg
 """ <> joinWith "\n" (map (\page -> "  | Msg__" <> u page <> " " <> page <> ".Msg") fullPageModuleNames) <> """
 
 currentSession : RouteState -> Root.Session
-currentSession route = case route of 
+currentSession state = case state of 
 """ <> joinWith "\n" (map (\page -> """
         State__""" <> u page <> """ pageModel ->
           """ <> page <> """.page.session pageModel """
@@ -71,14 +71,14 @@ currentSession route = case route of
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg (Model model) =
-  case (msg, model.route) of
+  case (msg, model.state) of
     (UrlRequest urlRequest, _) ->
-          case model.route of
+          case model.state of
 """ <> joinWith "\n" (map (\page -> """
             State__""" <> u page <> """ pmodel ->
                   case """ <> page <> """.page.update (""" <> page <> """.page.onUrlRequest urlRequest) pmodel of
                     (pmodel_, pcmd) ->
-                      ( Model { model | route = State__""" <> u page <> """ pmodel_ }
+                      ( Model { model | state = State__""" <> u page <> """ pmodel_ }
                       , Cmd.map Msg__""" <> u page <> """ pcmd
                       )
         """
@@ -88,9 +88,9 @@ update msg (Model model) =
       case parseLocation location of
 """ <> joinWith "\n" (map (\page_ -> """
                 Route__""" <> u page_ <> """ routeValue ->
-                      case """ <> page_ <> """.page.init model.flags location model.key routeValue (Just (currentSession model.route)) of
+                      case """ <> page_ <> """.page.init model.flags location model.key routeValue (Just (currentSession model.state)) of
                         (initialModel, initialCmd) ->
-                          ( Model { model | route = State__""" <> u page_ <> """ initialModel }
+                          ( Model { model | state = State__""" <> u page_ <> """ initialModel }
                           , Cmd.map Msg__""" <> u page_ <> """ initialCmd
                           )
                 """
@@ -101,7 +101,7 @@ update msg (Model model) =
     (Msg__""" <> u page <> """ pageMsg, State__""" <> u page <> """ pageModel) ->
           case """ <> page <> """.page.update pageMsg pageModel of
             (pageModel_, pageCmd ) ->
-              (Model { model | route = State__""" <> u page <> """ pageModel_ }, Cmd.map Msg__""" <> u page <> """ pageCmd)
+              (Model { model | state = State__""" <> u page <> """ pageModel_ }, Cmd.map Msg__""" <> u page <> """ pageCmd)
         """
 ) fullPageModuleNames) <> """
 
@@ -111,7 +111,7 @@ documentMap : (msg -> Msg) -> Document msg -> Document Msg
 documentMap f { title, body } = { title = title, body = List.map (Html.map f) body }
 
 view : Model -> Document Msg
-view (Model model) = case model.route of
+view (Model model) = case model.state of
 
 """ <> joinWith "\n" (map (\page ->
         "  State__" <> u page <> " m -> documentMap Msg__" <> u page <> " (" <> page <> ".page.view m)"
@@ -141,7 +141,7 @@ init flags location key =
 "          Route__" <> u page <> " routeValue -> case " <> page <> """.page.init flags location key routeValue Nothing of
                 (initialModel, initialCmd) ->
                     ( Model
-                        { route = State__""" <> u page <> """ initialModel
+                        { state = State__""" <> u page <> """ initialModel
                         , key = key
                         , flags = flags
                         }
@@ -151,7 +151,7 @@ init flags location key =
 
 subscriptions : Model -> Sub Msg
 subscriptions (Model model) =
-    case model.route of
+    case model.state of
 """ <> joinWith "\n" (map (\page ->
         "        State__" <> u page <> " routeValue -> Sub.map Msg__" <> u page <> " (" <> page <> ".page.subscriptions routeValue)"
         ) fullPageModuleNames)

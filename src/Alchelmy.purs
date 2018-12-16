@@ -10,11 +10,10 @@ import Data.Maybe (Maybe(..))
 import Data.String (Pattern(..), joinWith, split)
 import Data.String.Regex (regex, test)
 import Data.String.Regex.Flags (noFlags)
-
 import Data.Traversable (for, for_)
 import Effect (Effect)
 import Effect.Aff (Aff, error, launchAff_, makeAff, nonCanceler)
-import Effect.Class (liftEffect)
+import Effect.Class (class MonadEffect, liftEffect)
 import Effect.Class.Console (log)
 import Effect.Console (error) as Console
 import Effect.Exception (Error, throw)
@@ -28,11 +27,20 @@ import Prelude (Unit, bind, discard, flip, map, not, pure, void, when, ($), (<$>
 
 foreign import globEffect :: (Error -> Effect Unit) -> (Array FilePath -> Effect Unit) -> String -> Effect (Array FilePath)
 
-magic :: String
-magic = "-- alchelmy page"
 
-rootMagic :: String
-rootMagic = "-- alchelmy root page"
+defaultSrcDir :: String
+defaultSrcDir = "src/"
+
+defaultPagePattern :: String
+defaultPagePattern = "src/**/Page/*.elm"
+
+defaultRootPattern :: String
+defaultRootPattern = "src/**/Root.elm"
+
+pathToModuleName :: forall m. MonadEffect m => FilePath -> m String
+pathToModuleName file = do 
+    path <- liftEffect $ resolve [dirname file] (basenameWithoutExt file ".elm")
+    pure $ joinWith "." (split (Pattern sep) (relative defaultSrcDir path))
 
 glob :: String -> Aff (Array FilePath)
 glob pattern = makeAff \resolve -> do
@@ -69,7 +77,7 @@ generateRouter rootPattern pagePattern = do
     -- create root Type.elm, Update.elm and View.elm
     application <- getApplicationName
 
-    let srcDir = "./src/"
+
 
     rootElmFiles <- glob rootPattern
     rootPath <- case rootElmFiles of
@@ -105,9 +113,7 @@ generateRouter rootPattern pagePattern = do
     -- pageFiles <- glob $ "./src/" <> application <> "/Page/*.elm"
 
     elmFiles <- glob pagePattern
-    pageModuleNames <- for elmFiles \file -> do
-        path <- liftEffect $ resolve [dirname file] (basenameWithoutExt file ".elm")
-        pure $ joinWith "." (split (Pattern sep) (relative srcDir path))
+    pageModuleNames <- for elmFiles pathToModuleName
 
     for_ pageModuleNames \file -> do
         log $ "Found module: " <> file
@@ -117,8 +123,9 @@ generateRouter rootPattern pagePattern = do
         liftEffect $ throw "Page not found."
 
     -- generate <application>.Alchelmy.elm
-    sourceBuffer <- liftEffect $ fromString (renderRouter application pageModuleNames) UTF8
-    generatedElmPath <- liftEffect $ resolve [srcDir] "Alchelmy.elm"
+    rootModuleName <- pathToModuleName rootPath
+    sourceBuffer <- liftEffect $ fromString (renderRouter application rootModuleName pageModuleNames) UTF8
+    generatedElmPath <- liftEffect $ resolve [defaultSrcDir] "Alchelmy.elm"
     log $ "Generating " <> generatedElmPath <> " ..."
     writeFile generatedElmPath sourceBuffer
 
@@ -143,8 +150,7 @@ getApplicationName = do
 
 main :: Effect Unit
 main = do
-    let defaultPagePattern = "src/**/Page/*.elm"
-    let defaultRootPattern = "src/**/Root.elm"
+
     args <- argv
     case drop 2 args of
 

@@ -1,8 +1,8 @@
 module Main exposing (main)
 
-import Alchelmy exposing (Model, Msg, program)
+import Alchelmy exposing (Flags, Model, Msg, program)
 
 
-main : Program () Model Msg
+main : Program Flags Model Msg
 main =
     program
