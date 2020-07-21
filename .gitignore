@@ -22,3 +22,5 @@ output
 bower_components
 
 .psc-ide-port
+.spago
+.purs-repl
