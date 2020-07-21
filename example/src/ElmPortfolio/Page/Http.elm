@@ -39,19 +39,14 @@ route =
     map () (s "http")
 
 
-init : Value -> Url -> Key -> Route -> Maybe Value -> ( Model, Cmd Msg )
-init _ _ key _ maybeSession =
-    case maybeSession of
-        Nothing ->
-            ( Model key initialSession "waiting.gif", requestTopic () )
+init : Value -> Url -> Key -> Route -> ( Model, Cmd Msg )
+init value _ key _ =
+    case Decode.decodeValue decodeSession value of
+        Err _ ->
+            ( Model key initialSession "waiting.gif", getRandomGif initialSession.topic )
 
-        Just value ->
-            case Decode.decodeValue decodeSession value of
-                Err _ ->
-                    ( Model key initialSession "waiting.gif", getRandomGif initialSession.topic )
-
-                Ok session ->
-                    ( Model key session "waiting.gif", getRandomGif session.topic )
+        Ok session ->
+            ( Model key session "waiting.gif", getRandomGif session.topic )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )

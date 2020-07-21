@@ -32,19 +32,14 @@ route =
     s "url-parsing" </> int
 
 
-init : Value -> Url -> Key -> Route -> Maybe Value -> ( Model, Cmd Msg )
-init _ location key id maybeSession =
-    case maybeSession of
-        Nothing ->
+init : Value -> Url -> Key -> Route -> ( Model, Cmd Msg )
+init value location key id =
+    case decodeValue decodeSession value of
+        Err _ ->
             ( { key = key, session = initialSession, id = id, location = location }, requestTopic () )
 
-        Just value ->
-            case decodeValue decodeSession value of
-                Err _ ->
-                    ( { key = key, session = initialSession, id = id, location = location }, requestTopic () )
-
-                Ok session ->
-                    ( { key = key, session = session, id = id, location = location }, Cmd.none )
+        Ok session ->
+            ( { key = key, session = session, id = id, location = location }, Cmd.none )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )

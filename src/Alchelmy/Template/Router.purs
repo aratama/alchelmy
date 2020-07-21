@@ -137,7 +137,7 @@ update msg (Model model) =
                     <> """ routeValue ->
                       case """
                     <> page_
-                    <> """.page.init model.flags location model.key routeValue (Just (currentSession model.state)) of
+                    <> """.page.init (currentSession model.state) location model.key routeValue of
                         (initialModel, initialCmd) ->
                           ( Model { model | state = State__"""
                     <> u page_
@@ -224,7 +224,7 @@ init flags location key =
           ( map
               ( \page ->
                   "          Route__" <> u page <> " routeValue -> case " <> page
-                    <> """.page.init flags location key routeValue Nothing of
+                    <> """.page.init flags location key routeValue of
                 (initialModel, initialCmd) ->
                     ( Model
                         { state = State__"""

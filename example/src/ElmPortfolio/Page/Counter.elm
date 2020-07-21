@@ -59,19 +59,14 @@ route =
 -- an `init` function initializes the local state of the page with `Url`, `Route` and the global state.
 
 
-init : Value -> Url -> Key -> Route -> Maybe Value -> ( Model, Cmd Msg )
-init _ _ key _ maybeSession =
-    case maybeSession of
-        Nothing ->
-            ( { key = key, session = initialSession, count = 0 }, requestTopic () )
+init : Value -> Url -> Key -> Route -> ( Model, Cmd Msg )
+init value _ key _ =
+    case decodeValue decodeSession value of
+        Err _ ->
+            ( { key = key, session = initialSession, count = 0 }, Cmd.none )
 
-        Just value ->
-            case decodeValue decodeSession value of
-                Err _ ->
-                    ( { key = key, session = initialSession, count = 0 }, Cmd.none )
-
-                Ok session ->
-                    ( { key = key, session = session, count = 0 }, Cmd.none )
+        Ok session ->
+            ( { key = key, session = session, count = 0 }, Cmd.none )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )

@@ -34,19 +34,14 @@ route =
     map () top
 
 
-init : Value -> Url -> Key -> Route -> Maybe Value -> ( Model, Cmd msg )
-init _ _ key _ maybeSession =
-    case maybeSession of
-        Nothing ->
+init : Value -> Url -> Key -> Route -> ( Model, Cmd msg )
+init value _ key _ =
+    case decodeValue decodeSession value of
+        Err _ ->
             ( { key = key, session = initialSession }, requestTopic () )
 
-        Just value ->
-            case decodeValue decodeSession value of
-                Err _ ->
-                    ( { key = key, session = initialSession }, requestTopic () )
-
-                Ok session ->
-                    ( { key = key, session = session }, Cmd.none )
+        Ok session ->
+            ( { key = key, session = session }, Cmd.none )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )

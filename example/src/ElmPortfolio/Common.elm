@@ -41,7 +41,7 @@ encodeSession session =
 
 
 type alias Page model msg route a =
-    { init : Value -> Url -> Key -> route -> Maybe Value -> ( model, Cmd msg )
+    { init : Value -> Url -> Key -> route -> ( model, Cmd msg )
     , view : model -> Document msg
     , update : msg -> model -> ( model, Cmd msg )
     , subscriptions : model -> Sub msg

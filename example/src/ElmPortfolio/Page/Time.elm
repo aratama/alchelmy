@@ -39,24 +39,19 @@ route =
     map {} (s "time")
 
 
-init : Value -> Url -> Key -> Route -> Maybe Value -> ( Model, Cmd Msg )
-init _ _ key _ maybeSession =
-    case maybeSession of
-        Nothing ->
+init : Value -> Url -> Key -> Route -> ( Model, Cmd Msg )
+init value _ key _ =
+    case decodeValue decodeSession value of
+        Err _ ->
             ( { key = key, session = initialSession, posix = millisToPosix 0 }, requestTopic () )
 
-        Just value ->
-            case decodeValue decodeSession value of
-                Err _ ->
-                    ( { key = key, session = initialSession, posix = millisToPosix 0 }, requestTopic () )
-
-                Ok session ->
-                    ( { key = key, session = session, posix = millisToPosix 0 }
-                      -- Mysterious bug workaround
-                      -- Originally, you can put just `Cmd.none`, however in the case the timer will not work.
-                      -- If you remove `route` in the routing, it work. Extremely confusing.
-                    , requestTopic ()
-                    )
+        Ok session ->
+            ( { key = key, session = session, posix = millisToPosix 0 }
+              -- Mysterious bug workaround
+              -- Originally, you can put just `Cmd.none`, however in the case the timer will not work.
+              -- If you remove `route` in the routing, it work. Extremely confusing.
+            , requestTopic ()
+            )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )

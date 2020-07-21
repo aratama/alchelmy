@@ -156,7 +156,7 @@ update msg (Model model) =
       case parseLocation location of
 
                 Route__ElmPortfolio_Page_Counter routeValue ->
-                      case ElmPortfolio.Page.Counter.page.init model.flags location model.key routeValue (Just (currentSession model.state)) of
+                      case ElmPortfolio.Page.Counter.page.init (currentSession model.state) location model.key routeValue of
                         (initialModel, initialCmd) ->
                           ( Model { model | state = State__ElmPortfolio_Page_Counter initialModel }
                           , Cmd.map Msg__ElmPortfolio_Page_Counter initialCmd
@@ -164,7 +164,7 @@ update msg (Model model) =
                 
 
                 Route__ElmPortfolio_Page_Http routeValue ->
-                      case ElmPortfolio.Page.Http.page.init model.flags location model.key routeValue (Just (currentSession model.state)) of
+                      case ElmPortfolio.Page.Http.page.init (currentSession model.state) location model.key routeValue of
                         (initialModel, initialCmd) ->
                           ( Model { model | state = State__ElmPortfolio_Page_Http initialModel }
                           , Cmd.map Msg__ElmPortfolio_Page_Http initialCmd
@@ -172,7 +172,7 @@ update msg (Model model) =
                 
 
                 Route__ElmPortfolio_Page_NotFound routeValue ->
-                      case ElmPortfolio.Page.NotFound.page.init model.flags location model.key routeValue (Just (currentSession model.state)) of
+                      case ElmPortfolio.Page.NotFound.page.init (currentSession model.state) location model.key routeValue of
                         (initialModel, initialCmd) ->
                           ( Model { model | state = State__ElmPortfolio_Page_NotFound initialModel }
                           , Cmd.map Msg__ElmPortfolio_Page_NotFound initialCmd
@@ -180,7 +180,7 @@ update msg (Model model) =
                 
 
                 Route__ElmPortfolio_Page_Preferences routeValue ->
-                      case ElmPortfolio.Page.Preferences.page.init model.flags location model.key routeValue (Just (currentSession model.state)) of
+                      case ElmPortfolio.Page.Preferences.page.init (currentSession model.state) location model.key routeValue of
                         (initialModel, initialCmd) ->
                           ( Model { model | state = State__ElmPortfolio_Page_Preferences initialModel }
                           , Cmd.map Msg__ElmPortfolio_Page_Preferences initialCmd
@@ -188,7 +188,7 @@ update msg (Model model) =
                 
 
                 Route__ElmPortfolio_Page_Time routeValue ->
-                      case ElmPortfolio.Page.Time.page.init model.flags location model.key routeValue (Just (currentSession model.state)) of
+                      case ElmPortfolio.Page.Time.page.init (currentSession model.state) location model.key routeValue of
                         (initialModel, initialCmd) ->
                           ( Model { model | state = State__ElmPortfolio_Page_Time initialModel }
                           , Cmd.map Msg__ElmPortfolio_Page_Time initialCmd
@@ -196,7 +196,7 @@ update msg (Model model) =
                 
 
                 Route__ElmPortfolio_Page_Top routeValue ->
-                      case ElmPortfolio.Page.Top.page.init model.flags location model.key routeValue (Just (currentSession model.state)) of
+                      case ElmPortfolio.Page.Top.page.init (currentSession model.state) location model.key routeValue of
                         (initialModel, initialCmd) ->
                           ( Model { model | state = State__ElmPortfolio_Page_Top initialModel }
                           , Cmd.map Msg__ElmPortfolio_Page_Top initialCmd
@@ -204,7 +204,7 @@ update msg (Model model) =
                 
 
                 Route__ElmPortfolio_Page_URLParsing routeValue ->
-                      case ElmPortfolio.Page.URLParsing.page.init model.flags location model.key routeValue (Just (currentSession model.state)) of
+                      case ElmPortfolio.Page.URLParsing.page.init (currentSession model.state) location model.key routeValue of
                         (initialModel, initialCmd) ->
                           ( Model { model | state = State__ElmPortfolio_Page_URLParsing initialModel }
                           , Cmd.map Msg__ElmPortfolio_Page_URLParsing initialCmd
@@ -296,7 +296,7 @@ init flags location key =
 
         case parseLocation location of
 
-          Route__ElmPortfolio_Page_Counter routeValue -> case ElmPortfolio.Page.Counter.page.init flags location key routeValue Nothing of
+          Route__ElmPortfolio_Page_Counter routeValue -> case ElmPortfolio.Page.Counter.page.init flags location key routeValue of
                 (initialModel, initialCmd) ->
                     ( Model
                         { state = State__ElmPortfolio_Page_Counter initialModel
@@ -306,7 +306,7 @@ init flags location key =
                     , Cmd.map Msg__ElmPortfolio_Page_Counter initialCmd
                     )
                 
-          Route__ElmPortfolio_Page_Http routeValue -> case ElmPortfolio.Page.Http.page.init flags location key routeValue Nothing of
+          Route__ElmPortfolio_Page_Http routeValue -> case ElmPortfolio.Page.Http.page.init flags location key routeValue of
                 (initialModel, initialCmd) ->
                     ( Model
                         { state = State__ElmPortfolio_Page_Http initialModel
@@ -316,7 +316,7 @@ init flags location key =
                     , Cmd.map Msg__ElmPortfolio_Page_Http initialCmd
                     )
                 
-          Route__ElmPortfolio_Page_NotFound routeValue -> case ElmPortfolio.Page.NotFound.page.init flags location key routeValue Nothing of
+          Route__ElmPortfolio_Page_NotFound routeValue -> case ElmPortfolio.Page.NotFound.page.init flags location key routeValue of
                 (initialModel, initialCmd) ->
                     ( Model
                         { state = State__ElmPortfolio_Page_NotFound initialModel
@@ -326,7 +326,7 @@ init flags location key =
                     , Cmd.map Msg__ElmPortfolio_Page_NotFound initialCmd
                     )
                 
-          Route__ElmPortfolio_Page_Preferences routeValue -> case ElmPortfolio.Page.Preferences.page.init flags location key routeValue Nothing of
+          Route__ElmPortfolio_Page_Preferences routeValue -> case ElmPortfolio.Page.Preferences.page.init flags location key routeValue of
                 (initialModel, initialCmd) ->
                     ( Model
                         { state = State__ElmPortfolio_Page_Preferences initialModel
@@ -336,7 +336,7 @@ init flags location key =
                     , Cmd.map Msg__ElmPortfolio_Page_Preferences initialCmd
                     )
                 
-          Route__ElmPortfolio_Page_Time routeValue -> case ElmPortfolio.Page.Time.page.init flags location key routeValue Nothing of
+          Route__ElmPortfolio_Page_Time routeValue -> case ElmPortfolio.Page.Time.page.init flags location key routeValue of
                 (initialModel, initialCmd) ->
                     ( Model
                         { state = State__ElmPortfolio_Page_Time initialModel
@@ -346,7 +346,7 @@ init flags location key =
                     , Cmd.map Msg__ElmPortfolio_Page_Time initialCmd
                     )
                 
-          Route__ElmPortfolio_Page_Top routeValue -> case ElmPortfolio.Page.Top.page.init flags location key routeValue Nothing of
+          Route__ElmPortfolio_Page_Top routeValue -> case ElmPortfolio.Page.Top.page.init flags location key routeValue of
                 (initialModel, initialCmd) ->
                     ( Model
                         { state = State__ElmPortfolio_Page_Top initialModel
@@ -356,7 +356,7 @@ init flags location key =
                     , Cmd.map Msg__ElmPortfolio_Page_Top initialCmd
                     )
                 
-          Route__ElmPortfolio_Page_URLParsing routeValue -> case ElmPortfolio.Page.URLParsing.page.init flags location key routeValue Nothing of
+          Route__ElmPortfolio_Page_URLParsing routeValue -> case ElmPortfolio.Page.URLParsing.page.init flags location key routeValue of
                 (initialModel, initialCmd) ->
                     ( Model
                         { state = State__ElmPortfolio_Page_URLParsing initialModel
