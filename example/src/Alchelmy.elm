@@ -12,7 +12,7 @@ import Html as Html exposing (Html, text)
 import Maybe as Maybe exposing (Maybe(..))
 import Url exposing (Url)
 import Url.Parser as UrlParser exposing (s, oneOf, Parser, parse, (</>))
-import ElmPortfolio.Root as Root
+import Json.Encode
 import ElmPortfolio.Page.Counter
 import ElmPortfolio.Page.Http
 import ElmPortfolio.Page.NotFound
@@ -23,17 +23,17 @@ import ElmPortfolio.Page.URLParsing
 
 
 type alias Flags =
-    Root.Flags
+    Json.Encode.Value
 
 
 type alias Session =
-    Root.Session
+    Json.Encode.Value
 
 
 type Model = Model
   { state : RouteState
   , key : Key
-  , flags : Root.Flags
+  , flags : Flags
   }
 
 type Route
@@ -65,7 +65,7 @@ type Msg
   | Msg__ElmPortfolio_Page_Top ElmPortfolio.Page.Top.Msg
   | Msg__ElmPortfolio_Page_URLParsing ElmPortfolio.Page.URLParsing.Msg
 
-currentSession : RouteState -> Root.Session
+currentSession : RouteState -> Session
 currentSession state = case state of 
 
         State__ElmPortfolio_Page_Counter pageModel ->
@@ -291,7 +291,7 @@ parseLocation location =
         Nothing ->
             Route__ElmPortfolio_Page_NotFound ()
 
-init : Root.Flags -> Url -> Key -> ( Model, Cmd Msg )
+init : Flags -> Url -> Key -> ( Model, Cmd Msg )
 init flags location key =
 
         case parseLocation location of
@@ -378,7 +378,7 @@ subscriptions (Model model) =
         State__ElmPortfolio_Page_Top routeValue -> Sub.map Msg__ElmPortfolio_Page_Top (ElmPortfolio.Page.Top.page.subscriptions routeValue)
         State__ElmPortfolio_Page_URLParsing routeValue -> Sub.map Msg__ElmPortfolio_Page_URLParsing (ElmPortfolio.Page.URLParsing.page.subscriptions routeValue)
 
-program : Program Root.Flags Model Msg
+program : Program Flags Model Msg
 program =
     application
         { init = init

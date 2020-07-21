@@ -2,13 +2,13 @@ module ElmPortfolio.Page.Top exposing (Model, Msg, Route, page, route)
 
 import Browser exposing (Document, UrlRequest(..))
 import Browser.Navigation exposing (Key)
-import ElmPortfolio.Common as Common exposing (link, updateTopic)
+import ElmPortfolio.Common as Common exposing (Page, Session, decodeSession, encodeSession, initialSession, link, updateTopic)
 import ElmPortfolio.Ports exposing (receiveTopic, requestTopic)
-import ElmPortfolio.Root as Root exposing (Flags, Session, initialSession)
 import Html exposing (Html, a, div, h1, img, p, text)
 import Html.Attributes exposing (class, href, src)
+import Json.Decode exposing (Value, decodeValue)
 import Url exposing (Url)
-import Url.Parser as UrlParser exposing ((</>), Parser, map, s, top)
+import Url.Parser exposing (Parser, map, top)
 
 
 type alias Msg =
@@ -20,7 +20,8 @@ type PageMsg
 
 
 type alias Model =
-    { session : Session
+    { key : Key
+    , session : Session
     }
 
 
@@ -33,14 +34,19 @@ route =
     map () top
 
 
-init : Flags -> Url -> Key -> Route -> Maybe Session -> ( Model, Cmd msg )
+init : Value -> Url -> Key -> Route -> Maybe Value -> ( Model, Cmd msg )
 init _ _ key _ maybeSession =
     case maybeSession of
         Nothing ->
-            ( { session = initialSession key }, requestTopic () )
+            ( { key = key, session = initialSession }, requestTopic () )
 
-        Just session ->
-            ( { session = session }, Cmd.none )
+        Just value ->
+            case decodeValue decodeSession value of
+                Err _ ->
+                    ( { key = key, session = initialSession }, requestTopic () )
+
+                Ok session ->
+                    ( { key = key, session = session }, Cmd.none )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -66,7 +72,7 @@ view model =
     }
 
 
-page : Root.Page Model Msg Route a
+page : Page Model Msg Route a
 page =
     { route = route
     , init = init
@@ -74,5 +80,5 @@ page =
     , update = update
     , subscriptions = subscriptions
     , onUrlRequest = Common.UrlRequest
-    , session = \model -> model.session
+    , session = \model -> encodeSession model.session
     }

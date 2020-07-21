@@ -2,14 +2,14 @@ module ElmPortfolio.Page.Http exposing (Model, Msg, Route, page, route)
 
 import Browser exposing (Document, UrlRequest(..))
 import Browser.Navigation exposing (Key)
-import ElmPortfolio.Common as Common exposing (link, updateTopic)
+import ElmPortfolio.Common as Common exposing (Page, Session, decodeSession, encodeSession, initialSession, link, updateTopic)
 import ElmPortfolio.Ports exposing (receiveTopic, requestTopic)
-import ElmPortfolio.Root as Root exposing (Flags, Session, initialSession)
 import Html exposing (Html, a, br, button, div, h1, h2, img, p, text)
 import Html.Attributes exposing (class, href, src)
 import Html.Events exposing (custom, onClick)
 import Http
 import Json.Decode as Decode
+import Json.Encode exposing (Value)
 import Url exposing (Url)
 import Url.Parser as UrlParser exposing ((</>), Parser, map, s)
 
@@ -24,7 +24,8 @@ type PageMsg
 
 
 type alias Model =
-    { session : Session
+    { key : Key
+    , session : Session
     , gifUrl : String
     }
 
@@ -38,14 +39,19 @@ route =
     map () (s "http")
 
 
-init : Flags -> Url -> Key -> Route -> Maybe Session -> ( Model, Cmd Msg )
+init : Value -> Url -> Key -> Route -> Maybe Value -> ( Model, Cmd Msg )
 init _ _ key _ maybeSession =
     case maybeSession of
         Nothing ->
-            ( Model (initialSession key) "waiting.gif", requestTopic () )
+            ( Model key initialSession "waiting.gif", requestTopic () )
 
-        Just session ->
-            ( Model session "waiting.gif", getRandomGif session.topic )
+        Just value ->
+            case Decode.decodeValue decodeSession value of
+                Err _ ->
+                    ( Model key initialSession "waiting.gif", getRandomGif initialSession.topic )
+
+                Ok session ->
+                    ( Model key session "waiting.gif", getRandomGif session.topic )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -104,7 +110,7 @@ view model =
     }
 
 
-page : Root.Page Model Msg Route a
+page : Page Model Msg Route a
 page =
     { route = route
     , init = init
@@ -112,5 +118,5 @@ page =
     , update = update
     , subscriptions = subscriptions
     , onUrlRequest = Common.UrlRequest
-    , session = \model -> model.session
+    , session = \model -> encodeSession model.session
     }

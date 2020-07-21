@@ -2,12 +2,13 @@ module ElmPortfolio.Page.Preferences exposing (Model, Msg, Route, page, route)
 
 import Browser exposing (Document)
 import Browser.Navigation exposing (Key, pushUrl)
-import ElmPortfolio.Common as Common exposing (link, updateTopic)
+import ElmPortfolio.Common as Common exposing (Page, Session, decodeSession, encodeSession, initialSession, link, updateTopic)
 import ElmPortfolio.Ports exposing (receiveTopic, requestTopic, saveTopic)
-import ElmPortfolio.Root as Root exposing (Flags, Session, initialSession)
 import Html exposing (Html, a, button, div, h1, img, input, p, text)
 import Html.Attributes exposing (class, href, src, type_, value)
 import Html.Events exposing (custom, onClick, onInput)
+import Json.Decode exposing (decodeValue)
+import Json.Encode exposing (Value)
 import Url exposing (Url)
 import Url.Parser as UrlParser exposing ((</>), Parser, map, s)
 
@@ -22,7 +23,8 @@ type PageMsg
 
 
 type alias Model =
-    { value : String
+    { key : Key
+    , value : String
     , session : Session
     }
 
@@ -36,18 +38,19 @@ route =
     map {} (s "preferences")
 
 
-init : Flags -> Url -> Key -> Route -> Maybe Session -> ( Model, Cmd Msg )
+init : Value -> Url -> Key -> Route -> Maybe Value -> ( Model, Cmd Msg )
 init _ _ key _ maybeSession =
-    let
-        initial =
-            initialSession key
-    in
     case maybeSession of
         Nothing ->
-            ( { session = initial, value = initial.topic }, requestTopic () )
+            ( { key = key, session = initialSession, value = initialSession.topic }, requestTopic () )
 
-        Just session ->
-            ( { session = session, value = session.topic }, Cmd.none )
+        Just value ->
+            case decodeValue decodeSession value of
+                Err _ ->
+                    ( { key = key, session = initialSession, value = initialSession.topic }, Cmd.none )
+
+                Ok session ->
+                    ( { key = key, session = session, value = session.topic }, Cmd.none )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -88,7 +91,7 @@ view model =
     }
 
 
-page : Root.Page Model Msg Route a
+page : Page Model Msg Route a
 page =
     { route = route
     , init = init
@@ -96,5 +99,5 @@ page =
     , update = update
     , subscriptions = subscriptions
     , onUrlRequest = Common.UrlRequest
-    , session = \model -> model.session
+    , session = \model -> encodeSession model.session
     }

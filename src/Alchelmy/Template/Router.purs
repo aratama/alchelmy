@@ -37,26 +37,24 @@ import Html as Html exposing (Html, text)
 import Maybe as Maybe exposing (Maybe(..))
 import Url exposing (Url)
 import Url.Parser as UrlParser exposing (s, oneOf, Parser, parse, (</>))
-import """
-      <> rootModuleName
-      <> """ as Root
+import Json.Encode
 """
       <> joinWith "\n" (map (\page -> "import " <> page) fullPageModuleNames)
       <> """
 
 
 type alias Flags =
-    Root.Flags
+    Json.Encode.Value
 
 
 type alias Session =
-    Root.Session
+    Json.Encode.Value
 
 
 type Model = Model
   { state : RouteState
   , key : Key
-  , flags : Root.Flags
+  , flags : Flags
   }
 
 type Route
@@ -76,7 +74,7 @@ type Msg
       <> joinWith "\n" (map (\page -> "  | Msg__" <> u page <> " " <> page <> ".Msg") fullPageModuleNames)
       <> """
 
-currentSession : RouteState -> Root.Session
+currentSession : RouteState -> Session
 currentSession state = case state of 
 """
       <> joinWith "\n"
@@ -216,7 +214,7 @@ parseLocation location =
       <> u notFound
       <> """ ()
 
-init : Root.Flags -> Url -> Key -> ( Model, Cmd Msg )
+init : Flags -> Url -> Key -> ( Model, Cmd Msg )
 init flags location key =
 
         case parseLocation location of
@@ -258,7 +256,7 @@ subscriptions (Model model) =
           )
       <> """
 
-program : Program Root.Flags Model Msg
+program : Program Flags Model Msg
 program =
     application
         { init = init

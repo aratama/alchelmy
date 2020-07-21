@@ -2,16 +2,17 @@ module ElmPortfolio.Page.Time exposing (Model, Msg, Route, page, route)
 
 import Browser exposing (Document)
 import Browser.Navigation exposing (Key, pushUrl)
-import ElmPortfolio.Common as Common exposing (link, updateTopic)
+import ElmPortfolio.Common as Common exposing (Page, Session, decodeSession, encodeSession, initialSession, link, updateTopic)
 import ElmPortfolio.Ports exposing (receiveTopic, requestTopic)
-import ElmPortfolio.Root as Root exposing (Flags, Session, initialSession)
 import Html exposing (Html, a, br, button, div, h1, h2, img, p, text)
 import Html.Attributes exposing (class, href, src)
+import Json.Decode exposing (decodeValue)
+import Json.Encode exposing (Value)
 import Svg exposing (circle, line, svg)
 import Svg.Attributes exposing (cx, cy, fill, r, stroke, viewBox, width, x1, x2, y1, y2)
 import Time as Time exposing (Posix, here, millisToPosix, toMinute, toSecond, utc)
 import Url exposing (Url)
-import Url.Parser as UrlParser exposing ((</>), Parser, map, s)
+import Url.Parser exposing (Parser, map, s)
 
 
 type alias Msg =
@@ -23,7 +24,8 @@ type PageMsg
 
 
 type alias Model =
-    { session : Session
+    { key : Key
+    , session : Session
     , posix : Posix
     }
 
@@ -37,19 +39,24 @@ route =
     map {} (s "time")
 
 
-init : Flags -> Url -> Key -> Route -> Maybe Session -> ( Model, Cmd Msg )
+init : Value -> Url -> Key -> Route -> Maybe Value -> ( Model, Cmd Msg )
 init _ _ key _ maybeSession =
     case maybeSession of
         Nothing ->
-            ( { session = initialSession key, posix = millisToPosix 0 }, requestTopic () )
+            ( { key = key, session = initialSession, posix = millisToPosix 0 }, requestTopic () )
 
-        Just session ->
-            ( { session = session, posix = millisToPosix 0 }
-              -- Mysterious bug workaround
-              -- Originally, you can put just `Cmd.none`, however in the case the timer will not work.
-              -- If you remove `route` in the routing, it work. Extremely confusing.
-            , requestTopic ()
-            )
+        Just value ->
+            case decodeValue decodeSession value of
+                Err _ ->
+                    ( { key = key, session = initialSession, posix = millisToPosix 0 }, requestTopic () )
+
+                Ok session ->
+                    ( { key = key, session = session, posix = millisToPosix 0 }
+                      -- Mysterious bug workaround
+                      -- Originally, you can put just `Cmd.none`, however in the case the timer will not work.
+                      -- If you remove `route` in the routing, it work. Extremely confusing.
+                    , requestTopic ()
+                    )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -96,7 +103,7 @@ view model =
     }
 
 
-page : Root.Page Model Msg Route a
+page : Page Model Msg Route a
 page =
     { route = route
     , init = init
@@ -104,5 +111,5 @@ page =
     , update = update
     , subscriptions = subscriptions
     , onUrlRequest = Common.UrlRequest
-    , session = \model -> model.session
+    , session = \model -> encodeSession model.session
     }

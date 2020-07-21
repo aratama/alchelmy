@@ -1,14 +1,54 @@
-module ElmPortfolio.Common exposing (Msg(..), defaultNavigation, link, update, updateTopic, view)
+module ElmPortfolio.Common exposing (Msg(..), Page, Session, decodeSession, defaultNavigation, encodeSession, initialSession, link, update, updateTopic, view)
 
 import Browser exposing (Document, UrlRequest(..))
 import Browser.Navigation exposing (Key, load, pushUrl)
-import ElmPortfolio.Root exposing (Session)
 import Html exposing (Html, a, button, div, h1, header, p, text)
 import Html.Attributes exposing (class, href)
 import Html.Events exposing (onClick)
+import Json.Decode
+import Json.Encode exposing (Value)
 import Maybe exposing (Maybe, withDefault)
 import Url exposing (Url)
-import Url.Parser as UrlParser exposing (Parser)
+import Url.Parser exposing (Parser)
+
+
+type alias Session =
+    { topic : String
+    , destination : Maybe String
+    }
+
+
+initialSession : Session
+initialSession =
+    { topic = "goat"
+    , destination = Nothing
+    }
+
+
+decodeSession : Json.Decode.Decoder Session
+decodeSession =
+    Json.Decode.map2 Session
+        (Json.Decode.field "topic" Json.Decode.string)
+        (Json.Decode.field "destination" <| Json.Decode.maybe Json.Decode.string)
+
+
+encodeSession : Session -> Value
+encodeSession session =
+    Json.Encode.object
+        [ ( "topic", Json.Encode.string session.topic )
+        , ( "destination", Maybe.withDefault Json.Encode.null <| Maybe.map Json.Encode.string session.destination )
+        ]
+
+
+type alias Page model msg route a =
+    { init : Value -> Url -> Key -> route -> Maybe Value -> ( model, Cmd msg )
+    , view : model -> Document msg
+    , update : msg -> model -> ( model, Cmd msg )
+    , subscriptions : model -> Sub msg
+    , onUrlRequest : UrlRequest -> msg
+    , route : Parser (route -> a) a
+    , session : model -> Value
+    }
 
 
 link : String -> String -> Html msg
@@ -69,10 +109,10 @@ type Msg a
 
 
 update :
-    (a -> { model | session : Session } -> ( { model | session : Session }, Cmd (Msg a) ))
+    (a -> { model | session : Session, key : Key } -> ( { model | session : Session, key : Key }, Cmd (Msg a) ))
     -> Msg a
-    -> { model | session : Session }
-    -> ( { model | session : Session }, Cmd (Msg a) )
+    -> { model | session : Session, key : Key }
+    -> ( { model | session : Session, key : Key }, Cmd (Msg a) )
 update f msg model =
     let
         session =
@@ -98,7 +138,7 @@ update f msg model =
             case urlRequest of
                 Internal url ->
                     ( model
-                    , pushUrl model.session.key (Url.toString url)
+                    , pushUrl model.key (Url.toString url)
                     )
 
                 External url ->
@@ -119,19 +159,15 @@ updateTopic model maybeTopic =
     { model | session = { session | topic = topic } }
 
 
-defaultNavigation : { model | session : Session } -> UrlRequest -> ( { model | session : Session }, Cmd msg )
+defaultNavigation : { model | session : Session, key : Key } -> UrlRequest -> ( { model | session : Session, key : Key }, Cmd msg )
 defaultNavigation model urlRequest =
     case urlRequest of
         Internal url ->
             ( model
-            , pushUrl model.session.key (Url.toString url)
+            , pushUrl model.key (Url.toString url)
             )
 
         External url ->
-            let
-                session =
-                    model.session
-            in
             ( model
             , load url
             )

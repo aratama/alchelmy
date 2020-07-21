@@ -2,14 +2,15 @@ module ElmPortfolio.Page.Counter exposing (Model, Msg, Route, page)
 
 import Browser exposing (Document, UrlRequest(..))
 import Browser.Navigation exposing (Key)
-import ElmPortfolio.Common as Common exposing (link, updateTopic)
+import ElmPortfolio.Common as Common exposing (Page, Session, decodeSession, encodeSession, initialSession, link, updateTopic)
 import ElmPortfolio.Ports exposing (receiveTopic, requestTopic)
-import ElmPortfolio.Root as Root exposing (Flags, Session, initialSession)
 import Html exposing (Html, a, button, div, h1, p, text)
 import Html.Attributes exposing (class, href, src)
 import Html.Events exposing (custom, onClick)
+import Json.Decode exposing (decodeValue)
+import Json.Encode exposing (Value)
 import Url exposing (Url)
-import Url.Parser as UrlParser exposing ((</>), Parser, map, s)
+import Url.Parser exposing ((</>), Parser, map, s)
 
 
 
@@ -39,7 +40,8 @@ type PageMsg
 
 
 type alias Model =
-    { session : Session
+    { key : Key
+    , session : Session
     , count : Int
     }
 
@@ -57,14 +59,19 @@ route =
 -- an `init` function initializes the local state of the page with `Url`, `Route` and the global state.
 
 
-init : Flags -> Url -> Key -> Route -> Maybe Session -> ( Model, Cmd Msg )
+init : Value -> Url -> Key -> Route -> Maybe Value -> ( Model, Cmd Msg )
 init _ _ key _ maybeSession =
     case maybeSession of
         Nothing ->
-            ( { session = initialSession key, count = 0 }, requestTopic () )
+            ( { key = key, session = initialSession, count = 0 }, requestTopic () )
 
-        Just session ->
-            ( { session = session, count = 0 }, Cmd.none )
+        Just value ->
+            case decodeValue decodeSession value of
+                Err _ ->
+                    ( { key = key, session = initialSession, count = 0 }, Cmd.none )
+
+                Ok session ->
+                    ( { key = key, session = session, count = 0 }, Cmd.none )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -100,7 +107,7 @@ view model =
     }
 
 
-page : Root.Page Model Msg Route a
+page : Page Model Msg Route a
 page =
     { route = route
     , init = init
@@ -108,5 +115,5 @@ page =
     , update = update
     , subscriptions = subscriptions
     , onUrlRequest = Common.UrlRequest
-    , session = \model -> model.session
+    , session = \model -> encodeSession model.session
     }
