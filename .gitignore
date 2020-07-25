@@ -19,8 +19,6 @@ tests-generated/src/TestProject
 tests-generated/index.js
 
 output
-bower_components
-
 .psc-ide-port
 .spago
 .purs-repl

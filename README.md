@@ -65,7 +65,6 @@ alchelmy has a command line interface:
 
 ```sh
 $ npm i
-$ bower update
 $ npm run build
 ```
 
