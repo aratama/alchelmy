@@ -13,7 +13,7 @@
     "rebuild": "cd .. && npm run build && cd example && node ../bin/alchelmy.js update && elm-app build",
     "new": "node ../bin/alchelmy.js new Minimum",
     "clean": "rimraf src/ElmPortfolio/Alchelmy.elm src/ElmPortfolio/alchelmy.js elm-stuff tests/elm-stuff",
-    "main": "elm-app start"
+    "start": "elm-app start"
   },
   "author": "",
   "license": "ISC",

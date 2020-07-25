@@ -34,9 +34,9 @@ An page module have to export types and values named as:
 - `Route`
 - `Msg`
 - `Model`
-- `page : Root.Page model msg route a`
+- `page : Page Model Msg Route a`
 
-`Root.Page` type is defined as:
+`Page` type is defined as:
 
 ```elm
 type alias Page model msg route a =
