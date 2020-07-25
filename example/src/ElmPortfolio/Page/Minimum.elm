@@ -1,12 +1,11 @@
 module ElmPortfolio.Page.Minimum exposing (Model, Msg, Route, page)
 
-import Browser exposing (Document, UrlRequest(..))
+import Browser exposing (UrlRequest(..))
 import Browser.Navigation exposing (Key)
-import ElmPortfolio.Common as Common exposing (Page, Session, defaultNavigation, encodeSession, initialSession)
+import ElmPortfolio.Common exposing (Page, Session, defaultNavigation, encodeSession, initialSession)
 import Html exposing (h1, text)
 import Html.Attributes exposing (class)
-import Url exposing (Url)
-import Url.Parser exposing (Parser, map, s)
+import Url.Parser exposing (map, s)
 
 
 type Msg

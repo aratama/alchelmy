@@ -50,7 +50,7 @@ type alias Page model msg route a =
     }
 ```
 
-This `Page` type is similar to the first argument of [Browser.application](https://package.elm-lang.org/packages/elm/browser/latest/Browser#application) function, however notice that some properties and arguments are added. The `route` property is page-by-page URL parsers and express page location. `route` value extracted from URL will be passed to the `init` function of the page module. So you also need to define the `Route` type in the root page module.
+This `Page` type is similar to the first argument of [Browser.application](https://package.elm-lang.org/packages/elm/browser/latest/Browser#application) function, however notice that some properties and arguments are added. The `route` property is page-by-page URL parsers and express page location. `route` value extracted from URL will be passed to the `init` function of the page module. So you also need to define the `Route` type in the page module.
 
 ### Installation
 
@@ -61,7 +61,7 @@ alchelmy isn't in NPM yet. You can use `npm i aratama/alchelmy` to install alche
 alchelmy has a command line interface:
 
 - `alchelmy init <application>` will generate `src/<Application>` directory and make some scaffolds.
-- `alchelmy update` will (re)generate `src/<Application>/Alchemy.elm`. Additionally, make `alchemy.js` to import CSS files associated with each pages.
+- `alchelmy update` will (re)generate `src/<Application>/Alchemy.elm`.
 - `alchelmy new <page>` will generate a new page named `<page>`.
 
 ## Building Alchelmy Itself
@@ -75,7 +75,12 @@ $ npm run build
 ## Known Limitations
 
 - You can't specify order of precedence of routes. You should take care not to overlap routings.
-- You can't call the parent command from the child command. It's on purpose. Both `Root` modules and the page module aren't component and it's not in parent-child relationships.
+
+## Other Projects for Elm SPA
+
+- [elm-spa](https://www.elm-spa.dev/guide)
+- [elm-pages](https://elm-pages.com/)
+- [Spades](https://github.com/rogeriochaves/spades)
 
 ## References
 

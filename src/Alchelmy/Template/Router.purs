@@ -8,8 +8,8 @@ import Prelude (bind, map, ($), (<$>), (<>), (==))
 u :: String -> String
 u = replaceAll (Pattern ".") (Replacement "_")
 
-renderRouter :: String -> String -> Array String -> String
-renderRouter application rootModuleName fullPageModuleNames =
+renderRouter :: String -> Array String -> String
+renderRouter application fullPageModuleNames =
   let
     notFound_ =
       head $ catMaybes
