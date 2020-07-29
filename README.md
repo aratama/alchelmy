@@ -1,5 +1,7 @@
 # alchelmy
 
+[日本語版](readme-ja.md)
+
 An experimental code generator for an Single Page Application with multiple pages in Elm.
 
 ![Alchemist Sendivogius](docs/Alchemik_Sedziwoj_Matejko.JPG)

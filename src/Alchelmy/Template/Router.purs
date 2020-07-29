@@ -1,9 +1,7 @@
 module Alchelmy.Template.Router where
 
-import Data.Maybe (Maybe(..), fromMaybe)
-import Data.Array (catMaybes, head, last)
-import Data.String (joinWith, split, Pattern(..), replaceAll, Replacement(..))
-import Prelude (bind, map, ($), (<$>), (<>), (==))
+import Data.String (Pattern(..), Replacement(..), joinWith, replaceAll)
+import Prelude (map, (<$>), (<>))
 
 underbar :: String -> String
 underbar = replaceAll (Pattern ".") (Replacement "_")
@@ -11,16 +9,6 @@ underbar = replaceAll (Pattern ".") (Replacement "_")
 renderRouter :: String -> Array String -> String
 renderRouter application fullPageModuleNames =
   let
-    notFound_ =
-      head $ catMaybes
-        $ ( \moduleName -> do
-              n <- last $ split (Pattern ".") moduleName
-              if n == "NotFound" then Just moduleName else Nothing
-          )
-        <$> fullPageModuleNames
-
-    notFound = fromMaybe "***NOTDOUND***" notFound_
-
     pages = underbar <$> fullPageModuleNames
 
     each f = joinWith "\n" (map f fullPageModuleNames)
@@ -37,7 +25,7 @@ renderRouter application fullPageModuleNames =
 -- Do not edit this     --
 --------------------------
 
-module Alchelmy exposing (Flags, Model, Msg(..), Session, init, view, update, subscriptions, program)
+module Alchelmy exposing (Flags, Model, Msg(..), Route(..), Session, init, view, update, subscriptions, program)
 
 import Browser exposing (Document, UrlRequest(..), application)
 import Browser.Navigation exposing (Key, load, pushUrl)
@@ -78,8 +66,8 @@ type Msg
   | UrlChange Url"""
       , each \page -> block [ [ "  | Msg__", underbar page, " ", page, ".Msg" ] ]
       , """
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg (Model model) =
+update : Route -> Msg -> Model -> ( Model, Cmd Msg )
+update notFoundRoute msg (Model model) =
   case (msg, model.state) of
     (UrlRequest urlRequest, _) ->
           case model.state of
@@ -98,7 +86,7 @@ update msg (Model model) =
       , each \page ->
           block
             [ [ "            State__", underbar page, " pageModel ->", page, ".page.session pageModel " ] ]
-      , "          rerouting () = case parseLocation location of"
+      , "          rerouting () = case parseLocation notFoundRoute location of"
       , each \page_ ->
           block
             [ [ "                Route__", underbar page_, " routeValue -> " ]
@@ -143,18 +131,19 @@ matchers =
       , "        ]"
       , """
 
-parseLocation : Url -> Route
-parseLocation location =
+parseLocation : Route -> Url -> Route
+parseLocation notFoundRoute location =
     case parse matchers location of
         Just route ->
             route
 
-        Nothing ->"""
-      , block [ [ "            Route__", underbar notFound, " ()" ] ]
+        Nothing -> 
+            notFoundRoute 
+      """
       , """
-init : Flags -> Url -> Key -> ( Model, Cmd Msg )
-init flags location key =
-        case parseLocation location of
+init : Route -> Flags -> Url -> Key -> ( Model, Cmd Msg )
+init notFoundRoute flags location key =
+        case parseLocation notFoundRoute location of
 """
       , each \page ->
           block
@@ -174,12 +163,12 @@ subscriptions (Model model) =
           block [ [ "        State__", underbar page, " routeValue -> Sub.map Msg__", underbar page, " (", page, ".page.subscriptions routeValue)" ] ]
       , """
 
-program : Program Flags Model Msg
-program =
+program : { notFound : Route } -> Program Flags Model Msg
+program config =
     application
-        { init = init
+        { init = init config.notFound
         , view = view
-        , update = update
+        , update = update config.notFound
         , subscriptions = subscriptions
         , onUrlRequest = UrlRequest
         , onUrlChange = UrlChange

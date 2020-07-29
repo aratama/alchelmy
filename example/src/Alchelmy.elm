@@ -4,7 +4,7 @@
 -- Do not edit this     --
 --------------------------
 
-module Alchelmy exposing (Flags, Model, Msg(..), Session, init, view, update, subscriptions, program)
+module Alchelmy exposing (Flags, Model, Msg(..), Route(..), Session, init, view, update, subscriptions, program)
 
 import Browser exposing (Document, UrlRequest(..), application)
 import Browser.Navigation exposing (Key, load, pushUrl)
@@ -71,8 +71,8 @@ type Msg
   | Msg__ElmPortfolio_Page_Top ElmPortfolio.Page.Top.Msg
   | Msg__ElmPortfolio_Page_URLParsing ElmPortfolio.Page.URLParsing.Msg
 
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg (Model model) =
+update : Route -> Msg -> Model -> ( Model, Cmd Msg )
+update notFoundRoute msg (Model model) =
   case (msg, model.state) of
     (UrlRequest urlRequest, _) ->
           case model.state of
@@ -121,7 +121,7 @@ update msg (Model model) =
             State__ElmPortfolio_Page_Time pageModel ->ElmPortfolio.Page.Time.page.session pageModel 
             State__ElmPortfolio_Page_Top pageModel ->ElmPortfolio.Page.Top.page.session pageModel 
             State__ElmPortfolio_Page_URLParsing pageModel ->ElmPortfolio.Page.URLParsing.page.session pageModel 
-          rerouting () = case parseLocation location of
+          rerouting () = case parseLocation notFoundRoute location of
                 Route__ElmPortfolio_Page_Counter routeValue -> 
                     case ElmPortfolio.Page.Counter.page.init (currentSession ()) location model.key routeValue of
                         (initialModel, initialCmd) ->
@@ -276,18 +276,19 @@ matchers =
         ]
 
 
-parseLocation : Url -> Route
-parseLocation location =
+parseLocation : Route -> Url -> Route
+parseLocation notFoundRoute location =
     case parse matchers location of
         Just route ->
             route
 
-        Nothing ->
-            Route__ElmPortfolio_Page_NotFound ()
+        Nothing -> 
+            notFoundRoute 
+      
 
-init : Flags -> Url -> Key -> ( Model, Cmd Msg )
-init flags location key =
-        case parseLocation location of
+init : Route -> Flags -> Url -> Key -> ( Model, Cmd Msg )
+init notFoundRoute flags location key =
+        case parseLocation notFoundRoute location of
 
           Route__ElmPortfolio_Page_Counter routeValue -> case ElmPortfolio.Page.Counter.page.init flags location key routeValue of
               (initialModel, initialCmd) ->
@@ -345,12 +346,12 @@ subscriptions (Model model) =
         State__ElmPortfolio_Page_URLParsing routeValue -> Sub.map Msg__ElmPortfolio_Page_URLParsing (ElmPortfolio.Page.URLParsing.page.subscriptions routeValue)
 
 
-program : Program Flags Model Msg
-program =
+program : { notFound : Route } -> Program Flags Model Msg
+program config =
     application
-        { init = init
+        { init = init config.notFound
         , view = view
-        , update = update
+        , update = update config.notFound
         , subscriptions = subscriptions
         , onUrlRequest = UrlRequest
         , onUrlChange = UrlChange
