@@ -110,5 +110,6 @@ page =
     , update = update
     , subscriptions = subscriptions
     , onUrlRequest = Common.UrlRequest
+    , onUrlChange = Common.UrlChange
     , session = \model -> encodeSession model.session
     }

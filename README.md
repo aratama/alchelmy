@@ -42,6 +42,7 @@ type alias Page model msg route a =
     , update : msg -> model -> ( model, Cmd msg )
     , subscriptions : model -> Sub msg
     , onUrlRequest : UrlRequest -> msg
+    , onUrlChange : Url -> msg
     , route : Parser (route -> a) a
     , session : model -> Value
     }
@@ -72,7 +73,9 @@ $ npm run build
 
 - You can't specify order of precedence of routes. You should take care not to overlap routings.
 
-## Other Projects for Elm SPA
+## Comparison to Other Projects
+
+There are some simillar projects:
 
 - [elm-spa](https://www.elm-spa.dev/guide)
 - [elm-pages](https://elm-pages.com/)

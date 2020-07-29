@@ -22,8 +22,16 @@ renderRouter application fullPageModuleNames =
     notFound = fromMaybe "***NOTDOUND***" notFound_
 
     pages = u <$> fullPageModuleNames
+
+    each f = joinWith "\n" (map f fullPageModuleNames)
+
+    k page lhs rhs = lhs <> u page <> rhs
+
+    s :: String -> String -> String -> String
+    s page lhs rhs = lhs <> page <> rhs
   in
-    """
+    joinWith "\n"
+      [ """
 --------------------------
 -- Auto-generated codes --
 -- Do not edit this     --
@@ -39,9 +47,8 @@ import Url exposing (Url)
 import Url.Parser as UrlParser exposing (s, oneOf, Parser, parse, (</>))
 import Json.Encode
 """
-      <> joinWith "\n" (map (\page -> "import " <> page) fullPageModuleNames)
-      <> """
-
+      , each \page -> "import " <> page
+      , """
 
 type alias Flags =
     Json.Encode.Value
@@ -59,97 +66,67 @@ type Model = Model
 
 type Route
   = """
-      <> joinWith "\n  | " (map (\page -> "Route__" <> u page <> " " <> page <> ".Route") fullPageModuleNames)
-      <> """
+          <> joinWith "\n  | " (map (\page -> "Route__" <> u page <> " " <> page <> ".Route") fullPageModuleNames)
+      , """
 
 type RouteState
   = """
-      <> joinWith "\n  | " (map (\page -> "State__" <> u page <> " " <> page <> ".Model") fullPageModuleNames)
-      <> """
-
+          <> joinWith "\n  | " (map (\page -> "State__" <> u page <> " " <> page <> ".Model") fullPageModuleNames)
+      , """
 type Msg
   = UrlRequest UrlRequest
-  | Navigate Url
+  | UrlChange Url
 """
-      <> joinWith "\n" (map (\page -> "  | Msg__" <> u page <> " " <> page <> ".Msg") fullPageModuleNames)
-      <> """
-
+      , each \page -> "  | Msg__" <> u page <> " " <> page <> ".Msg"
+      , """
 currentSession : RouteState -> Session
 currentSession state = case state of 
 """
-      <> joinWith "\n"
-          ( map
-              ( \page ->
-                  """
-        State__"""
-                    <> u page
-                    <> """ pageModel ->
-          """
-                    <> page
-                    <> """.page.session pageModel """
-              )
-              fullPageModuleNames
-          )
-      <> """
-
-
+      , each \page ->
+          joinWith "    \n"
+            [ "  State__" `k page` " pageModel ->"
+            , "    " `s page` ".page.session pageModel "
+            ]
+      , """
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg (Model model) =
   case (msg, model.state) of
     (UrlRequest urlRequest, _) ->
           case model.state of
 """
-      <> joinWith "\n"
-          ( map
-              ( \page ->
-                  """
-            State__"""
-                    <> u page
-                    <> """ pmodel ->
-                  case """
-                    <> page
-                    <> """.page.update ("""
-                    <> page
-                    <> """.page.onUrlRequest urlRequest) pmodel of
-                    (pmodel_, pcmd) ->
-                      ( Model { model | state = State__"""
-                    <> u page
-                    <> """ pmodel_ }
-                      , Cmd.map Msg__"""
-                    <> u page
-                    <> """ pcmd
-                      )
-        """
-              )
-              fullPageModuleNames
-          )
-      <> """
-
-    (Navigate location, _) ->
-      case parseLocation location of
-"""
-      <> joinWith "\n"
+      , each \page ->
+          joinWith "\n"
+            [ "            State__" <> u page <> " pmodel ->"
+            , "                case " <> page <> ".page.update (" <> page <> ".page.onUrlRequest urlRequest) pmodel of"
+            , "                    (pmodel_, pcmd) ->"
+            , "                        ( Model { model | state = State__" <> u page <> " pmodel_ }, Cmd.map Msg__" <> u page <> " pcmd)"
+            ]
+      , "    (UrlChange location, _) ->"
+      , "      let "
+      , "           (session, cmdOnUrlChange) = case model.state of"
+      , each \page ->
+          joinWith "\n"
+            [ "             State__" `k page` " pmodel ->    "
+            , "               case " `s page` ".page.update (" `s page` ".page.onUrlChange location) pmodel of"
+            , "                 (model_, cmd) -> (" `s page` ".page.session model_, Cmd.map Msg__" `k page` " cmd)"
+            ]
+      , "      in"
+      , "      case parseLocation location of"
+      , joinWith "\n"
           ( map
               ( \page_ ->
-                  """
-                Route__"""
-                    <> u page_
-                    <> """ routeValue ->
-                      case """
-                    <> page_
-                    <> """.page.init (currentSession model.state) location model.key routeValue of
-                        (initialModel, initialCmd) ->
-                          ( Model { model | state = State__"""
-                    <> u page_
-                    <> """ initialModel }
-                          , Cmd.map Msg__"""
-                    <> u page_
-                    <> """ initialCmd
-                          )
-                """
+                  joinWith "\n"
+                    [ "                Route__" <> u page_ <> " routeValue -> "
+                    , "                    case " <> page_ <> ".page.init session location model.key routeValue of"
+                    , "                        (initialModel, initialCmd) ->"
+                    , "                            ( Model { model | state = State__" <> u page_ <> " initialModel }"
+                    , "                            , Cmd.batch [cmdOnUrlChange, Cmd.map Msg__" <> u page_ <> " initialCmd]"
+                    , "                            )"
+                    ]
               )
               fullPageModuleNames
           )
+      ]
       <> """
   
 """
@@ -264,7 +241,7 @@ program =
         , update = update
         , subscriptions = subscriptions
         , onUrlRequest = UrlRequest
-        , onUrlChange = Navigate
+        , onUrlChange = UrlChange
         }
 
 

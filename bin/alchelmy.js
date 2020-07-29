@@ -495,6 +495,13 @@ var PS = {};
   var u = Data_String_Common.replaceAll(".")("_");
   var renderRouter = function (application) {
       return function (fullPageModuleNames) {
+          var s = function (page) {
+              return function (lhs) {
+                  return function (rhs) {
+                      return lhs + (page + rhs);
+                  };
+              };
+          };
           var pages = Data_Functor.map(Data_Functor.functorArray)(u)(fullPageModuleNames);
           var notFound_ = Data_Array.head(Data_Array.catMaybes(Data_Functor.map(Data_Functor.functorArray)(function (moduleName) {
               return Control_Bind.bind(Data_Maybe.bindMaybe)(Data_Array.last(Data_String_Common.split(".")(moduleName)))(function (n) {
@@ -506,21 +513,33 @@ var PS = {};
               });
           })(fullPageModuleNames)));
           var notFound = Data_Maybe.fromMaybe("***NOTDOUND***")(notFound_);
-          return "\x0a--------------------------\x0a-- Auto-generated codes --\x0a-- Do not edit this     --\x0a--------------------------\x0a\x0amodule Alchelmy exposing (Flags, Model, Msg, Session, program)\x0a\x0aimport Browser exposing (Document, UrlRequest(..), application)\x0aimport Browser.Navigation exposing (Key, load, pushUrl)\x0aimport Html as Html exposing (Html, text)\x0aimport Maybe as Maybe exposing (Maybe(..))\x0aimport Url exposing (Url)\x0aimport Url.Parser as UrlParser exposing (s, oneOf, Parser, parse, (</>))\x0aimport Json.Encode\x0a" + (Data_String_Common.joinWith("\x0a")(Data_Functor.map(Data_Functor.functorArray)(function (page) {
+          var k = function (page) {
+              return function (lhs) {
+                  return function (rhs) {
+                      return lhs + (u(page) + rhs);
+                  };
+              };
+          };
+          var each = function (f) {
+              return Data_String_Common.joinWith("\x0a")(Data_Functor.map(Data_Functor.functorArray)(f)(fullPageModuleNames));
+          };
+          return Data_String_Common.joinWith("\x0a")([ "\x0a--------------------------\x0a-- Auto-generated codes --\x0a-- Do not edit this     --\x0a--------------------------\x0a\x0amodule Alchelmy exposing (Flags, Model, Msg, Session, program)\x0a\x0aimport Browser exposing (Document, UrlRequest(..), application)\x0aimport Browser.Navigation exposing (Key, load, pushUrl)\x0aimport Html as Html exposing (Html, text)\x0aimport Maybe as Maybe exposing (Maybe(..))\x0aimport Url exposing (Url)\x0aimport Url.Parser as UrlParser exposing (s, oneOf, Parser, parse, (</>))\x0aimport Json.Encode\x0a", each(function (page) {
               return "import " + page;
-          })(fullPageModuleNames)) + ("\x0a\x0a\x0atype alias Flags =\x0a    Json.Encode.Value\x0a\x0a\x0atype alias Session =\x0a    Json.Encode.Value\x0a\x0a\x0atype Model = Model\x0a  { state : RouteState\x0a  , key : Key\x0a  , flags : Flags\x0a  }\x0a\x0atype Route\x0a  = " + (Data_String_Common.joinWith("\x0a  | ")(Data_Functor.map(Data_Functor.functorArray)(function (page) {
+          }), "\x0a\x0atype alias Flags =\x0a    Json.Encode.Value\x0a\x0a\x0atype alias Session =\x0a    Json.Encode.Value\x0a\x0a\x0atype Model = Model\x0a  { state : RouteState\x0a  , key : Key\x0a  , flags : Flags\x0a  }\x0a\x0atype Route\x0a  = " + Data_String_Common.joinWith("\x0a  | ")(Data_Functor.map(Data_Functor.functorArray)(function (page) {
               return "Route__" + (u(page) + (" " + (page + ".Route")));
-          })(fullPageModuleNames)) + ("\x0a\x0atype RouteState\x0a  = " + (Data_String_Common.joinWith("\x0a  | ")(Data_Functor.map(Data_Functor.functorArray)(function (page) {
+          })(fullPageModuleNames)), "\x0a\x0atype RouteState\x0a  = " + Data_String_Common.joinWith("\x0a  | ")(Data_Functor.map(Data_Functor.functorArray)(function (page) {
               return "State__" + (u(page) + (" " + (page + ".Model")));
-          })(fullPageModuleNames)) + ("\x0a\x0atype Msg\x0a  = UrlRequest UrlRequest\x0a  | Navigate Url\x0a" + (Data_String_Common.joinWith("\x0a")(Data_Functor.map(Data_Functor.functorArray)(function (page) {
+          })(fullPageModuleNames)), "\x0atype Msg\x0a  = UrlRequest UrlRequest\x0a  | UrlChange Url\x0a", each(function (page) {
               return "  | Msg__" + (u(page) + (" " + (page + ".Msg")));
-          })(fullPageModuleNames)) + ("\x0a\x0acurrentSession : RouteState -> Session\x0acurrentSession state = case state of \x0a" + (Data_String_Common.joinWith("\x0a")(Data_Functor.map(Data_Functor.functorArray)(function (page) {
-              return "\x0a        State__" + (u(page) + (" pageModel ->\x0a          " + (page + ".page.session pageModel ")));
-          })(fullPageModuleNames)) + ("\x0a\x0a\x0aupdate : Msg -> Model -> ( Model, Cmd Msg )\x0aupdate msg (Model model) =\x0a  case (msg, model.state) of\x0a    (UrlRequest urlRequest, _) ->\x0a          case model.state of\x0a" + (Data_String_Common.joinWith("\x0a")(Data_Functor.map(Data_Functor.functorArray)(function (page) {
-              return "\x0a            State__" + (u(page) + (" pmodel ->\x0a                  case " + (page + (".page.update (" + (page + (".page.onUrlRequest urlRequest) pmodel of\x0a                    (pmodel_, pcmd) ->\x0a                      ( Model { model | state = State__" + (u(page) + (" pmodel_ }\x0a                      , Cmd.map Msg__" + (u(page) + " pcmd\x0a                      )\x0a        ")))))))));
-          })(fullPageModuleNames)) + ("\x0a\x0a    (Navigate location, _) ->\x0a      case parseLocation location of\x0a" + (Data_String_Common.joinWith("\x0a")(Data_Functor.map(Data_Functor.functorArray)(function (page_) {
-              return "\x0a                Route__" + (u(page_) + (" routeValue ->\x0a                      case " + (page_ + (".page.init (currentSession model.state) location model.key routeValue of\x0a                        (initialModel, initialCmd) ->\x0a                          ( Model { model | state = State__" + (u(page_) + (" initialModel }\x0a                          , Cmd.map Msg__" + (u(page_) + " initialCmd\x0a                          )\x0a                ")))))));
-          })(fullPageModuleNames)) + ("\x0a  \x0a" + (Data_String_Common.joinWith("\x0a")(Data_Functor.map(Data_Functor.functorArray)(function (page) {
+          }), "\x0acurrentSession : RouteState -> Session\x0acurrentSession state = case state of \x0a", each(function (page) {
+              return Data_String_Common.joinWith("    \x0a")([ k(page)("  State__")(" pageModel ->"), s(page)("    ")(".page.session pageModel ") ]);
+          }), "\x0aupdate : Msg -> Model -> ( Model, Cmd Msg )\x0aupdate msg (Model model) =\x0a  case (msg, model.state) of\x0a    (UrlRequest urlRequest, _) ->\x0a          case model.state of\x0a", each(function (page) {
+              return Data_String_Common.joinWith("\x0a")([ "            State__" + (u(page) + " pmodel ->"), "                case " + (page + (".page.update (" + (page + ".page.onUrlRequest urlRequest) pmodel of"))), "                    (pmodel_, pcmd) ->", "                        ( Model { model | state = State__" + (u(page) + (" pmodel_ }, Cmd.map Msg__" + (u(page) + " pcmd)"))) ]);
+          }), "    (UrlChange location, _) ->", "      let ", "           (session, cmdOnUrlChange) = case model.state of", each(function (page) {
+              return Data_String_Common.joinWith("\x0a")([ k(page)("             State__")(" pmodel ->    "), s(page)(s(page)("               case ")(".page.update ("))(".page.onUrlChange location) pmodel of"), k(page)(s(page)("                 (model_, cmd) -> (")(".page.session model_, Cmd.map Msg__"))(" cmd)") ]);
+          }), "      in", "      case parseLocation location of", Data_String_Common.joinWith("\x0a")(Data_Functor.map(Data_Functor.functorArray)(function (page_) {
+              return Data_String_Common.joinWith("\x0a")([ "                Route__" + (u(page_) + " routeValue -> "), "                    case " + (page_ + ".page.init session location model.key routeValue of"), "                        (initialModel, initialCmd) ->", "                            ( Model { model | state = State__" + (u(page_) + " initialModel }"), "                            , Cmd.batch [cmdOnUrlChange, Cmd.map Msg__" + (u(page_) + " initialCmd]"), "                            )" ]);
+          })(fullPageModuleNames)) ]) + ("\x0a  \x0a" + (Data_String_Common.joinWith("\x0a")(Data_Functor.map(Data_Functor.functorArray)(function (page) {
               return "\x0a    (Msg__" + (u(page) + (" pageMsg, State__" + (u(page) + (" pageModel) ->\x0a          case " + (page + (".page.update pageMsg pageModel of\x0a            (pageModel_, pageCmd ) ->\x0a              (Model { model | state = State__" + (u(page) + (" pageModel_ }, Cmd.map Msg__" + (u(page) + " pageCmd)\x0a        ")))))))));
           })(fullPageModuleNames)) + ("\x0a\x0a    (_, _) -> (Model model, Cmd.none)\x0a\x0adocumentMap : (msg -> Msg) -> Document msg -> Document Msg\x0adocumentMap f { title, body } = { title = title, body = List.map (Html.map f) body }\x0a\x0aview : Model -> Document Msg\x0aview (Model model) = case model.state of\x0a\x0a" + (Data_String_Common.joinWith("\x0a")(Data_Functor.map(Data_Functor.functorArray)(function (page) {
               return "  State__" + (u(page) + (" m -> documentMap Msg__" + (u(page) + (" (" + (page + ".page.view m)")))));
@@ -530,7 +549,7 @@ var PS = {};
               return "          Route__" + (u(page) + (" routeValue -> case " + (page + (".page.init flags location key routeValue of\x0a                (initialModel, initialCmd) ->\x0a                    ( Model\x0a                        { state = State__" + (u(page) + (" initialModel\x0a                        , key = key\x0a                        , flags = flags\x0a                        }\x0a                    , Cmd.map Msg__" + (u(page) + " initialCmd\x0a                    )\x0a                ")))))));
           })(fullPageModuleNames)) + ("\x0a\x0asubscriptions : Model -> Sub Msg\x0asubscriptions (Model model) =\x0a    case model.state of\x0a" + (Data_String_Common.joinWith("\x0a")(Data_Functor.map(Data_Functor.functorArray)(function (page) {
               return "        State__" + (u(page) + (" routeValue -> Sub.map Msg__" + (u(page) + (" (" + (page + ".page.subscriptions routeValue)")))));
-          })(fullPageModuleNames)) + "\x0a\x0aprogram : Program Flags Model Msg\x0aprogram =\x0a    application\x0a        { init = init\x0a        , view = view\x0a        , update = update\x0a        , subscriptions = subscriptions\x0a        , onUrlRequest = UrlRequest\x0a        , onUrlChange = Navigate\x0a        }\x0a\x0a\x0a")))))))))))))))))))))))));
+          })(fullPageModuleNames)) + "\x0a\x0aprogram : Program Flags Model Msg\x0aprogram =\x0a    application\x0a        { init = init\x0a        , view = view\x0a        , update = update\x0a        , subscriptions = subscriptions\x0a        , onUrlRequest = UrlRequest\x0a        , onUrlChange = UrlChange\x0a        }\x0a\x0a\x0a"))))))))))));
       };
   };
   exports["renderRouter"] = renderRouter;
@@ -3381,6 +3400,7 @@ var PS = {};
   exports["exit"] = $foreign.exit;
 })(PS);
 (function($PS) {
+  // Generated by purs version 0.13.8
   "use strict";
   $PS["Alchelmy"] = $PS["Alchelmy"] || {};
   var exports = $PS["Alchelmy"];

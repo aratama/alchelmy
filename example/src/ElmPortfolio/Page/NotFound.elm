@@ -2,7 +2,7 @@ module ElmPortfolio.Page.NotFound exposing (Model, Msg, Route, page, route)
 
 import Browser exposing (Document, UrlRequest(..))
 import Browser.Navigation exposing (Key, pushUrl)
-import ElmPortfolio.Common exposing (Page, Session, decodeSession, defaultNavigation, encodeSession, initialSession, link, updateTopic)
+import ElmPortfolio.Common as Common exposing (Page, Session, decodeSession, defaultNavigation, encodeSession, initialSession, link, updateTopic)
 import ElmPortfolio.Ports exposing (receiveTopic, requestTopic)
 import Html exposing (Html, a, div, h1, img, p, text)
 import Html.Attributes exposing (class, href, src)
@@ -15,6 +15,7 @@ import Url.Parser as UrlParser exposing ((</>), Parser, map, s, top)
 type Msg
     = ReceiveTopic (Maybe String)
     | UrlRequest UrlRequest
+    | UrlChange Url
 
 
 type alias Model =
@@ -51,6 +52,9 @@ update msg model =
         UrlRequest urlRequest ->
             defaultNavigation model urlRequest
 
+        UrlChange url ->
+            ( model, Cmd.none )
+
 
 subscriptions : Model -> Sub Msg
 subscriptions _ =
@@ -77,5 +81,6 @@ page =
     , update = update
     , subscriptions = subscriptions
     , onUrlRequest = UrlRequest
+    , onUrlChange = UrlChange
     , session = \model -> encodeSession model.session
     }

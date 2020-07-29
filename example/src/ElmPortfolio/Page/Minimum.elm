@@ -5,11 +5,13 @@ import Browser.Navigation exposing (Key)
 import ElmPortfolio.Common exposing (Page, Session, defaultNavigation, encodeSession, initialSession)
 import Html exposing (h1, text)
 import Html.Attributes exposing (class)
+import Url exposing (Url)
 import Url.Parser exposing (map, s)
 
 
 type Msg
     = UrlRequest UrlRequest
+    | UrlChange Url
 
 
 type alias Model =
@@ -32,7 +34,11 @@ page =
             case msg of
                 UrlRequest urlRequest ->
                     defaultNavigation model urlRequest
+
+                UrlChange url ->
+                    ( model, Cmd.none )
     , subscriptions = always Sub.none
     , onUrlRequest = UrlRequest
+    , onUrlChange = UrlChange
     , session = \model -> encodeSession model.session
     }
