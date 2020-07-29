@@ -111,6 +111,6 @@ page =
     , update = update
     , subscriptions = subscriptions
     , onUrlRequest = Common.UrlRequest
-    , onUrlChange = \url _ -> Common.UrlChange url
+    , onUrlChange = \url _ -> Common.NoOp
     , session = \model -> encodeSession model.session
     }

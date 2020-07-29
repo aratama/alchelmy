@@ -92,7 +92,7 @@ view model content =
                             , text "\" ?"
                             ]
                         , div [ class "lower" ]
-                            [ button [ onClick (Jump destination) ] [ text "Go to the page" ]
+                            [ button [ onClick (Load destination) ] [ text "Go to the page" ]
                             , button [ onClick CloseDialog ] [ text "Cancel" ]
                             ]
                         ]
@@ -102,12 +102,11 @@ view model content =
 
 type Msg a
     = ReceiveTopic (Maybe String)
-    | ExternalLink String
-    | Jump String
+    | Load String
     | CloseDialog
     | PageMsg a
     | UrlRequest UrlRequest
-    | UrlChange Url
+    | NoOp
 
 
 update :
@@ -124,10 +123,7 @@ update f msg model =
         ReceiveTopic maybeTopic ->
             ( { model | session = { session | topic = Maybe.withDefault "goat" maybeTopic } }, Cmd.none )
 
-        ExternalLink url ->
-            ( { model | session = { session | destination = Just url } }, Cmd.none )
-
-        Jump url ->
+        Load url ->
             ( model, load url )
 
         CloseDialog ->
@@ -148,7 +144,7 @@ update f msg model =
                     , Cmd.none
                     )
 
-        UrlChange url ->
+        NoOp ->
             ( model, Cmd.none )
 
 

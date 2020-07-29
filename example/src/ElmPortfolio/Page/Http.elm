@@ -2,16 +2,16 @@ module ElmPortfolio.Page.Http exposing (Model, Msg, Route, page, route)
 
 import Browser exposing (Document, UrlRequest(..))
 import Browser.Navigation exposing (Key)
-import ElmPortfolio.Common as Common exposing (Page, Session, decodeSession, encodeSession, initialSession, link, updateTopic)
-import ElmPortfolio.Ports exposing (receiveTopic, requestTopic)
-import Html exposing (Html, a, br, button, div, h1, h2, img, p, text)
-import Html.Attributes exposing (class, href, src)
-import Html.Events exposing (custom, onClick)
+import ElmPortfolio.Common as Common exposing (Msg(..), Page, Session, decodeSession, encodeSession, initialSession, link)
+import ElmPortfolio.Ports exposing (receiveTopic)
+import Html exposing (br, button, div, h1, h2, img, p, text)
+import Html.Attributes exposing (class, src)
+import Html.Events exposing (onClick)
 import Http
 import Json.Decode as Decode
 import Json.Encode exposing (Value)
 import Url exposing (Url)
-import Url.Parser as UrlParser exposing ((</>), Parser, map, s)
+import Url.Parser exposing (Parser, map, s)
 
 
 type alias Msg =
@@ -112,7 +112,7 @@ page =
     , view = view
     , update = update
     , subscriptions = subscriptions
-    , onUrlRequest = Common.UrlRequest
-    , onUrlChange = \url _ -> Common.UrlChange url
+    , onUrlRequest = UrlRequest
+    , onUrlChange = \_ _ -> NoOp
     , session = \model -> encodeSession model.session
     }
