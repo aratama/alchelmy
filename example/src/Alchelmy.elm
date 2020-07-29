@@ -4,7 +4,7 @@
 -- Do not edit this     --
 --------------------------
 
-module Alchelmy exposing (Flags, Model, Msg, Session, program)
+module Alchelmy exposing (Flags, Model, Msg(..), Session, init, view, update, subscriptions, program)
 
 import Browser exposing (Document, UrlRequest(..), application)
 import Browser.Navigation exposing (Key, load, pushUrl)
@@ -75,21 +75,21 @@ type Msg
 currentSession : RouteState -> Session
 currentSession state = case state of 
 
-  State__ElmPortfolio_Page_Counter pageModel ->    
+  State__ElmPortfolio_Page_Counter pageModel ->
     ElmPortfolio.Page.Counter.page.session pageModel 
-  State__ElmPortfolio_Page_Http pageModel ->    
+  State__ElmPortfolio_Page_Http pageModel ->
     ElmPortfolio.Page.Http.page.session pageModel 
-  State__ElmPortfolio_Page_Minimum pageModel ->    
+  State__ElmPortfolio_Page_Minimum pageModel ->
     ElmPortfolio.Page.Minimum.page.session pageModel 
-  State__ElmPortfolio_Page_NotFound pageModel ->    
+  State__ElmPortfolio_Page_NotFound pageModel ->
     ElmPortfolio.Page.NotFound.page.session pageModel 
-  State__ElmPortfolio_Page_Preferences pageModel ->    
+  State__ElmPortfolio_Page_Preferences pageModel ->
     ElmPortfolio.Page.Preferences.page.session pageModel 
-  State__ElmPortfolio_Page_Time pageModel ->    
+  State__ElmPortfolio_Page_Time pageModel ->
     ElmPortfolio.Page.Time.page.session pageModel 
-  State__ElmPortfolio_Page_Top pageModel ->    
+  State__ElmPortfolio_Page_Top pageModel ->
     ElmPortfolio.Page.Top.page.session pageModel 
-  State__ElmPortfolio_Page_URLParsing pageModel ->    
+  State__ElmPortfolio_Page_URLParsing pageModel ->
     ElmPortfolio.Page.URLParsing.page.session pageModel 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -207,56 +207,38 @@ update msg (Model model) =
                             ( Model { model | state = State__ElmPortfolio_Page_URLParsing initialModel }
                             , Cmd.batch [cmdOnUrlChange, Cmd.map Msg__ElmPortfolio_Page_URLParsing initialCmd]
                             )
-  
-
     (Msg__ElmPortfolio_Page_Counter pageMsg, State__ElmPortfolio_Page_Counter pageModel) ->
-          case ElmPortfolio.Page.Counter.page.update pageMsg pageModel of
+        case ElmPortfolio.Page.Counter.page.update pageMsg pageModel of
             (pageModel_, pageCmd ) ->
-              (Model { model | state = State__ElmPortfolio_Page_Counter pageModel_ }, Cmd.map Msg__ElmPortfolio_Page_Counter pageCmd)
-        
-
+                (Model { model | state = State__ElmPortfolio_Page_Counter pageModel_ }, Cmd.map Msg__ElmPortfolio_Page_Counter pageCmd)
     (Msg__ElmPortfolio_Page_Http pageMsg, State__ElmPortfolio_Page_Http pageModel) ->
-          case ElmPortfolio.Page.Http.page.update pageMsg pageModel of
+        case ElmPortfolio.Page.Http.page.update pageMsg pageModel of
             (pageModel_, pageCmd ) ->
-              (Model { model | state = State__ElmPortfolio_Page_Http pageModel_ }, Cmd.map Msg__ElmPortfolio_Page_Http pageCmd)
-        
-
+                (Model { model | state = State__ElmPortfolio_Page_Http pageModel_ }, Cmd.map Msg__ElmPortfolio_Page_Http pageCmd)
     (Msg__ElmPortfolio_Page_Minimum pageMsg, State__ElmPortfolio_Page_Minimum pageModel) ->
-          case ElmPortfolio.Page.Minimum.page.update pageMsg pageModel of
+        case ElmPortfolio.Page.Minimum.page.update pageMsg pageModel of
             (pageModel_, pageCmd ) ->
-              (Model { model | state = State__ElmPortfolio_Page_Minimum pageModel_ }, Cmd.map Msg__ElmPortfolio_Page_Minimum pageCmd)
-        
-
+                (Model { model | state = State__ElmPortfolio_Page_Minimum pageModel_ }, Cmd.map Msg__ElmPortfolio_Page_Minimum pageCmd)
     (Msg__ElmPortfolio_Page_NotFound pageMsg, State__ElmPortfolio_Page_NotFound pageModel) ->
-          case ElmPortfolio.Page.NotFound.page.update pageMsg pageModel of
+        case ElmPortfolio.Page.NotFound.page.update pageMsg pageModel of
             (pageModel_, pageCmd ) ->
-              (Model { model | state = State__ElmPortfolio_Page_NotFound pageModel_ }, Cmd.map Msg__ElmPortfolio_Page_NotFound pageCmd)
-        
-
+                (Model { model | state = State__ElmPortfolio_Page_NotFound pageModel_ }, Cmd.map Msg__ElmPortfolio_Page_NotFound pageCmd)
     (Msg__ElmPortfolio_Page_Preferences pageMsg, State__ElmPortfolio_Page_Preferences pageModel) ->
-          case ElmPortfolio.Page.Preferences.page.update pageMsg pageModel of
+        case ElmPortfolio.Page.Preferences.page.update pageMsg pageModel of
             (pageModel_, pageCmd ) ->
-              (Model { model | state = State__ElmPortfolio_Page_Preferences pageModel_ }, Cmd.map Msg__ElmPortfolio_Page_Preferences pageCmd)
-        
-
+                (Model { model | state = State__ElmPortfolio_Page_Preferences pageModel_ }, Cmd.map Msg__ElmPortfolio_Page_Preferences pageCmd)
     (Msg__ElmPortfolio_Page_Time pageMsg, State__ElmPortfolio_Page_Time pageModel) ->
-          case ElmPortfolio.Page.Time.page.update pageMsg pageModel of
+        case ElmPortfolio.Page.Time.page.update pageMsg pageModel of
             (pageModel_, pageCmd ) ->
-              (Model { model | state = State__ElmPortfolio_Page_Time pageModel_ }, Cmd.map Msg__ElmPortfolio_Page_Time pageCmd)
-        
-
+                (Model { model | state = State__ElmPortfolio_Page_Time pageModel_ }, Cmd.map Msg__ElmPortfolio_Page_Time pageCmd)
     (Msg__ElmPortfolio_Page_Top pageMsg, State__ElmPortfolio_Page_Top pageModel) ->
-          case ElmPortfolio.Page.Top.page.update pageMsg pageModel of
+        case ElmPortfolio.Page.Top.page.update pageMsg pageModel of
             (pageModel_, pageCmd ) ->
-              (Model { model | state = State__ElmPortfolio_Page_Top pageModel_ }, Cmd.map Msg__ElmPortfolio_Page_Top pageCmd)
-        
-
+                (Model { model | state = State__ElmPortfolio_Page_Top pageModel_ }, Cmd.map Msg__ElmPortfolio_Page_Top pageCmd)
     (Msg__ElmPortfolio_Page_URLParsing pageMsg, State__ElmPortfolio_Page_URLParsing pageModel) ->
-          case ElmPortfolio.Page.URLParsing.page.update pageMsg pageModel of
+        case ElmPortfolio.Page.URLParsing.page.update pageMsg pageModel of
             (pageModel_, pageCmd ) ->
-              (Model { model | state = State__ElmPortfolio_Page_URLParsing pageModel_ }, Cmd.map Msg__ElmPortfolio_Page_URLParsing pageCmd)
-        
-
+                (Model { model | state = State__ElmPortfolio_Page_URLParsing pageModel_ }, Cmd.map Msg__ElmPortfolio_Page_URLParsing pageCmd)
     (_, _) -> (Model model, Cmd.none)
 
 documentMap : (msg -> Msg) -> Document msg -> Document Msg
@@ -264,7 +246,6 @@ documentMap f { title, body } = { title = title, body = List.map (Html.map f) bo
 
 view : Model -> Document Msg
 view (Model model) = case model.state of
-
   State__ElmPortfolio_Page_Counter m -> documentMap Msg__ElmPortfolio_Page_Counter (ElmPortfolio.Page.Counter.page.view m)
   State__ElmPortfolio_Page_Http m -> documentMap Msg__ElmPortfolio_Page_Http (ElmPortfolio.Page.Http.page.view m)
   State__ElmPortfolio_Page_Minimum m -> documentMap Msg__ElmPortfolio_Page_Minimum (ElmPortfolio.Page.Minimum.page.view m)
@@ -274,18 +255,21 @@ view (Model model) = case model.state of
   State__ElmPortfolio_Page_Top m -> documentMap Msg__ElmPortfolio_Page_Top (ElmPortfolio.Page.Top.page.view m)
   State__ElmPortfolio_Page_URLParsing m -> documentMap Msg__ElmPortfolio_Page_URLParsing (ElmPortfolio.Page.URLParsing.page.view m)
 
+
 matchers : Parser (Route -> a) a
 matchers =
     oneOf
-        [ UrlParser.map Route__ElmPortfolio_Page_Counter ElmPortfolio.Page.Counter.page.route
-        , UrlParser.map Route__ElmPortfolio_Page_Http ElmPortfolio.Page.Http.page.route
-        , UrlParser.map Route__ElmPortfolio_Page_Minimum ElmPortfolio.Page.Minimum.page.route
-        , UrlParser.map Route__ElmPortfolio_Page_NotFound ElmPortfolio.Page.NotFound.page.route
-        , UrlParser.map Route__ElmPortfolio_Page_Preferences ElmPortfolio.Page.Preferences.page.route
-        , UrlParser.map Route__ElmPortfolio_Page_Time ElmPortfolio.Page.Time.page.route
-        , UrlParser.map Route__ElmPortfolio_Page_Top ElmPortfolio.Page.Top.page.route
-        , UrlParser.map Route__ElmPortfolio_Page_URLParsing ElmPortfolio.Page.URLParsing.page.route
+        [
+          UrlParser.map Route__ElmPortfolio_Page_Counter ElmPortfolio.Page.Counter.page.route,
+          UrlParser.map Route__ElmPortfolio_Page_Http ElmPortfolio.Page.Http.page.route,
+          UrlParser.map Route__ElmPortfolio_Page_Minimum ElmPortfolio.Page.Minimum.page.route,
+          UrlParser.map Route__ElmPortfolio_Page_NotFound ElmPortfolio.Page.NotFound.page.route,
+          UrlParser.map Route__ElmPortfolio_Page_Preferences ElmPortfolio.Page.Preferences.page.route,
+          UrlParser.map Route__ElmPortfolio_Page_Time ElmPortfolio.Page.Time.page.route,
+          UrlParser.map Route__ElmPortfolio_Page_Top ElmPortfolio.Page.Top.page.route,
+          UrlParser.map Route__ElmPortfolio_Page_URLParsing ElmPortfolio.Page.URLParsing.page.route
         ]
+
 
 parseLocation : Url -> Route
 parseLocation location =
@@ -298,93 +282,54 @@ parseLocation location =
 
 init : Flags -> Url -> Key -> ( Model, Cmd Msg )
 init flags location key =
-
         case parseLocation location of
 
           Route__ElmPortfolio_Page_Counter routeValue -> case ElmPortfolio.Page.Counter.page.init flags location key routeValue of
-                (initialModel, initialCmd) ->
-                    ( Model
-                        { state = State__ElmPortfolio_Page_Counter initialModel
-                        , key = key
-                        , flags = flags
-                        }
-                    , Cmd.map Msg__ElmPortfolio_Page_Counter initialCmd
-                    )
-                
+              (initialModel, initialCmd) ->
+                  ( Model { state = State__ElmPortfolio_Page_Counter initialModel, key = key, flags = flags }
+                  , Cmd.map Msg__ElmPortfolio_Page_Counter initialCmd
+                  )
           Route__ElmPortfolio_Page_Http routeValue -> case ElmPortfolio.Page.Http.page.init flags location key routeValue of
-                (initialModel, initialCmd) ->
-                    ( Model
-                        { state = State__ElmPortfolio_Page_Http initialModel
-                        , key = key
-                        , flags = flags
-                        }
-                    , Cmd.map Msg__ElmPortfolio_Page_Http initialCmd
-                    )
-                
+              (initialModel, initialCmd) ->
+                  ( Model { state = State__ElmPortfolio_Page_Http initialModel, key = key, flags = flags }
+                  , Cmd.map Msg__ElmPortfolio_Page_Http initialCmd
+                  )
           Route__ElmPortfolio_Page_Minimum routeValue -> case ElmPortfolio.Page.Minimum.page.init flags location key routeValue of
-                (initialModel, initialCmd) ->
-                    ( Model
-                        { state = State__ElmPortfolio_Page_Minimum initialModel
-                        , key = key
-                        , flags = flags
-                        }
-                    , Cmd.map Msg__ElmPortfolio_Page_Minimum initialCmd
-                    )
-                
+              (initialModel, initialCmd) ->
+                  ( Model { state = State__ElmPortfolio_Page_Minimum initialModel, key = key, flags = flags }
+                  , Cmd.map Msg__ElmPortfolio_Page_Minimum initialCmd
+                  )
           Route__ElmPortfolio_Page_NotFound routeValue -> case ElmPortfolio.Page.NotFound.page.init flags location key routeValue of
-                (initialModel, initialCmd) ->
-                    ( Model
-                        { state = State__ElmPortfolio_Page_NotFound initialModel
-                        , key = key
-                        , flags = flags
-                        }
-                    , Cmd.map Msg__ElmPortfolio_Page_NotFound initialCmd
-                    )
-                
+              (initialModel, initialCmd) ->
+                  ( Model { state = State__ElmPortfolio_Page_NotFound initialModel, key = key, flags = flags }
+                  , Cmd.map Msg__ElmPortfolio_Page_NotFound initialCmd
+                  )
           Route__ElmPortfolio_Page_Preferences routeValue -> case ElmPortfolio.Page.Preferences.page.init flags location key routeValue of
-                (initialModel, initialCmd) ->
-                    ( Model
-                        { state = State__ElmPortfolio_Page_Preferences initialModel
-                        , key = key
-                        , flags = flags
-                        }
-                    , Cmd.map Msg__ElmPortfolio_Page_Preferences initialCmd
-                    )
-                
+              (initialModel, initialCmd) ->
+                  ( Model { state = State__ElmPortfolio_Page_Preferences initialModel, key = key, flags = flags }
+                  , Cmd.map Msg__ElmPortfolio_Page_Preferences initialCmd
+                  )
           Route__ElmPortfolio_Page_Time routeValue -> case ElmPortfolio.Page.Time.page.init flags location key routeValue of
-                (initialModel, initialCmd) ->
-                    ( Model
-                        { state = State__ElmPortfolio_Page_Time initialModel
-                        , key = key
-                        , flags = flags
-                        }
-                    , Cmd.map Msg__ElmPortfolio_Page_Time initialCmd
-                    )
-                
+              (initialModel, initialCmd) ->
+                  ( Model { state = State__ElmPortfolio_Page_Time initialModel, key = key, flags = flags }
+                  , Cmd.map Msg__ElmPortfolio_Page_Time initialCmd
+                  )
           Route__ElmPortfolio_Page_Top routeValue -> case ElmPortfolio.Page.Top.page.init flags location key routeValue of
-                (initialModel, initialCmd) ->
-                    ( Model
-                        { state = State__ElmPortfolio_Page_Top initialModel
-                        , key = key
-                        , flags = flags
-                        }
-                    , Cmd.map Msg__ElmPortfolio_Page_Top initialCmd
-                    )
-                
+              (initialModel, initialCmd) ->
+                  ( Model { state = State__ElmPortfolio_Page_Top initialModel, key = key, flags = flags }
+                  , Cmd.map Msg__ElmPortfolio_Page_Top initialCmd
+                  )
           Route__ElmPortfolio_Page_URLParsing routeValue -> case ElmPortfolio.Page.URLParsing.page.init flags location key routeValue of
-                (initialModel, initialCmd) ->
-                    ( Model
-                        { state = State__ElmPortfolio_Page_URLParsing initialModel
-                        , key = key
-                        , flags = flags
-                        }
-                    , Cmd.map Msg__ElmPortfolio_Page_URLParsing initialCmd
-                    )
-                
+              (initialModel, initialCmd) ->
+                  ( Model { state = State__ElmPortfolio_Page_URLParsing initialModel, key = key, flags = flags }
+                  , Cmd.map Msg__ElmPortfolio_Page_URLParsing initialCmd
+                  )
+
 
 subscriptions : Model -> Sub Msg
 subscriptions (Model model) =
     case model.state of
+
         State__ElmPortfolio_Page_Counter routeValue -> Sub.map Msg__ElmPortfolio_Page_Counter (ElmPortfolio.Page.Counter.page.subscriptions routeValue)
         State__ElmPortfolio_Page_Http routeValue -> Sub.map Msg__ElmPortfolio_Page_Http (ElmPortfolio.Page.Http.page.subscriptions routeValue)
         State__ElmPortfolio_Page_Minimum routeValue -> Sub.map Msg__ElmPortfolio_Page_Minimum (ElmPortfolio.Page.Minimum.page.subscriptions routeValue)
@@ -393,6 +338,7 @@ subscriptions (Model model) =
         State__ElmPortfolio_Page_Time routeValue -> Sub.map Msg__ElmPortfolio_Page_Time (ElmPortfolio.Page.Time.page.subscriptions routeValue)
         State__ElmPortfolio_Page_Top routeValue -> Sub.map Msg__ElmPortfolio_Page_Top (ElmPortfolio.Page.Top.page.subscriptions routeValue)
         State__ElmPortfolio_Page_URLParsing routeValue -> Sub.map Msg__ElmPortfolio_Page_URLParsing (ElmPortfolio.Page.URLParsing.page.subscriptions routeValue)
+
 
 program : Program Flags Model Msg
 program =
@@ -404,5 +350,4 @@ program =
         , onUrlRequest = UrlRequest
         , onUrlChange = UrlChange
         }
-
 

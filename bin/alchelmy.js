@@ -492,17 +492,17 @@ var PS = {};
   var Data_Functor = $PS["Data.Functor"];
   var Data_Maybe = $PS["Data.Maybe"];
   var Data_String_Common = $PS["Data.String.Common"];                
-  var u = Data_String_Common.replaceAll(".")("_");
+  var underbar = Data_String_Common.replaceAll(".")("_");
   var renderRouter = function (application) {
       return function (fullPageModuleNames) {
-          var s = function (page) {
+          var u = function (page) {
               return function (lhs) {
                   return function (rhs) {
-                      return lhs + (page + rhs);
+                      return lhs + (underbar(page) + rhs);
                   };
               };
           };
-          var pages = Data_Functor.map(Data_Functor.functorArray)(u)(fullPageModuleNames);
+          var pages = Data_Functor.map(Data_Functor.functorArray)(underbar)(fullPageModuleNames);
           var notFound_ = Data_Array.head(Data_Array.catMaybes(Data_Functor.map(Data_Functor.functorArray)(function (moduleName) {
               return Control_Bind.bind(Data_Maybe.bindMaybe)(Data_Array.last(Data_String_Common.split(".")(moduleName)))(function (n) {
                   var $0 = n === "NotFound";
@@ -513,43 +513,49 @@ var PS = {};
               });
           })(fullPageModuleNames)));
           var notFound = Data_Maybe.fromMaybe("***NOTDOUND***")(notFound_);
-          var k = function (page) {
-              return function (lhs) {
-                  return function (rhs) {
-                      return lhs + (u(page) + rhs);
-                  };
-              };
+          var elements = function (f) {
+              return Data_String_Common.joinWith(",\x0a")(Data_Functor.map(Data_Functor.functorArray)(f)(fullPageModuleNames));
           };
           var each = function (f) {
               return Data_String_Common.joinWith("\x0a")(Data_Functor.map(Data_Functor.functorArray)(f)(fullPageModuleNames));
           };
-          return Data_String_Common.joinWith("\x0a")([ "\x0a--------------------------\x0a-- Auto-generated codes --\x0a-- Do not edit this     --\x0a--------------------------\x0a\x0amodule Alchelmy exposing (Flags, Model, Msg, Session, program)\x0a\x0aimport Browser exposing (Document, UrlRequest(..), application)\x0aimport Browser.Navigation exposing (Key, load, pushUrl)\x0aimport Html as Html exposing (Html, text)\x0aimport Maybe as Maybe exposing (Maybe(..))\x0aimport Url exposing (Url)\x0aimport Url.Parser as UrlParser exposing (s, oneOf, Parser, parse, (</>))\x0aimport Json.Encode\x0a", each(function (page) {
+          var d = function (page) {
+              return function (lhs) {
+                  return function (rhs) {
+                      return lhs + (page + rhs);
+                  };
+              };
+          };
+          var block = function (xs) {
+              return Data_String_Common.joinWith("\x0a")(Data_Functor.map(Data_Functor.functorArray)(Data_String_Common.joinWith(""))(xs));
+          };
+          return Data_String_Common.joinWith("\x0a")([ "\x0a--------------------------\x0a-- Auto-generated codes --\x0a-- Do not edit this     --\x0a--------------------------\x0a\x0amodule Alchelmy exposing (Flags, Model, Msg(..), Session, init, view, update, subscriptions, program)\x0a\x0aimport Browser exposing (Document, UrlRequest(..), application)\x0aimport Browser.Navigation exposing (Key, load, pushUrl)\x0aimport Html as Html exposing (Html, text)\x0aimport Maybe as Maybe exposing (Maybe(..))\x0aimport Url exposing (Url)\x0aimport Url.Parser as UrlParser exposing (s, oneOf, Parser, parse, (</>))\x0aimport Json.Encode\x0a", each(function (page) {
               return "import " + page;
           }), "\x0a\x0atype alias Flags =\x0a    Json.Encode.Value\x0a\x0a\x0atype alias Session =\x0a    Json.Encode.Value\x0a\x0a\x0atype Model = Model\x0a  { state : RouteState\x0a  , key : Key\x0a  , flags : Flags\x0a  }\x0a\x0atype Route\x0a  = " + Data_String_Common.joinWith("\x0a  | ")(Data_Functor.map(Data_Functor.functorArray)(function (page) {
-              return "Route__" + (u(page) + (" " + (page + ".Route")));
+              return "Route__" + (underbar(page) + (" " + (page + ".Route")));
           })(fullPageModuleNames)), "\x0a\x0atype RouteState\x0a  = " + Data_String_Common.joinWith("\x0a  | ")(Data_Functor.map(Data_Functor.functorArray)(function (page) {
-              return "State__" + (u(page) + (" " + (page + ".Model")));
+              return "State__" + (underbar(page) + (" " + (page + ".Model")));
           })(fullPageModuleNames)), "\x0atype Msg\x0a  = UrlRequest UrlRequest\x0a  | UrlChange Url\x0a", each(function (page) {
-              return "  | Msg__" + (u(page) + (" " + (page + ".Msg")));
+              return block([ [ "  | Msg__", underbar(page), " ", page, ".Msg" ] ]);
           }), "\x0acurrentSession : RouteState -> Session\x0acurrentSession state = case state of \x0a", each(function (page) {
-              return Data_String_Common.joinWith("    \x0a")([ k(page)("  State__")(" pageModel ->"), s(page)("    ")(".page.session pageModel ") ]);
+              return block([ [ "  State__", underbar(page), " pageModel ->" ], [ "    ", page, ".page.session pageModel " ] ]);
           }), "\x0aupdate : Msg -> Model -> ( Model, Cmd Msg )\x0aupdate msg (Model model) =\x0a  case (msg, model.state) of\x0a    (UrlRequest urlRequest, _) ->\x0a          case model.state of\x0a", each(function (page) {
-              return Data_String_Common.joinWith("\x0a")([ "            State__" + (u(page) + " pmodel ->"), "                case " + (page + (".page.update (" + (page + ".page.onUrlRequest urlRequest) pmodel of"))), "                    (pmodel_, pcmd) ->", "                        ( Model { model | state = State__" + (u(page) + (" pmodel_ }, Cmd.map Msg__" + (u(page) + " pcmd)"))) ]);
+              return block([ [ "            State__", underbar(page), " pmodel ->" ], [ "                case ", page, ".page.update (", page, ".page.onUrlRequest urlRequest) pmodel of" ], [ "                    (pmodel_, pcmd) ->" ], [ "                        ( Model { model | state = State__", underbar(page), " pmodel_ }, Cmd.map Msg__", underbar(page), " pcmd)" ] ]);
           }), "    (UrlChange location, _) ->", "      let ", "           (session, cmdOnUrlChange) = case model.state of", each(function (page) {
-              return Data_String_Common.joinWith("\x0a")([ k(page)("             State__")(" pmodel ->    "), s(page)(s(page)("               case ")(".page.update ("))(".page.onUrlChange location) pmodel of"), k(page)(s(page)("                 (model_, cmd) -> (")(".page.session model_, Cmd.map Msg__"))(" cmd)") ]);
-          }), "      in", "      case parseLocation location of", Data_String_Common.joinWith("\x0a")(Data_Functor.map(Data_Functor.functorArray)(function (page_) {
-              return Data_String_Common.joinWith("\x0a")([ "                Route__" + (u(page_) + " routeValue -> "), "                    case " + (page_ + ".page.init session location model.key routeValue of"), "                        (initialModel, initialCmd) ->", "                            ( Model { model | state = State__" + (u(page_) + " initialModel }"), "                            , Cmd.batch [cmdOnUrlChange, Cmd.map Msg__" + (u(page_) + " initialCmd]"), "                            )" ]);
-          })(fullPageModuleNames)) ]) + ("\x0a  \x0a" + (Data_String_Common.joinWith("\x0a")(Data_Functor.map(Data_Functor.functorArray)(function (page) {
-              return "\x0a    (Msg__" + (u(page) + (" pageMsg, State__" + (u(page) + (" pageModel) ->\x0a          case " + (page + (".page.update pageMsg pageModel of\x0a            (pageModel_, pageCmd ) ->\x0a              (Model { model | state = State__" + (u(page) + (" pageModel_ }, Cmd.map Msg__" + (u(page) + " pageCmd)\x0a        ")))))))));
-          })(fullPageModuleNames)) + ("\x0a\x0a    (_, _) -> (Model model, Cmd.none)\x0a\x0adocumentMap : (msg -> Msg) -> Document msg -> Document Msg\x0adocumentMap f { title, body } = { title = title, body = List.map (Html.map f) body }\x0a\x0aview : Model -> Document Msg\x0aview (Model model) = case model.state of\x0a\x0a" + (Data_String_Common.joinWith("\x0a")(Data_Functor.map(Data_Functor.functorArray)(function (page) {
-              return "  State__" + (u(page) + (" m -> documentMap Msg__" + (u(page) + (" (" + (page + ".page.view m)")))));
-          })(fullPageModuleNames)) + ("\x0a\x0amatchers : Parser (Route -> a) a\x0amatchers =\x0a    oneOf\x0a        [ " + (Data_String_Common.joinWith("\x0a        , ")(Data_Functor.map(Data_Functor.functorArray)(function (page) {
-              return "UrlParser.map Route__" + (u(page) + (" " + (page + ".page.route")));
-          })(fullPageModuleNames)) + ("\x0a        ]\x0a\x0aparseLocation : Url -> Route\x0aparseLocation location =\x0a    case parse matchers location of\x0a        Just route ->\x0a            route\x0a\x0a        Nothing ->\x0a            Route__" + (u(notFound) + (" ()\x0a\x0ainit : Flags -> Url -> Key -> ( Model, Cmd Msg )\x0ainit flags location key =\x0a\x0a        case parseLocation location of\x0a\x0a" + (Data_String_Common.joinWith("\x0a")(Data_Functor.map(Data_Functor.functorArray)(function (page) {
-              return "          Route__" + (u(page) + (" routeValue -> case " + (page + (".page.init flags location key routeValue of\x0a                (initialModel, initialCmd) ->\x0a                    ( Model\x0a                        { state = State__" + (u(page) + (" initialModel\x0a                        , key = key\x0a                        , flags = flags\x0a                        }\x0a                    , Cmd.map Msg__" + (u(page) + " initialCmd\x0a                    )\x0a                ")))))));
-          })(fullPageModuleNames)) + ("\x0a\x0asubscriptions : Model -> Sub Msg\x0asubscriptions (Model model) =\x0a    case model.state of\x0a" + (Data_String_Common.joinWith("\x0a")(Data_Functor.map(Data_Functor.functorArray)(function (page) {
-              return "        State__" + (u(page) + (" routeValue -> Sub.map Msg__" + (u(page) + (" (" + (page + ".page.subscriptions routeValue)")))));
-          })(fullPageModuleNames)) + "\x0a\x0aprogram : Program Flags Model Msg\x0aprogram =\x0a    application\x0a        { init = init\x0a        , view = view\x0a        , update = update\x0a        , subscriptions = subscriptions\x0a        , onUrlRequest = UrlRequest\x0a        , onUrlChange = UrlChange\x0a        }\x0a\x0a\x0a"))))))))))));
+              return block([ [ "             State__", underbar(page), " pmodel ->    " ], [ "               case ", page, ".page.update (", page, ".page.onUrlChange location) pmodel of" ], [ "                 (model_, cmd) -> (", page, ".page.session model_, Cmd.map Msg__", underbar(page), " cmd)" ] ]);
+          }), "      in", "      case parseLocation location of", each(function (page_) {
+              return block([ [ "                Route__", underbar(page_), " routeValue -> " ], [ "                    case ", page_, ".page.init session location model.key routeValue of" ], [ "                        (initialModel, initialCmd) ->" ], [ "                            ( Model { model | state = State__", underbar(page_), " initialModel }" ], [ "                            , Cmd.batch [cmdOnUrlChange, Cmd.map Msg__", underbar(page_), " initialCmd]" ], [ "                            )" ] ]);
+          }), each(function (page) {
+              return block([ [ "    (Msg__", underbar(page), " pageMsg, State__", underbar(page), " pageModel) ->" ], [ "        case ", page, ".page.update pageMsg pageModel of" ], [ "            (pageModel_, pageCmd ) ->" ], [ "                (Model { model | state = State__", underbar(page), " pageModel_ }, Cmd.map Msg__", underbar(page), " pageCmd)" ] ]);
+          }), "    (_, _) -> (Model model, Cmd.none)", "", "documentMap : (msg -> Msg) -> Document msg -> Document Msg", "documentMap f { title, body } = { title = title, body = List.map (Html.map f) body }", "", "view : Model -> Document Msg", "view (Model model) = case model.state of", each(function (page) {
+              return block([ [ "  State__", underbar(page), " m -> documentMap Msg__", underbar(page), " (", page, ".page.view m)" ] ]);
+          }), "\x0a\x0amatchers : Parser (Route -> a) a\x0amatchers =\x0a    oneOf\x0a        [", elements(function (page) {
+              return block([ [ "          UrlParser.map Route__", underbar(page), " ", page, ".page.route" ] ]);
+          }), "        ]", "\x0a\x0aparseLocation : Url -> Route\x0aparseLocation location =\x0a    case parse matchers location of\x0a        Just route ->\x0a            route\x0a\x0a        Nothing ->", block([ [ "            Route__", underbar(notFound), " ()" ] ]), "\x0ainit : Flags -> Url -> Key -> ( Model, Cmd Msg )\x0ainit flags location key =\x0a        case parseLocation location of\x0a", each(function (page) {
+              return block([ [ "          Route__", underbar(page), " routeValue -> case ", page, ".page.init flags location key routeValue of" ], [ "              (initialModel, initialCmd) ->" ], [ "                  ( Model { state = State__", underbar(page), " initialModel, key = key, flags = flags }" ], [ "                  , Cmd.map Msg__", underbar(page), " initialCmd" ], [ "                  )" ] ]);
+          }), "\x0a\x0asubscriptions : Model -> Sub Msg\x0asubscriptions (Model model) =\x0a    case model.state of\x0a", each(function (page) {
+              return block([ [ "        State__", underbar(page), " routeValue -> Sub.map Msg__", underbar(page), " (", page, ".page.subscriptions routeValue)" ] ]);
+          }), "\x0a\x0aprogram : Program Flags Model Msg\x0aprogram =\x0a    application\x0a        { init = init\x0a        , view = view\x0a        , update = update\x0a        , subscriptions = subscriptions\x0a        , onUrlRequest = UrlRequest\x0a        , onUrlChange = UrlChange\x0a        }\x0a\x0a" ]);
       };
   };
   exports["renderRouter"] = renderRouter;
