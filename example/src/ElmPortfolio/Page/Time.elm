@@ -26,7 +26,7 @@ type PageMsg
 type alias Model =
     { key : Key
     , session : Session
-    , posix : Posix
+    , posix : Maybe Posix
     }
 
 
@@ -43,10 +43,10 @@ init : Value -> Url -> Key -> Route -> ( Model, Cmd Msg )
 init value _ key _ =
     case decodeValue decodeSession value of
         Err _ ->
-            ( { key = key, session = initialSession, posix = millisToPosix 0 }, requestTopic () )
+            ( { key = key, session = initialSession, posix = Nothing }, requestTopic () )
 
         Ok session ->
-            ( { key = key, session = session, posix = millisToPosix 0 }
+            ( { key = key, session = session, posix = Nothing }
               -- Mysterious bug workaround
               -- Originally, you can put just `Cmd.none`, however in the case the timer will not work.
               -- If you remove `route` in the routing, it work. Extremely confusing.
@@ -60,7 +60,7 @@ update =
         \msg model ->
             case msg of
                 Tick newTime ->
-                    ( { model | posix = newTime }, Cmd.none )
+                    ( { model | posix = Just newTime }, Cmd.none )
 
 
 subscriptions : Model -> Sub Msg
@@ -79,20 +79,25 @@ view model =
             Html.map Common.PageMsg <|
                 div [ class "page-a container" ]
                     [ h1 [] [ text "Time" ]
-                    , let
-                        angle =
-                            turns (toFloat (toSecond utc model.posix) / 60)
+                    , case model.posix of
+                        Nothing ->
+                            text ""
 
-                        handX =
-                            String.fromFloat (50 + 40 * cos angle)
+                        Just posix ->
+                            let
+                                angle =
+                                    turns (toFloat (toSecond utc posix) / 60)
 
-                        handY =
-                            String.fromFloat (50 + 40 * sin angle)
-                      in
-                      svg [ viewBox "0 0 100 100", width "300px" ]
-                        [ circle [ cx "50", cy "50", r "45", fill "#5b91ba" ] []
-                        , line [ x1 "50", y1 "50", x2 handX, y2 handY, stroke "#023963" ] []
-                        ]
+                                handX =
+                                    String.fromFloat (50 + 40 * cos angle)
+
+                                handY =
+                                    String.fromFloat (50 + 40 * sin angle)
+                            in
+                            svg [ viewBox "0 0 100 100", width "300px" ]
+                                [ circle [ cx "50", cy "50", r "45", fill "#5b91ba" ] []
+                                , line [ x1 "50", y1 "50", x2 handX, y2 handY, stroke "#023963" ] []
+                                ]
                     ]
         ]
     }
@@ -106,6 +111,6 @@ page =
     , update = update
     , subscriptions = subscriptions
     , onUrlRequest = Common.UrlRequest
-    , onUrlChange = Common.UrlChange
+    , onUrlChange = \url _ -> Common.UrlChange url
     , session = \model -> encodeSession model.session
     }

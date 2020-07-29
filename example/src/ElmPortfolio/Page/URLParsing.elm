@@ -4,15 +4,22 @@ import Browser exposing (Document)
 import Browser.Navigation exposing (Key)
 import ElmPortfolio.Common as Common exposing (Page, Session, decodeSession, encodeSession, initialSession, link, updateTopic)
 import ElmPortfolio.Ports exposing (receiveTopic, requestTopic)
-import Html exposing (Html, a, div, h1, img, p, text)
-import Html.Attributes exposing (class, href, src)
+import Html exposing (Html, a, button, div, h1, img, input, p, text)
+import Html.Attributes exposing (class, href, src, value)
+import Html.Events exposing (onClick, onInput)
 import Json.Decode exposing (Value, decodeValue)
 import Url as Url exposing (Protocol(..), Url)
 import Url.Parser exposing ((</>), Parser, int, map, s)
 
 
 type alias Msg =
-    Common.Msg ()
+    Common.Msg PageMsg
+
+
+type PageMsg
+    = Input String
+    | PushUrl
+    | UrlChange Url Int
 
 
 type alias Model =
@@ -20,6 +27,7 @@ type alias Model =
     , session : Session
     , id : Int
     , location : Url
+    , value : String
     }
 
 
@@ -36,17 +44,25 @@ init : Value -> Url -> Key -> Route -> ( Model, Cmd Msg )
 init value location key id =
     case decodeValue decodeSession value of
         Err _ ->
-            ( { key = key, session = initialSession, id = id, location = location }, requestTopic () )
+            ( { key = key, session = initialSession, id = id, location = location, value = "/url-parsing/" ++ String.fromInt id }, requestTopic () )
 
         Ok session ->
-            ( { key = key, session = session, id = id, location = location }, Cmd.none )
+            ( { key = key, session = session, id = id, location = location, value = "/url-parsing/" ++ String.fromInt id }, Cmd.none )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update =
     Common.update <|
         \msg model ->
-            ( model, Cmd.none )
+            case msg of
+                Input value ->
+                    ( { model | value = value }, Cmd.none )
+
+                PushUrl ->
+                    ( model, Browser.Navigation.pushUrl model.key <| model.value )
+
+                UrlChange url id ->
+                    ( { model | id = id }, Cmd.none )
 
 
 subscriptions : Model -> Sub Msg
@@ -64,6 +80,8 @@ view model =
                     [ h1 [] [ text "URL Parsing" ]
                     , p [] [ text <| "URL: " ++ Url.toString model.location ]
                     , p [] [ text <| "Parameter: " ++ String.fromInt model.id ]
+                    , p [] [ input [ value model.value, onInput Input ] [], button [ onClick PushUrl ] [ text "pushUrl" ] ]
+                    , p [] [ text "When url is changed, `page.onUrlChange` message is caused." ]
                     ]
         ]
     }
@@ -77,6 +95,6 @@ page =
     , update = update
     , subscriptions = subscriptions
     , onUrlRequest = Common.UrlRequest
-    , onUrlChange = Common.UrlChange
+    , onUrlChange = \url id -> Common.PageMsg <| UrlChange url id
     , session = \model -> encodeSession model.session
     }

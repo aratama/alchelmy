@@ -42,7 +42,7 @@ type alias Page model msg route a =
     , update : msg -> model -> ( model, Cmd msg )
     , subscriptions : model -> Sub msg
     , onUrlRequest : UrlRequest -> msg
-    , onUrlChange : Url -> msg
+    , onUrlChange : Url -> route -> msg
     , route : Parser (route -> a) a
     , session : model -> Value
     }
