@@ -495,13 +495,6 @@ var PS = {};
   var underbar = Data_String_Common.replaceAll(".")("_");
   var renderRouter = function (application) {
       return function (fullPageModuleNames) {
-          var u = function (page) {
-              return function (lhs) {
-                  return function (rhs) {
-                      return lhs + (underbar(page) + rhs);
-                  };
-              };
-          };
           var pages = Data_Functor.map(Data_Functor.functorArray)(underbar)(fullPageModuleNames);
           var notFound_ = Data_Array.head(Data_Array.catMaybes(Data_Functor.map(Data_Functor.functorArray)(function (moduleName) {
               return Control_Bind.bind(Data_Maybe.bindMaybe)(Data_Array.last(Data_String_Common.split(".")(moduleName)))(function (n) {
@@ -519,13 +512,6 @@ var PS = {};
           var each = function (f) {
               return Data_String_Common.joinWith("\x0a")(Data_Functor.map(Data_Functor.functorArray)(f)(fullPageModuleNames));
           };
-          var d = function (page) {
-              return function (lhs) {
-                  return function (rhs) {
-                      return lhs + (page + rhs);
-                  };
-              };
-          };
           var block = function (xs) {
               return Data_String_Common.joinWith("\x0a")(Data_Functor.map(Data_Functor.functorArray)(Data_String_Common.joinWith(""))(xs));
           };
@@ -535,10 +521,8 @@ var PS = {};
               return "Route__" + (underbar(page) + (" " + (page + ".Route")));
           })(fullPageModuleNames)), "\x0a\x0atype RouteState\x0a  = " + Data_String_Common.joinWith("\x0a  | ")(Data_Functor.map(Data_Functor.functorArray)(function (page) {
               return "State__" + (underbar(page) + (" " + (page + ".Model")));
-          })(fullPageModuleNames)), "\x0atype Msg\x0a  = UrlRequest UrlRequest\x0a  | UrlChange Url\x0a", each(function (page) {
+          })(fullPageModuleNames)), "\x0atype Msg\x0a  = UrlRequest UrlRequest\x0a  | UrlChange Url", each(function (page) {
               return block([ [ "  | Msg__", underbar(page), " ", page, ".Msg" ] ]);
-          }), "\x0acurrentSession : RouteState -> Session\x0acurrentSession state = case state of \x0a", each(function (page) {
-              return block([ [ "  State__", underbar(page), " pageModel ->" ], [ "    ", page, ".page.session pageModel " ] ]);
           }), "\x0aupdate : Msg -> Model -> ( Model, Cmd Msg )\x0aupdate msg (Model model) =\x0a  case (msg, model.state) of\x0a    (UrlRequest urlRequest, _) ->\x0a          case model.state of\x0a", each(function (page) {
               return block([ [ "            State__", underbar(page), " pmodel ->" ], [ "                case ", page, ".page.update (", page, ".page.onUrlRequest urlRequest) pmodel of" ], [ "                    (pmodel_, pcmd) ->" ], [ "                        ( Model { model | state = State__", underbar(page), " pmodel_ }, Cmd.map Msg__", underbar(page), " pcmd)" ] ]);
           }), "    (UrlChange location, _) ->", "      let ", "           (session, cmdOnUrlChange) = case model.state of", each(function (page) {

@@ -62,7 +62,6 @@ type RouteState
 type Msg
   = UrlRequest UrlRequest
   | UrlChange Url
-
   | Msg__ElmPortfolio_Page_Counter ElmPortfolio.Page.Counter.Msg
   | Msg__ElmPortfolio_Page_Http ElmPortfolio.Page.Http.Msg
   | Msg__ElmPortfolio_Page_Minimum ElmPortfolio.Page.Minimum.Msg
@@ -71,26 +70,6 @@ type Msg
   | Msg__ElmPortfolio_Page_Time ElmPortfolio.Page.Time.Msg
   | Msg__ElmPortfolio_Page_Top ElmPortfolio.Page.Top.Msg
   | Msg__ElmPortfolio_Page_URLParsing ElmPortfolio.Page.URLParsing.Msg
-
-currentSession : RouteState -> Session
-currentSession state = case state of 
-
-  State__ElmPortfolio_Page_Counter pageModel ->
-    ElmPortfolio.Page.Counter.page.session pageModel 
-  State__ElmPortfolio_Page_Http pageModel ->
-    ElmPortfolio.Page.Http.page.session pageModel 
-  State__ElmPortfolio_Page_Minimum pageModel ->
-    ElmPortfolio.Page.Minimum.page.session pageModel 
-  State__ElmPortfolio_Page_NotFound pageModel ->
-    ElmPortfolio.Page.NotFound.page.session pageModel 
-  State__ElmPortfolio_Page_Preferences pageModel ->
-    ElmPortfolio.Page.Preferences.page.session pageModel 
-  State__ElmPortfolio_Page_Time pageModel ->
-    ElmPortfolio.Page.Time.page.session pageModel 
-  State__ElmPortfolio_Page_Top pageModel ->
-    ElmPortfolio.Page.Top.page.session pageModel 
-  State__ElmPortfolio_Page_URLParsing pageModel ->
-    ElmPortfolio.Page.URLParsing.page.session pageModel 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg (Model model) =

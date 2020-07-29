@@ -29,11 +29,6 @@ renderRouter application fullPageModuleNames =
 
     block :: Array (Array String) -> String
     block xs = joinWith "\n" (map (joinWith "") xs)
-
-    u page lhs rhs = lhs <> underbar page <> rhs
-
-    d :: String -> String -> String -> String
-    d page lhs rhs = lhs <> page <> rhs
   in
     joinWith "\n"
       [ """
@@ -80,18 +75,8 @@ type RouteState
       , """
 type Msg
   = UrlRequest UrlRequest
-  | UrlChange Url
-"""
+  | UrlChange Url"""
       , each \page -> block [ [ "  | Msg__", underbar page, " ", page, ".Msg" ] ]
-      , """
-currentSession : RouteState -> Session
-currentSession state = case state of 
-"""
-      , each \page ->
-          block
-            [ [ "  State__", underbar page, " pageModel ->" ]
-            , [ "    ", page, ".page.session pageModel " ]
-            ]
       , """
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg (Model model) =
