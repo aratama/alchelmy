@@ -110,6 +110,6 @@ page =
     , update = update
     , subscriptions = subscriptions
     , onUrlRequest = UrlRequest
-    , onUrlChange = \_ _ -> NoOp
+    , onUrlChange = \_ -> NoOp
     , session = \model -> encodeSession model.session
     }

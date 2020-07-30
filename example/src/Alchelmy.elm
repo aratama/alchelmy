@@ -121,97 +121,97 @@ update notFoundRoute msg (Model model) =
             State__ElmPortfolio_Page_Time pageModel ->ElmPortfolio.Page.Time.page.session pageModel 
             State__ElmPortfolio_Page_Top pageModel ->ElmPortfolio.Page.Top.page.session pageModel 
             State__ElmPortfolio_Page_URLParsing pageModel ->ElmPortfolio.Page.URLParsing.page.session pageModel 
-          rerouting () = case parseLocation notFoundRoute location of
+          rerouting cmd = case parseLocation notFoundRoute location of
                 Route__ElmPortfolio_Page_Counter routeValue -> 
                     case ElmPortfolio.Page.Counter.page.init (currentSession ()) location model.key routeValue of
                         (initialModel, initialCmd) ->
                             ( Model { model | state = State__ElmPortfolio_Page_Counter initialModel }
-                            , Cmd.map Msg__ElmPortfolio_Page_Counter initialCmd
+                            , Cmd.batch [cmd, Cmd.map Msg__ElmPortfolio_Page_Counter initialCmd]
                             )
                 Route__ElmPortfolio_Page_Http routeValue -> 
                     case ElmPortfolio.Page.Http.page.init (currentSession ()) location model.key routeValue of
                         (initialModel, initialCmd) ->
                             ( Model { model | state = State__ElmPortfolio_Page_Http initialModel }
-                            , Cmd.map Msg__ElmPortfolio_Page_Http initialCmd
+                            , Cmd.batch [cmd, Cmd.map Msg__ElmPortfolio_Page_Http initialCmd]
                             )
                 Route__ElmPortfolio_Page_Minimum routeValue -> 
                     case ElmPortfolio.Page.Minimum.page.init (currentSession ()) location model.key routeValue of
                         (initialModel, initialCmd) ->
                             ( Model { model | state = State__ElmPortfolio_Page_Minimum initialModel }
-                            , Cmd.map Msg__ElmPortfolio_Page_Minimum initialCmd
+                            , Cmd.batch [cmd, Cmd.map Msg__ElmPortfolio_Page_Minimum initialCmd]
                             )
                 Route__ElmPortfolio_Page_NotFound routeValue -> 
                     case ElmPortfolio.Page.NotFound.page.init (currentSession ()) location model.key routeValue of
                         (initialModel, initialCmd) ->
                             ( Model { model | state = State__ElmPortfolio_Page_NotFound initialModel }
-                            , Cmd.map Msg__ElmPortfolio_Page_NotFound initialCmd
+                            , Cmd.batch [cmd, Cmd.map Msg__ElmPortfolio_Page_NotFound initialCmd]
                             )
                 Route__ElmPortfolio_Page_Preferences routeValue -> 
                     case ElmPortfolio.Page.Preferences.page.init (currentSession ()) location model.key routeValue of
                         (initialModel, initialCmd) ->
                             ( Model { model | state = State__ElmPortfolio_Page_Preferences initialModel }
-                            , Cmd.map Msg__ElmPortfolio_Page_Preferences initialCmd
+                            , Cmd.batch [cmd, Cmd.map Msg__ElmPortfolio_Page_Preferences initialCmd]
                             )
                 Route__ElmPortfolio_Page_Time routeValue -> 
                     case ElmPortfolio.Page.Time.page.init (currentSession ()) location model.key routeValue of
                         (initialModel, initialCmd) ->
                             ( Model { model | state = State__ElmPortfolio_Page_Time initialModel }
-                            , Cmd.map Msg__ElmPortfolio_Page_Time initialCmd
+                            , Cmd.batch [cmd, Cmd.map Msg__ElmPortfolio_Page_Time initialCmd]
                             )
                 Route__ElmPortfolio_Page_Top routeValue -> 
                     case ElmPortfolio.Page.Top.page.init (currentSession ()) location model.key routeValue of
                         (initialModel, initialCmd) ->
                             ( Model { model | state = State__ElmPortfolio_Page_Top initialModel }
-                            , Cmd.map Msg__ElmPortfolio_Page_Top initialCmd
+                            , Cmd.batch [cmd, Cmd.map Msg__ElmPortfolio_Page_Top initialCmd]
                             )
                 Route__ElmPortfolio_Page_URLParsing routeValue -> 
                     case ElmPortfolio.Page.URLParsing.page.init (currentSession ()) location model.key routeValue of
                         (initialModel, initialCmd) ->
                             ( Model { model | state = State__ElmPortfolio_Page_URLParsing initialModel }
-                            , Cmd.map Msg__ElmPortfolio_Page_URLParsing initialCmd
+                            , Cmd.batch [cmd, Cmd.map Msg__ElmPortfolio_Page_URLParsing initialCmd]
                             )
       in
       case model.state of
              State__ElmPortfolio_Page_Counter pmodel ->    
-               case parse ElmPortfolio.Page.Counter.page.route location of
-                  Just route -> case ElmPortfolio.Page.Counter.page.update (ElmPortfolio.Page.Counter.page.onUrlChange location route) pmodel of
-                      (pageModel_, pageCmd) -> (Model { model | state = State__ElmPortfolio_Page_Counter pageModel_ }, Cmd.map Msg__ElmPortfolio_Page_Counter pageCmd)
-                  Nothing -> rerouting ()
+                  case ElmPortfolio.Page.Counter.page.update (ElmPortfolio.Page.Counter.page.onUrlChange location) pmodel of
+                      (pageModel_, pageCmd) -> case parse ElmPortfolio.Page.Counter.page.route location of 
+                          Just _ -> (Model { model | state = State__ElmPortfolio_Page_Counter pageModel_ }, Cmd.map Msg__ElmPortfolio_Page_Counter pageCmd)
+                          _ -> rerouting (Cmd.map Msg__ElmPortfolio_Page_Counter pageCmd)
              State__ElmPortfolio_Page_Http pmodel ->    
-               case parse ElmPortfolio.Page.Http.page.route location of
-                  Just route -> case ElmPortfolio.Page.Http.page.update (ElmPortfolio.Page.Http.page.onUrlChange location route) pmodel of
-                      (pageModel_, pageCmd) -> (Model { model | state = State__ElmPortfolio_Page_Http pageModel_ }, Cmd.map Msg__ElmPortfolio_Page_Http pageCmd)
-                  Nothing -> rerouting ()
+                  case ElmPortfolio.Page.Http.page.update (ElmPortfolio.Page.Http.page.onUrlChange location) pmodel of
+                      (pageModel_, pageCmd) -> case parse ElmPortfolio.Page.Http.page.route location of 
+                          Just _ -> (Model { model | state = State__ElmPortfolio_Page_Http pageModel_ }, Cmd.map Msg__ElmPortfolio_Page_Http pageCmd)
+                          _ -> rerouting (Cmd.map Msg__ElmPortfolio_Page_Http pageCmd)
              State__ElmPortfolio_Page_Minimum pmodel ->    
-               case parse ElmPortfolio.Page.Minimum.page.route location of
-                  Just route -> case ElmPortfolio.Page.Minimum.page.update (ElmPortfolio.Page.Minimum.page.onUrlChange location route) pmodel of
-                      (pageModel_, pageCmd) -> (Model { model | state = State__ElmPortfolio_Page_Minimum pageModel_ }, Cmd.map Msg__ElmPortfolio_Page_Minimum pageCmd)
-                  Nothing -> rerouting ()
+                  case ElmPortfolio.Page.Minimum.page.update (ElmPortfolio.Page.Minimum.page.onUrlChange location) pmodel of
+                      (pageModel_, pageCmd) -> case parse ElmPortfolio.Page.Minimum.page.route location of 
+                          Just _ -> (Model { model | state = State__ElmPortfolio_Page_Minimum pageModel_ }, Cmd.map Msg__ElmPortfolio_Page_Minimum pageCmd)
+                          _ -> rerouting (Cmd.map Msg__ElmPortfolio_Page_Minimum pageCmd)
              State__ElmPortfolio_Page_NotFound pmodel ->    
-               case parse ElmPortfolio.Page.NotFound.page.route location of
-                  Just route -> case ElmPortfolio.Page.NotFound.page.update (ElmPortfolio.Page.NotFound.page.onUrlChange location route) pmodel of
-                      (pageModel_, pageCmd) -> (Model { model | state = State__ElmPortfolio_Page_NotFound pageModel_ }, Cmd.map Msg__ElmPortfolio_Page_NotFound pageCmd)
-                  Nothing -> rerouting ()
+                  case ElmPortfolio.Page.NotFound.page.update (ElmPortfolio.Page.NotFound.page.onUrlChange location) pmodel of
+                      (pageModel_, pageCmd) -> case parse ElmPortfolio.Page.NotFound.page.route location of 
+                          Just _ -> (Model { model | state = State__ElmPortfolio_Page_NotFound pageModel_ }, Cmd.map Msg__ElmPortfolio_Page_NotFound pageCmd)
+                          _ -> rerouting (Cmd.map Msg__ElmPortfolio_Page_NotFound pageCmd)
              State__ElmPortfolio_Page_Preferences pmodel ->    
-               case parse ElmPortfolio.Page.Preferences.page.route location of
-                  Just route -> case ElmPortfolio.Page.Preferences.page.update (ElmPortfolio.Page.Preferences.page.onUrlChange location route) pmodel of
-                      (pageModel_, pageCmd) -> (Model { model | state = State__ElmPortfolio_Page_Preferences pageModel_ }, Cmd.map Msg__ElmPortfolio_Page_Preferences pageCmd)
-                  Nothing -> rerouting ()
+                  case ElmPortfolio.Page.Preferences.page.update (ElmPortfolio.Page.Preferences.page.onUrlChange location) pmodel of
+                      (pageModel_, pageCmd) -> case parse ElmPortfolio.Page.Preferences.page.route location of 
+                          Just _ -> (Model { model | state = State__ElmPortfolio_Page_Preferences pageModel_ }, Cmd.map Msg__ElmPortfolio_Page_Preferences pageCmd)
+                          _ -> rerouting (Cmd.map Msg__ElmPortfolio_Page_Preferences pageCmd)
              State__ElmPortfolio_Page_Time pmodel ->    
-               case parse ElmPortfolio.Page.Time.page.route location of
-                  Just route -> case ElmPortfolio.Page.Time.page.update (ElmPortfolio.Page.Time.page.onUrlChange location route) pmodel of
-                      (pageModel_, pageCmd) -> (Model { model | state = State__ElmPortfolio_Page_Time pageModel_ }, Cmd.map Msg__ElmPortfolio_Page_Time pageCmd)
-                  Nothing -> rerouting ()
+                  case ElmPortfolio.Page.Time.page.update (ElmPortfolio.Page.Time.page.onUrlChange location) pmodel of
+                      (pageModel_, pageCmd) -> case parse ElmPortfolio.Page.Time.page.route location of 
+                          Just _ -> (Model { model | state = State__ElmPortfolio_Page_Time pageModel_ }, Cmd.map Msg__ElmPortfolio_Page_Time pageCmd)
+                          _ -> rerouting (Cmd.map Msg__ElmPortfolio_Page_Time pageCmd)
              State__ElmPortfolio_Page_Top pmodel ->    
-               case parse ElmPortfolio.Page.Top.page.route location of
-                  Just route -> case ElmPortfolio.Page.Top.page.update (ElmPortfolio.Page.Top.page.onUrlChange location route) pmodel of
-                      (pageModel_, pageCmd) -> (Model { model | state = State__ElmPortfolio_Page_Top pageModel_ }, Cmd.map Msg__ElmPortfolio_Page_Top pageCmd)
-                  Nothing -> rerouting ()
+                  case ElmPortfolio.Page.Top.page.update (ElmPortfolio.Page.Top.page.onUrlChange location) pmodel of
+                      (pageModel_, pageCmd) -> case parse ElmPortfolio.Page.Top.page.route location of 
+                          Just _ -> (Model { model | state = State__ElmPortfolio_Page_Top pageModel_ }, Cmd.map Msg__ElmPortfolio_Page_Top pageCmd)
+                          _ -> rerouting (Cmd.map Msg__ElmPortfolio_Page_Top pageCmd)
              State__ElmPortfolio_Page_URLParsing pmodel ->    
-               case parse ElmPortfolio.Page.URLParsing.page.route location of
-                  Just route -> case ElmPortfolio.Page.URLParsing.page.update (ElmPortfolio.Page.URLParsing.page.onUrlChange location route) pmodel of
-                      (pageModel_, pageCmd) -> (Model { model | state = State__ElmPortfolio_Page_URLParsing pageModel_ }, Cmd.map Msg__ElmPortfolio_Page_URLParsing pageCmd)
-                  Nothing -> rerouting ()
+                  case ElmPortfolio.Page.URLParsing.page.update (ElmPortfolio.Page.URLParsing.page.onUrlChange location) pmodel of
+                      (pageModel_, pageCmd) -> case parse ElmPortfolio.Page.URLParsing.page.route location of 
+                          Just _ -> (Model { model | state = State__ElmPortfolio_Page_URLParsing pageModel_ }, Cmd.map Msg__ElmPortfolio_Page_URLParsing pageCmd)
+                          _ -> rerouting (Cmd.map Msg__ElmPortfolio_Page_URLParsing pageCmd)
     (Msg__ElmPortfolio_Page_Counter pageMsg, State__ElmPortfolio_Page_Counter pageModel) ->
         case ElmPortfolio.Page.Counter.page.update pageMsg pageModel of
             (pageModel_, pageCmd ) ->

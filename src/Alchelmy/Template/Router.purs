@@ -86,14 +86,14 @@ update notFoundRoute msg (Model model) =
       , each \page ->
           block
             [ [ "            State__", underbar page, " pageModel ->", page, ".page.session pageModel " ] ]
-      , "          rerouting () = case parseLocation notFoundRoute location of"
+      , "          rerouting cmd = case parseLocation notFoundRoute location of"
       , each \page_ ->
           block
             [ [ "                Route__", underbar page_, " routeValue -> " ]
             , [ "                    case ", page_, ".page.init (currentSession ()) location model.key routeValue of" ]
             , [ "                        (initialModel, initialCmd) ->" ]
             , [ "                            ( Model { model | state = State__", underbar page_, " initialModel }" ]
-            , [ "                            , Cmd.map Msg__", underbar page_, " initialCmd" ]
+            , [ "                            , Cmd.batch [cmd, Cmd.map Msg__", underbar page_, " initialCmd]" ]
             , [ "                            )" ]
             ]
       , "      in"
@@ -101,10 +101,10 @@ update notFoundRoute msg (Model model) =
       , each \page ->
           block
             [ [ "             State__", underbar page, " pmodel ->    " ]
-            , [ "               case parse ", page, ".page.route location of" ]
-            , [ "                  Just route -> case ", page, ".page.update (", page, ".page.onUrlChange location route) pmodel of" ]
-            , [ "                      (pageModel_, pageCmd) -> (Model { model | state = State__", underbar page, " pageModel_ }, Cmd.map Msg__", underbar page, " pageCmd)" ]
-            , [ "                  Nothing -> rerouting ()" ]
+            , [ "                  case ", page, ".page.update (", page, ".page.onUrlChange location) pmodel of" ]
+            , [ "                      (pageModel_, pageCmd) -> case parse ", page, ".page.route location of " ]
+            , [ "                          Just _ -> (Model { model | state = State__", underbar page, " pageModel_ }, Cmd.map Msg__", underbar page, " pageCmd)" ]
+            , [ "                          _ -> rerouting (Cmd.map Msg__", underbar page, " pageCmd)" ]
             ]
       , each \page ->
           block

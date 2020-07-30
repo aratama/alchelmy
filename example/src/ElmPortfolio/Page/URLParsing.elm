@@ -19,7 +19,7 @@ type alias Msg =
 type PageMsg
     = Input String
     | PushUrl
-    | UrlChange Url Int
+    | UrlChange Url
 
 
 type alias Model =
@@ -61,8 +61,13 @@ update =
                 PushUrl ->
                     ( model, Browser.Navigation.pushUrl model.key <| model.value )
 
-                UrlChange url id ->
-                    ( { model | id = id }, Cmd.none )
+                UrlChange url ->
+                    case Url.Parser.parse route url of
+                        Nothing ->
+                            ( model, Cmd.none )
+
+                        Just id ->
+                            ( { model | id = id }, Cmd.none )
 
 
 subscriptions : Model -> Sub Msg
@@ -95,6 +100,6 @@ page =
     , update = update
     , subscriptions = subscriptions
     , onUrlRequest = Common.UrlRequest
-    , onUrlChange = \url id -> Common.PageMsg <| UrlChange url id
+    , onUrlChange = \url -> Common.PageMsg <| UrlChange url
     , session = \model -> encodeSession model.session
     }

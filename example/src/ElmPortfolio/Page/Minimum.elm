@@ -11,7 +11,7 @@ import Url.Parser exposing (map, s)
 
 type Msg
     = UrlRequest UrlRequest
-    | UrlChange Url Route
+    | UrlChange Url
 
 
 type alias Model =
@@ -35,7 +35,7 @@ page =
                 UrlRequest urlRequest ->
                     defaultNavigation model urlRequest
 
-                UrlChange url () ->
+                UrlChange url ->
                     ( model, Cmd.none )
     , subscriptions = always Sub.none
     , onUrlRequest = UrlRequest

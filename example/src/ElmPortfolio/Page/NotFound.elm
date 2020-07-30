@@ -15,7 +15,7 @@ import Url.Parser as UrlParser exposing ((</>), Parser, map, s, top)
 type Msg
     = ReceiveTopic (Maybe String)
     | UrlRequest UrlRequest
-    | UrlChange Url Route
+    | UrlChange Url
 
 
 type alias Model =
@@ -52,7 +52,7 @@ update msg model =
         UrlRequest urlRequest ->
             defaultNavigation model urlRequest
 
-        UrlChange url _ ->
+        UrlChange url ->
             ( model, Cmd.none )
 
 
